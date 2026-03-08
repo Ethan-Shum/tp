@@ -365,16 +365,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+1.  Should work on mainstream OS as long as Java 17 or above is installed.
+2.  Should be able to store and manage at least 1000 application records without noticeable sluggishness for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  Should automatically save data after each modifying command.
+5.  Should store data locally on the user’s device and not require Internet access for normal operation.
+6.  Is not required to automate the internship application process since it only serves as a local application logbook.
+7. Should respond to typical commands within 2 seconds under normal usage conditions.
 
 *{More to be added}*
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Mainstream OS**: Windows, Linux, Unix, macOS.
+* **Application records**: A stored entry representing one internship application, including details such as company, role, status, application date, location, URL, and notes.
+* **Current displayed list**: The list of application records currently shown to the user, which may be the full list or a filtered subset.
+* **Index**: The 1-based position of an application record in the current displayed list.
+* **Status**: The current stage of an application, such as Applied, Interview, Offer, Rejected, or Withdrawn. 
+* **CLI(Command-line interface)**: A way of interacting with the application by typing commands.
+* **Local storage**: Data saved on the user’s own device rather than on an online server.
+* **Job URL**: A web link attached to an application record for quick access to the original job posting or company page.
 
 --------------------------------------------------------------------------------------------------------------------
 
