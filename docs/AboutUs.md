@@ -43,7 +43,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: UI
 
-### Ming You 
+### Ming You
 
 <img src="images/ming62.png" width="200px">
 
