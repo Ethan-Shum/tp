@@ -8,15 +8,16 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.model.application.exceptions.DuplicateApplicationException;
 import seedu.address.model.application.exceptions.ApplicationNotFoundException;
+import seedu.address.model.application.exceptions.DuplicateApplicationException;
 
 /**
  * A list of applications that enforces uniqueness between its elements and does not allow nulls.
- * A application is considered unique by comparing using {@code Application#isSameApplication(Application)}. As such, adding and updating of
- * applications uses Application#isSameApplication(Application) for equality so as to ensure that the application being added or updated is
- * unique in terms of identity in the UniqueApplicationList. However, the removal of a application uses Application#equals(Object) so
- * as to ensure that the application with exactly the same fields will be removed.
+ * A application is considered unique by comparing using {@code Application#isSameApplication(Application)}. As such,
+ * adding and updating of applications uses Application#isSameApplication(Application) for equality so as to ensure
+ * that the application being added or updated is unique in terms of identity in the UniqueApplicationList. However,
+ * the removal of a application uses Application#equals(Object) so as to ensure that the application with exactly the
+ * same fields will be removed.
  *
  * Supports a minimal set of list operations.
  *
@@ -51,7 +52,8 @@ public class UniqueApplicationList implements Iterable<Application> {
     /**
      * Replaces the application {@code target} in the list with {@code editedApplication}.
      * {@code target} must exist in the list.
-     * The application identity of {@code editedApplication} must not be the same as another existing application in the list.
+     * The application identity of {@code editedApplication} must not be the same as another existing application
+     * in the list.
      */
     public void setApplication(Application target, Application editedApplication) {
         requireAllNonNull(target, editedApplication);

@@ -16,9 +16,11 @@ import seedu.address.testutil.TypicalApplications;
 public class JsonSerializableAddressBookTest {
 
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "JsonSerializableAddressBookTest");
-    private static final Path TYPICAL_APPLICATIONS_FILE = TEST_DATA_FOLDER.resolve("typicalApplicationsAddressBook.json");
+    private static final Path TYPICAL_APPLICATIONS_FILE = TEST_DATA_FOLDER
+            .resolve("typicalApplicationsAddressBook.json");
     private static final Path INVALID_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("invalidApplicationAddressBook.json");
-    private static final Path DUPLICATE_APPLICATION_FILE = TEST_DATA_FOLDER.resolve("duplicateApplicationAddressBook.json");
+    private static final Path DUPLICATE_APPLICATION_FILE = TEST_DATA_FOLDER
+            .resolve("duplicateApplicationAddressBook.json");
 
     @Test
     public void toModelType_typicalApplicationsFile_success() throws Exception {

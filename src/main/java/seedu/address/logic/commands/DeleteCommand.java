@@ -42,7 +42,8 @@ public class DeleteCommand extends Command {
 
         Application applicationToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deleteApplication(applicationToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_APPLICATION_SUCCESS, Messages.format(applicationToDelete)));
+        return new CommandResult(String.format(MESSAGE_DELETE_APPLICATION_SUCCESS,
+                Messages.format(applicationToDelete)));
     }
 
     @Override

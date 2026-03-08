@@ -2,10 +2,10 @@ package seedu.address.testutil;
 
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
@@ -49,9 +49,11 @@ public class TypicalApplications {
             .withEmail("hans@example.com").withAddress("chicago ave").build();
 
     // Manually added - Application's details found in {@code CommandTestUtil}
-    public static final Application AMY = new ApplicationBuilder().withCompany(VALID_COMPANY_AMY).withPhone(VALID_PHONE_AMY)
+    public static final Application AMY = new ApplicationBuilder().withCompany(VALID_COMPANY_AMY)
+            .withPhone(VALID_PHONE_AMY)
             .withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY).withTags(VALID_TAG_FRIEND).build();
-    public static final Application BOB = new ApplicationBuilder().withCompany(VALID_COMPANY_BOB).withPhone(VALID_PHONE_BOB)
+    public static final Application BOB = new ApplicationBuilder().withCompany(VALID_COMPANY_BOB)
+            .withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .build();
 

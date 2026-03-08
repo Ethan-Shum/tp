@@ -46,7 +46,8 @@ public class AddressBookTest {
     @Test
     public void resetData_withDuplicateApplications_throwsDuplicateApplicationException() {
         // Two applications with the same identity fields
-        Application editedAlice = new ApplicationBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
+        Application editedAlice = new ApplicationBuilder(ALICE).withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_HUSBAND)
                 .build();
         List<Application> newApplications = Arrays.asList(ALICE, editedAlice);
         AddressBookStub newData = new AddressBookStub(newApplications);
@@ -73,7 +74,8 @@ public class AddressBookTest {
     @Test
     public void hasApplication_applicationWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addApplication(ALICE);
-        Application editedAlice = new ApplicationBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
+        Application editedAlice = new ApplicationBuilder(ALICE).withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_HUSBAND)
                 .build();
         assertTrue(addressBook.hasApplication(editedAlice));
     }
@@ -85,7 +87,8 @@ public class AddressBookTest {
 
     @Test
     public void toStringMethod() {
-        String expected = AddressBook.class.getCanonicalName() + "{applications=" + addressBook.getApplicationList() + "}";
+        String expected = AddressBook.class.getCanonicalName() + "{applications=" + addressBook.getApplicationList()
+                + "}";
         assertEquals(expected, addressBook.toString());
     }
 

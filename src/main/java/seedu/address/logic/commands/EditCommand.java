@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_APPLICATIONS;
@@ -92,7 +92,8 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Application} with the details of {@code applicationToEdit}
      * edited with {@code editApplicationDescriptor}.
      */
-    private static Application createEditedApplication(Application applicationToEdit, EditApplicationDescriptor editApplicationDescriptor) {
+    private static Application createEditedApplication(Application applicationToEdit,
+                                                       EditApplicationDescriptor editApplicationDescriptor) {
         assert applicationToEdit != null;
 
         Company updatedCompany = editApplicationDescriptor.getCompany().orElse(applicationToEdit.getCompany());

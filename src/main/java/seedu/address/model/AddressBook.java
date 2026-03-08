@@ -78,7 +78,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     /**
      * Replaces the given application {@code target} in the list with {@code editedApplication}.
      * {@code target} must exist in the address book.
-     * The application identity of {@code editedApplication} must not be the same as another existing application in the address book.
+     * The application identity of {@code editedApplication} must not be the same as another existing application
+     * in the address book.
      */
     public void setApplication(Application target, Application editedApplication) {
         requireNonNull(editedApplication);
