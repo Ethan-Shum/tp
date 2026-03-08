@@ -40,8 +40,8 @@ public class Messages {
         builder.append(application.getCompany())
                 .append("; Phone: ")
                 .append(application.getPhone())
-                .append("; Email: ")
-                .append(application.getEmail())
+                .append("; Application Date: ")
+                .append(application.getApplicationDate())
                 .append("; Address: ")
                 .append(application.getAddress())
                 .append("; Tags: ");
