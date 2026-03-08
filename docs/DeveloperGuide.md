@@ -300,30 +300,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `LockedIn` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Delete an application record**
+
+**Preconditions:**
+* User is logged in.
 
 **MSS**
 
-1.  User requests to list persons
-2.  LockedIn shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  LockedIn deletes the person
+1.  User wants to delete an application record.
+2.  User specifies the current index of the application record to be deleted.
+3.  LockedIn deletes the application record.
+4.  LockedIn shows a confirmation message indicating the deleted application record.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. The current displayed list is empty.
 
-  Use case ends.
+    * 2a1. LockedIn shows an error message.
 
-* 3a. The given index is invalid.
+      Use case ends.
+
+* 2b. The given index is invalid.
 
     * 3a1. LockedIn shows an error message.
 
-      Use case resumes at step 2.
+      Use case ends.
 
 **Use case: Add Job URL**
 
@@ -333,10 +338,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list persons
-2.  LockedIn shows a list of persons
-3.  User requests to add a job URL to a specific job application in the list
-4.  LockedIn attaches the URL to the specific job application and displays a success message
+1.  User requests to list application records.
+2.  LockedIn shows a list of application records.
+3.  User requests to add a job URL to a specific application record in the list.
+4.  LockedIn attaches the URL to the specific application record and displays a success message.
 
     Use case ends.
 
