@@ -140,7 +140,7 @@ public class AddCommandParserTest {
 
         //missing url
         expectedApplication = new ApplicationBuilder(AMY).withUrl(null).build();
-        assertParseSuccess(parser, COMPANY_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + TAG_DESC_FRIEND,
+        assertParseSuccess(parser, COMPANY_DESC_AMY + ROLE_DESC_AMY + APPLICATION_DATE_DESC_AMY + TAG_DESC_FRIEND,
                 new AddCommand(expectedApplication));
     }
 

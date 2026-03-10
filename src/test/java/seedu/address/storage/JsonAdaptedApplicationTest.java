@@ -17,6 +17,7 @@ import seedu.address.model.application.Company;
 import seedu.address.model.application.Role;
 import seedu.address.model.application.Url;
 
+
 public class JsonAdaptedApplicationTest {
     private static final String INVALID_COMPANY = "R@chel";
     private static final String INVALID_ROLE = "@Engineer";
@@ -95,14 +96,6 @@ public class JsonAdaptedApplicationTest {
                 new JsonAdaptedApplication(VALID_COMPANY, VALID_ROLE, VALID_APPLICATION_DATE,
                         INVALID_URL, VALID_TAGS);
         String expectedMessage = Url.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, application::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullAddress_throwsIllegalValueException() {
-        JsonAdaptedApplication application = new JsonAdaptedApplication(VALID_COMPANY, VALID_ROLE,
-                VALID_APPLICATION_DATE, null, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, application::toModelType);
     }
 
