@@ -274,13 +274,15 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* Computer Science undergraduates applying for multiple internships
+* need to track and manage a large number of applications simultaneously
 * prefer desktop apps over other types
-* can type fast
 * prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* value fast data entry and quick access to structured application information
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Helps CS students manage mass applications by storing company contacts and its position details 
+in a CLI environment. It allows target users to log application updates, record information about company / position and check deadlines, minimizing context switching between different job websites.
+
 
 
 ### User stories
