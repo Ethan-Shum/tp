@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -57,11 +57,11 @@ public class EditCommandTest {
         Application lastApplication = model.getFilteredApplicationList().get(indexLastApplication.getZeroBased());
 
         ApplicationBuilder applicationInList = new ApplicationBuilder(lastApplication);
-        Application editedApplication = applicationInList.withCompany(VALID_COMPANY_BOB).withPhone(VALID_PHONE_BOB)
+        Application editedApplication = applicationInList.withCompany(VALID_COMPANY_BOB).withRole(VALID_ROLE_BOB)
                 .withTags(VALID_TAG_HUSBAND).build();
 
         EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder().withCompany(VALID_COMPANY_BOB)
-                .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_HUSBAND).build();
+                .withRole(VALID_ROLE_BOB).withTags(VALID_TAG_HUSBAND).build();
         EditCommand editCommand = new EditCommand(indexLastApplication, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS,

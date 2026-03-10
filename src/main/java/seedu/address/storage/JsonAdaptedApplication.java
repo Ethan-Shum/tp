@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationDate;
 import seedu.address.model.application.Company;
-import seedu.address.model.application.Email;
-import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
 import seedu.address.model.application.Url;
 import seedu.address.model.tag.Tag;
 
@@ -26,8 +26,8 @@ class JsonAdaptedApplication {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Application's %s field is missing!";
 
     private final String company;
-    private final String phone;
-    private final String email;
+    private final String role;
+    private final String applicationDate;
     private final String url;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -35,12 +35,13 @@ class JsonAdaptedApplication {
      * Constructs a {@code JsonAdaptedApplication} with the given application details.
      */
     @JsonCreator
-    public JsonAdaptedApplication(@JsonProperty("company") String company, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("url") String url,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+    public JsonAdaptedApplication(@JsonProperty("company") String company, @JsonProperty("role") String role,
+                                  @JsonProperty("applicationDate") String applicationDate,
+                                  @JsonProperty("url") String url,
+                                  @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.company = company;
-        this.phone = phone;
-        this.email = email;
+        this.role = role;
+        this.applicationDate = applicationDate;
         this.url = url;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -52,8 +53,8 @@ class JsonAdaptedApplication {
      */
     public JsonAdaptedApplication(Application source) {
         company = source.getCompany().value;
-        phone = source.getPhone().value;
-        email = source.getEmail().value;
+        role = source.getRole().value;
+        applicationDate = source.getApplicationDate().value;
         url = source.getUrl().map(u -> u.value).orElse(null);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -79,21 +80,22 @@ class JsonAdaptedApplication {
         }
         final Company modelCompany = new Company(company);
 
-        if (phone == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName()));
+        if (role == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Role.class.getSimpleName()));
         }
-        if (!Phone.isValidPhone(phone)) {
-            throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
+        if (!Role.isValidRole(role)) {
+            throw new IllegalValueException(Role.MESSAGE_CONSTRAINTS);
         }
-        final Phone modelPhone = new Phone(phone);
+        final Role modelRole = new Role(role);
 
-        if (email == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
+        if (applicationDate == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    ApplicationDate.class.getSimpleName()));
         }
-        if (!Email.isValidEmail(email)) {
-            throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
+        if (!ApplicationDate.isValidApplicationDate(applicationDate)) {
+            throw new IllegalValueException(ApplicationDate.MESSAGE_CONSTRAINTS);
         }
-        final Email modelEmail = new Email(email);
+        final ApplicationDate modelApplicationDate = new ApplicationDate(applicationDate);
 
         Optional<Url> modelUrl = Optional.empty();
         if (url != null) {
@@ -104,7 +106,9 @@ class JsonAdaptedApplication {
         }
 
         final Set<Tag> modelTags = new HashSet<>(applicationTags);
-        return new Application(modelCompany, modelPhone, modelEmail, modelUrl, modelTags);
+        return new Application(modelCompany, modelRole, modelApplicationDate, modelUrl, modelTags);
     }
 
 }
+
+

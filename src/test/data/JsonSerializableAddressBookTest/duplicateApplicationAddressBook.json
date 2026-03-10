@@ -1,14 +1,14 @@
 {
   "applications": [ {
-    "company": "Alice Pauline",
-    "phone": "94351253",
-    "email": "alice@example.com",
+    "company": "Accenture",
+    "role": "Software Engineer",
+    "applicationDate": "2026-03-09",
     "url": "https://alice.com",
     "tags": [ "friends" ]
   }, {
-    "company": "Alice Pauline",
-    "phone": "94351253",
-    "email": "pauline@example.com",
+    "company": "Accenture",
+    "role": "Software Engineer",
+    "applicationDate": "2026-03-10",
     "url": "https://pauline.com"
   } ]
 }

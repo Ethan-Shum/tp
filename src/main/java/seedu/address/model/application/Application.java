@@ -1,13 +1,12 @@
 package seedu.address.model.application;
 
-import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
@@ -19,8 +18,8 @@ public class Application {
 
     // Identity fields
     private final Company company;
-    private final Phone phone;
-    private final Email email;
+    private final Role role;
+    private final ApplicationDate applicationDate;
 
     // Data fields
     private final Optional<Url> url;
@@ -29,11 +28,11 @@ public class Application {
     /**
      * Every field must be present and not null.
      */
-    public Application(Company company, Phone phone, Email email, Optional<Url> url, Set<Tag> tags) {
-        requireAllNonNull(company, phone, email, url, tags);
+    public Application(Company company, Role role, ApplicationDate applicationDate, Optional<Url> url, Set<Tag> tags) {
+        requireAllNonNull(company, role, applicationDate, url, tags);
         this.company = company;
-        this.phone = phone;
-        this.email = email;
+        this.role = role;
+        this.applicationDate = applicationDate;
         this.url = url;
         this.tags.addAll(tags);
     }
@@ -42,12 +41,12 @@ public class Application {
         return company;
     }
 
-    public Phone getPhone() {
-        return phone;
+    public Role getRole() {
+        return role;
     }
 
-    public Email getEmail() {
-        return email;
+    public ApplicationDate getApplicationDate() {
+        return applicationDate;
     }
 
     public Optional<Url> getUrl() {
@@ -72,7 +71,8 @@ public class Application {
         }
 
         return otherApplication != null
-                && otherApplication.getCompany().equals(getCompany());
+                && otherApplication.getCompany().equals(getCompany())
+                && otherApplication.getRole().equals(getRole());
     }
 
     /**
@@ -92,8 +92,8 @@ public class Application {
 
         Application otherApplication = (Application) other;
         return company.equals(otherApplication.company)
-                && phone.equals(otherApplication.phone)
-                && email.equals(otherApplication.email)
+                && role.equals(otherApplication.role)
+                && applicationDate.equals(otherApplication.applicationDate)
                 && url.equals(otherApplication.url)
                 && tags.equals(otherApplication.tags);
     }
@@ -101,15 +101,15 @@ public class Application {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(company, phone, email, url, tags);
+        return Objects.hash(company, role, applicationDate, url, tags);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("company", company)
-                .add("phone", phone)
-                .add("email", email)
+                .add("role", role)
+                .add("applicationDate", applicationDate)
                 .add("url", url)
                 .add("tags", tags)
                 .toString();

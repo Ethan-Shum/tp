@@ -1,13 +1,12 @@
 package seedu.address.model.application;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.testutil.ApplicationBuilder;
@@ -68,10 +67,10 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new ApplicationBuilder().withCompany("Alice Bob").build()));
 
-        // Keywords match phone, email and url, but does not match name
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("12345", "alice@email.com", "https://alice.com"));
-        assertFalse(predicate.test(new ApplicationBuilder().withCompany("Alice").withPhone("12345")
-                .withEmail("alice@email.com").withUrl("https://alice.com").build()));
+        // Keywords match role, application date and url, but does not match company
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Engineer", "2026-03-09", "https://alice.com"));
+        assertFalse(predicate.test(new ApplicationBuilder().withRole("Engineer")
+                .withApplicationDate("2026-03-09").withUrl("https://alice.com").build()));
     }
 
     @Test

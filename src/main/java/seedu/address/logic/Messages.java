@@ -38,10 +38,10 @@ public class Messages {
     public static String format(Application application) {
         final StringBuilder builder = new StringBuilder();
         builder.append(application.getCompany())
-                .append("; Phone: ")
-                .append(application.getPhone())
-                .append("; Email: ")
-                .append(application.getEmail())
+                .append("; Role: ")
+                .append(application.getRole())
+                .append("; Application Date: ")
+                .append(application.getApplicationDate())
                 .append("; URL: ")
                 .append(application.getUrl().map(u -> u.value).orElse("-"))
                 .append("; Tags: ");

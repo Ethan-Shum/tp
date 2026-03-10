@@ -37,7 +37,7 @@ public class ApplicationCard extends UiPart<Region> {
     @FXML
     private Label url;
     @FXML
-    private Label email;
+    private Label applicationDate;
     @FXML
     private FlowPane tags;
 
@@ -49,9 +49,9 @@ public class ApplicationCard extends UiPart<Region> {
         this.application = application;
         id.setText(displayedIndex + ". ");
         company.setText(application.getCompany().value);
-        phone.setText(application.getPhone().value);
+        phone.setText(application.getRole().value);
         url.setText(application.getUrl().map(u -> u.value).orElse("url: -"));
-        email.setText(application.getEmail().value);
+        applicationDate.setText(application.getApplicationDate().value);
         application.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));

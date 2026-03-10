@@ -1,11 +1,11 @@
 package seedu.address.testutil;
 
+import static seedu.address.logic.commands.CommandTestUtil.VALID_APPLICATION_DATE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_APPLICATION_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_URL_AMY;
@@ -23,39 +23,41 @@ import seedu.address.model.application.Application;
  */
 public class TypicalApplications {
 
-    public static final Application ALICE = new ApplicationBuilder().withCompany("Alice Pauline")
-            .withUrl("http://alice.example.com").withEmail("alice@example.com")
-            .withPhone("94351253")
+    public static final Application ALICE = new ApplicationBuilder().withCompany("Accenture")
+            .withUrl("http://alice.example.com").withApplicationDate("2026-01-01")
+            .withRole("Software Engineer")
             .withTags("friends").build();
-    public static final Application BENSON = new ApplicationBuilder().withCompany("Benson Meier")
+    public static final Application BENSON = new ApplicationBuilder().withCompany("Meta")
             .withUrl("http://benson.example.com")
-            .withEmail("johnd@example.com").withPhone("98765432")
+            .withApplicationDate("2026-01-02").withRole("Data Analyst")
             .withTags("owesMoney", "friends").build();
-    public static final Application CARL = new ApplicationBuilder().withCompany("Carl Kurz").withPhone("95352563")
-            .withEmail("heinz@example.com").withUrl("http://carl.example.com").build();
-    public static final Application DANIEL = new ApplicationBuilder().withCompany("Daniel Meier").withPhone("87652533")
-            .withEmail("cornelia@example.com").withUrl("http://daniel.example.com").withTags("friends").build();
-    public static final Application ELLE = new ApplicationBuilder().withCompany("Elle Meyer").withPhone("9482224")
-            .withEmail("werner@example.com").withUrl("http://elle.example.com").build();
-    public static final Application FIONA = new ApplicationBuilder().withCompany("Fiona Kunz").withPhone("9482427")
-            .withEmail("lydia@example.com").withUrl("http://fiona.example.com").build();
-    public static final Application GEORGE = new ApplicationBuilder().withCompany("George Best").withPhone("9482442")
-            .withEmail("anna@example.com").withUrl("http://george.example.com").build();
+    public static final Application CARL = new ApplicationBuilder().withCompany("Google").withRole("Mobile Developer")
+            .withApplicationDate("2026-01-03").withUrl("http://carl.example.com").build();
+    public static final Application DANIEL = new ApplicationBuilder().withCompany("Dyson").withRole("Backend Developer")
+            .withApplicationDate("2026-01-04").withUrl("http://daniel.example.com").withTags("friends").build();
+    public static final Application ELLE = new ApplicationBuilder().withCompany("Tencent").withRole("UX Designer")
+            .withApplicationDate("2026-01-05").withUrl("http://elle.example.com").build();
+    public static final Application FIONA = new ApplicationBuilder().withCompany("Foodpanda")
+            .withRole("Frontend Developer")
+            .withApplicationDate("2026-01-06").withUrl("http://fiona.example.com").build();
+    public static final Application GEORGE = new ApplicationBuilder().withCompany("Grab").withRole("DevOps Engineer")
+            .withApplicationDate("2026-01-07").withUrl("http://george.example.com").build();
 
     // Manually added
-    public static final Application HOON = new ApplicationBuilder().withCompany("Hoon Meier").withPhone("8482424")
-            .withEmail("stefan@example.com").withUrl("http://hoon.example.com").build();
-    public static final Application IDA = new ApplicationBuilder().withCompany("Ida Mueller").withPhone("8482131")
-            .withEmail("hans@example.com").withUrl("http://ida.example.com").build();
+    public static final Application HOON = new ApplicationBuilder().withCompany("HP").withRole("ML Engineer")
+            .withApplicationDate("2026-01-08").withUrl("http://hoon.example.com").build();
+    public static final Application IDA = new ApplicationBuilder().withCompany("IBM").withRole("Systems Analyst")
+            .withApplicationDate("2026-01-09").withUrl("http://ida.example.com").build();
 
     // Manually added - Application's details found in {@code CommandTestUtil}
     public static final Application AMY = new ApplicationBuilder().withCompany(VALID_COMPANY_AMY)
-            .withPhone(VALID_PHONE_AMY)
-            .withEmail(VALID_EMAIL_AMY).withUrl(VALID_URL_AMY).withTags(VALID_TAG_FRIEND).build();
+            .withRole(VALID_ROLE_AMY)
+            .withApplicationDate(VALID_APPLICATION_DATE_AMY).withUrl(VALID_URL_AMY)
+            .withTags(VALID_TAG_FRIEND).build();
     public static final Application BOB = new ApplicationBuilder().withCompany(VALID_COMPANY_BOB)
-            .withPhone(VALID_PHONE_BOB)
-            .withEmail(VALID_EMAIL_BOB).withUrl(VALID_URL_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
-            .build();
+            .withRole(VALID_ROLE_BOB)
+            .withApplicationDate(VALID_APPLICATION_DATE_BOB).withUrl(VALID_URL_BOB)
+            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 

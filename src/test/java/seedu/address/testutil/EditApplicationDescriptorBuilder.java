@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditApplicationDescriptor;
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationDate;
 import seedu.address.model.application.Company;
-import seedu.address.model.application.Email;
-import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
 import seedu.address.model.application.Url;
 import seedu.address.model.tag.Tag;
 
@@ -33,8 +33,8 @@ public class EditApplicationDescriptorBuilder {
     public EditApplicationDescriptorBuilder(Application application) {
         descriptor = new EditApplicationDescriptor();
         descriptor.setCompany(application.getCompany());
-        descriptor.setPhone(application.getPhone());
-        descriptor.setEmail(application.getEmail());
+        descriptor.setRole(application.getRole());
+        descriptor.setApplicationDate(application.getApplicationDate());
         application.getUrl().ifPresent(descriptor::setUrl);
         descriptor.setTags(application.getTags());
     }
@@ -48,18 +48,18 @@ public class EditApplicationDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code EditApplicationDescriptor} that we are building.
+     * Sets the {@code Role} of the {@code EditApplicationDescriptor} that we are building.
      */
-    public EditApplicationDescriptorBuilder withPhone(String phone) {
-        descriptor.setPhone(new Phone(phone));
+    public EditApplicationDescriptorBuilder withRole(String role) {
+        descriptor.setRole(new Role(role));
         return this;
     }
 
     /**
-     * Sets the {@code Email} of the {@code EditApplicationDescriptor} that we are building.
+     * Sets the {@code ApplicationDate} of the {@code EditApplicationDescriptor} that we are building.
      */
-    public EditApplicationDescriptorBuilder withEmail(String email) {
-        descriptor.setEmail(new Email(email));
+    public EditApplicationDescriptorBuilder withApplicationDate(String applicationDate) {
+        descriptor.setApplicationDate(new ApplicationDate(applicationDate));
         return this;
     }
 

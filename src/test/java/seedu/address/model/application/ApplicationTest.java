@@ -3,18 +3,17 @@ package seedu.address.model.application;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static seedu.address.logic.commands.CommandTestUtil.VALID_APPLICATION_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_URL_BOB;
+import seedu.address.testutil.ApplicationBuilder;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalApplications.ALICE;
 import static seedu.address.testutil.TypicalApplications.BOB;
-
-import org.junit.jupiter.api.Test;
-
-import seedu.address.testutil.ApplicationBuilder;
 
 public class ApplicationTest {
 
@@ -32,8 +31,8 @@ public class ApplicationTest {
         // null -> returns false
         assertFalse(ALICE.isSameApplication(null));
 
-        // same company, all other attributes different -> returns true
-        Application editedAlice = new ApplicationBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
+        // same company and role, all other attributes different -> returns true
+        Application editedAlice = new ApplicationBuilder(ALICE).withApplicationDate(VALID_APPLICATION_DATE_BOB)
                 .withUrl(VALID_URL_BOB).withTags(VALID_TAG_HUSBAND).build();
         assertTrue(ALICE.isSameApplication(editedAlice));
 
@@ -73,12 +72,12 @@ public class ApplicationTest {
         Application editedAlice = new ApplicationBuilder(ALICE).withCompany(VALID_COMPANY_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different phone -> returns false
-        editedAlice = new ApplicationBuilder(ALICE).withPhone(VALID_PHONE_BOB).build();
+        // different role -> returns false
+        editedAlice = new ApplicationBuilder(ALICE).withRole(VALID_ROLE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different email -> returns false
-        editedAlice = new ApplicationBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
+        // different application date -> returns false
+        editedAlice = new ApplicationBuilder(ALICE).withApplicationDate(VALID_APPLICATION_DATE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different url -> returns false
@@ -93,8 +92,9 @@ public class ApplicationTest {
     @Test
     public void toStringMethod() {
         String expected = Application.class.getCanonicalName() + "{company=" + ALICE.getCompany()
-                + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", url=" + ALICE.getUrl() + ", tags=" + ALICE.getTags() + "}";
+                + ", role=" + ALICE.getRole()
+                + ", applicationDate=" + ALICE.getApplicationDate() + ", url=" + ALICE.getUrl()
+                + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

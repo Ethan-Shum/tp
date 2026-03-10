@@ -1,45 +1,45 @@
 {
   "_comment": "AddressBook save file which contains the same Application values as in TypicalApplications#getTypicalAddressBook()",
   "applications" : [ {
-    "company" : "Alice Pauline",
-    "phone" : "94351253",
-    "email" : "alice@example.com",
+    "company" : "Accenture",
+    "role" : "Software Engineer",
+    "applicationDate" : "2026-01-01",
     "url" : "http://alice.example.com",
     "tags" : [ "friends" ]
   }, {
-    "company" : "Benson Meier",
-    "phone" : "98765432",
-    "email" : "johnd@example.com",
+    "company" : "Meta",
+    "role" : "Data Analyst",
+    "applicationDate" : "2026-01-02",
     "url" : "http://benson.example.com",
     "tags" : [ "owesMoney", "friends" ]
   }, {
-    "company" : "Carl Kurz",
-    "phone" : "95352563",
-    "email" : "heinz@example.com",
+    "company" : "Google",
+    "role" : "Mobile Developer",
+    "applicationDate" : "2026-01-03",
     "url" : "http://carl.example.com",
     "tags" : [ ]
   }, {
-    "company" : "Daniel Meier",
-    "phone" : "87652533",
-    "email" : "cornelia@example.com",
+    "company" : "Dyson",
+    "role" : "Backend Developer",
+    "applicationDate" : "2026-01-04",
     "url" : "http://daniel.example.com",
     "tags" : [ "friends" ]
   }, {
-    "company" : "Elle Meyer",
-    "phone" : "9482224",
-    "email" : "werner@example.com",
+    "company" : "Tencent",
+    "role" : "UX Designer",
+    "applicationDate" : "2026-01-05",
     "url" : "http://elle.example.com",
     "tags" : [ ]
   }, {
-    "company" : "Fiona Kunz",
-    "phone" : "9482427",
-    "email" : "lydia@example.com",
+    "company" : "Foodpanda",
+    "role" : "Frontend Developer",
+    "applicationDate" : "2026-01-06",
     "url" : "http://fiona.example.com",
     "tags" : [ ]
   }, {
-    "company" : "George Best",
-    "phone" : "9482442",
-    "email" : "anna@example.com",
+    "company" : "Grab",
+    "role" : "DevOps Engineer",
+    "applicationDate" : "2026-01-07",
     "url" : "http://george.example.com",
     "tags" : [ ]
   } ]

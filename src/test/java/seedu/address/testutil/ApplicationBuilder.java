@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.application.Application;
+import seedu.address.model.application.ApplicationDate;
 import seedu.address.model.application.Company;
-import seedu.address.model.application.Email;
-import seedu.address.model.application.Phone;
+import seedu.address.model.application.Role;
 import seedu.address.model.application.Url;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
@@ -17,13 +17,13 @@ import seedu.address.model.util.SampleDataUtil;
  */
 public class ApplicationBuilder {
 
-    public static final String DEFAULT_COMPANY = "Amy Bee";
-    public static final String DEFAULT_PHONE = "85355255";
-    public static final String DEFAULT_EMAIL = "amy@gmail.com";
+    public static final String DEFAULT_COMPANY = "Amazon";
+    public static final String DEFAULT_ROLE = "Software Engineer Intern";
+    public static final String DEFAULT_APPLICATION_DATE = "2026-03-09";
 
     private Company company;
-    private Phone phone;
-    private Email email;
+    private Role role;
+    private ApplicationDate applicationDate;
     private Optional<Url> url;
     private Set<Tag> tags;
 
@@ -32,8 +32,8 @@ public class ApplicationBuilder {
      */
     public ApplicationBuilder() {
         company = new Company(DEFAULT_COMPANY);
-        phone = new Phone(DEFAULT_PHONE);
-        email = new Email(DEFAULT_EMAIL);
+        role = new Role(DEFAULT_ROLE);
+        applicationDate = new ApplicationDate(DEFAULT_APPLICATION_DATE);
         url = Optional.empty();
         tags = new HashSet<>();
     }
@@ -43,8 +43,8 @@ public class ApplicationBuilder {
      */
     public ApplicationBuilder(Application applicationToCopy) {
         company = applicationToCopy.getCompany();
-        phone = applicationToCopy.getPhone();
-        email = applicationToCopy.getEmail();
+        role = applicationToCopy.getRole();
+        applicationDate = applicationToCopy.getApplicationDate();
         url = applicationToCopy.getUrl();
         tags = new HashSet<>(applicationToCopy.getTags());
     }
@@ -74,23 +74,23 @@ public class ApplicationBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code Application} that we are building.
+     * Sets the {@code Role} of the {@code Application} that we are building.
      */
-    public ApplicationBuilder withPhone(String phone) {
-        this.phone = new Phone(phone);
+    public ApplicationBuilder withRole(String role) {
+        this.role = new Role(role);
         return this;
     }
 
     /**
-     * Sets the {@code Email} of the {@code Application} that we are building.
+     * Sets the {@code ApplicationDate} of the {@code Application} that we are building.
      */
-    public ApplicationBuilder withEmail(String email) {
-        this.email = new Email(email);
+    public ApplicationBuilder withApplicationDate(String applicationDate) {
+        this.applicationDate = new ApplicationDate(applicationDate);
         return this;
     }
 
     public Application build() {
-        return new Application(company, phone, email, url, tags);
+        return new Application(company, role, applicationDate, url, tags);
     }
 
 }

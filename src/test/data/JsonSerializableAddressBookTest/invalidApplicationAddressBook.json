@@ -1,8 +1,8 @@
 {
   "applications": [ {
     "company": "Hans Muster",
-    "phone": "9482424",
-    "email": "invalid@email!3e",
+    "role": "Software Engineer",
+    "applicationDate": "2026/03/09",
     "url": "https://hans.com"
   } ]
 }
