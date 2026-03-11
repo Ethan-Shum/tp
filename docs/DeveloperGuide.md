@@ -304,12 +304,61 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `LockedIn` and the **Actor** is the `user`, unless specified otherwise)
 
+**Use case: Add an application**
+
+**Preconditions:**
+* User is logged in.
+
+**MSS:**
+
+1. User wants to add a new application record.
+2. User enters the command add with the required fields.
+3. LockedIn creates a new application record with the specified details.
+4. LockedIn adds the application record to the application list.
+5. LockedIn shows a confirmation message displaying the added application record.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The `n/COMPANY` field is missing.
+
+  * 2a1. LockedIn shows an error message indicating that the company name is required.  
+  
+    Use case ends.
+
+* 2b. The `r/ROLE` field is missing.
+
+  * 2b1. LockedIn shows an error message indicating that the role is required.  
+  
+    Use case ends.
+
+* 2c. The provided `APPLICATION_DATE` is invalid.
+
+  * 2c1. LockedIn shows an error message indicating that the date format is invalid.  
+  
+    Use case ends.
+
+* 2d. The provided `STATUS` is invalid.
+   
+   * 2d1. LockedIn shows an error message indicating that the status must be one of:  
+          `APPLIED`, `INTERVIEW`, `OFFERED`, `REJECTED`, `WITHDRAWN`.
+
+     Use case ends.
+
+* 2e. An application with the same `COMPANY`, `ROLE`, and `APPLICATION_DATE` already exists.
+
+    * 2e1. LockedIn shows an error message indicating that a duplicate application record already exists.
+
+      Use case ends.
+
+
 **Use case: Delete an application record**
 
 **Preconditions:**
 * User is logged in.
 
-**MSS**
+**MSS:**
 
 1.  User wants to delete an application record.
 2.  User specifies the current index of the application record to be deleted.
@@ -318,7 +367,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-**Extensions**
+**Extensions:**
 
 * 2a. The current displayed list is empty.
 
@@ -338,7 +387,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * User is logged in.
 * There is at least one existing job application in the system.
 
-**MSS**
+**MSS:**
 
 1.  User requests to list application records.
 2.  LockedIn shows a list of application records.
@@ -347,7 +396,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-**Extensions**
+**Extensions:**
 
 
 * 3a. The given index is invalid.
@@ -370,14 +419,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: Save data**
 
-**MSS**
+**MSS:**
 
 1.  User executes any data-modifying command (e.g. add, edit, delete).
 2.  LockedIn saves the updated data to the local JSON file automatically.
 
     Use case ends.
 
-**Extensions**
+**Extensions:**
 
 * 2a. LockedIn cannot write to the JSON file due to insufficient permissions.
 
@@ -405,7 +454,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: Exit the application**
 
-**MSS**
+**MSS:**
 
 1.  User enters `quit` or `q`.
 2.  LockedIn saves the current application data to the local JSON file.
@@ -413,7 +462,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-**Extensions**
+**Extensions:**
 
 * 1a. User enters extra words after `quit` or `q`.
 
