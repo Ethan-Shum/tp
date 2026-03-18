@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.application.NameContainsKeywordsPredicate;
+import seedu.address.model.application.ApplicationContainsKeywordsPredicate;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -15,14 +15,15 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all applications whose company names, roles, "
+            + "application dates or statuses contain any of the specified keywords (case-insensitive) and "
+            + "displays them as a list with index numbers.\n"
+            + "Parameters: [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...\n"
+            + "Example: " + COMMAND_WORD + " n/Google r/Intern d/2022-12-12 s/Applied";
 
-    private final NameContainsKeywordsPredicate predicate;
+    private final ApplicationContainsKeywordsPredicate predicate;
 
-    public FindCommand(NameContainsKeywordsPredicate predicate) {
+    public FindCommand(ApplicationContainsKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
 
@@ -41,7 +42,6 @@ public class FindCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof FindCommand)) {
             return false;
         }
@@ -49,6 +49,7 @@ public class FindCommand extends Command {
         FindCommand otherFindCommand = (FindCommand) other;
         return predicate.equals(otherFindCommand.predicate);
     }
+
 
     @Override
     public String toString() {

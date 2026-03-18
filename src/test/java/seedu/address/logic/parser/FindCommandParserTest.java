@@ -1,15 +1,20 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_APPLICATION_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.application.NameContainsKeywordsPredicate;
+import seedu.address.model.application.ApplicationContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
 
@@ -22,13 +27,33 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
-        FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+        FindCommand expectedFindCommand = new FindCommand(new ApplicationContainsKeywordsPredicate(
+                Arrays.asList("Google", "Meta"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+        assertParseSuccess(parser, " " + PREFIX_COMPANY + "Google Meta", expectedFindCommand);
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        expectedFindCommand = new FindCommand(new ApplicationContainsKeywordsPredicate(
+                new ArrayList<>(), Arrays.asList("Intern", "Developer"), new ArrayList<>(), new ArrayList<>()));
+        assertParseSuccess(parser, " " + PREFIX_ROLE + "Intern Developer", expectedFindCommand);
+
+        expectedFindCommand = new FindCommand(new ApplicationContainsKeywordsPredicate(
+                new ArrayList<>(), new ArrayList<>(), Arrays.asList("2022-12-12"), new ArrayList<>()));
+        assertParseSuccess(parser, " " + PREFIX_APPLICATION_DATE + "2022-12-12", expectedFindCommand);
+
+        expectedFindCommand = new FindCommand(new ApplicationContainsKeywordsPredicate(
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), Arrays.asList("Applied")));
+        assertParseSuccess(parser, " " + PREFIX_STATUS + "Applied", expectedFindCommand);
+
+        expectedFindCommand = new FindCommand(new ApplicationContainsKeywordsPredicate(
+                Arrays.asList("Google"), Arrays.asList("Intern"), Arrays.asList("2022-12-12"),
+                Arrays.asList("Applied")));
+        assertParseSuccess(parser, " " + PREFIX_COMPANY + "Google " + PREFIX_ROLE + "Intern "
+                + PREFIX_APPLICATION_DATE + "2022-12-12 " + PREFIX_STATUS + "Applied", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_noPrefix_throwsParseException() {
+        assertParseFailure(parser, "Alice Bob", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FindCommand.MESSAGE_USAGE));
     }
 
 }

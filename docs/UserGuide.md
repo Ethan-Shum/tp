@@ -129,23 +129,24 @@ Examples:
 * `list` followed by `next 1` increments the 1st application's status to the next stage.
 * `next 3` increments the 3rd application's status.
 
-### Locating persons by name: `find`
+### Locating applications: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds applications whose company names, roles, application dates or statuses contain any of the specified keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* At least one parameter must be provided.
+* The search is case-insensitive. e.g `n/google` will match `Google`.
+* The order of the keywords does not matter. e.g. `n/Google Meta` will match `Meta Google`.
+* Only full words will be matched e.g. `n/Goog` will not match `Google`.
+* Applications matching at least one keyword in the specified fields will be returned (i.e. `OR` search within the same field).
+* If multiple fields are specified, applications matching **all** specified fields will be returned (i.e. `AND` search across fields).
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/Google` returns applications to Google.
+* `find r/Intern` returns applications with the role Intern.
+* `find n/Google r/Intern` returns applications to Google with the role Intern.
+* `find s/Applied` returns applications with status Applied.
 
 ### Deleting a person : `delete`
 
@@ -217,6 +218,6 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Next**   | `next INDEX`<br> e.g., `next 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find**   | `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...`<br> e.g., `find n/Google r/Intern`
 **List**   | `list`
 **Help**   | `help`
