@@ -12,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.application.Application;
 
 /**
- * Deletes a application identified using it's displayed index from the address book.
+ * Deletes an application identified using it's displayed index from the address book.
  */
 public class DeleteCommand extends Command {
 

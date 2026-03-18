@@ -16,14 +16,14 @@ import javafx.scene.input.ClipboardContent;
 import seedu.address.model.application.Url;
 
 /**
- * Deletes a application identified using it's displayed index from the address book.
+ * Copy an application URL identified using it's displayed index from the address book.
  */
 public class CopyCommand extends Command {
 
     public static final String COMMAND_WORD = "copy";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Copys the application URL identified by the index number used in the displayed application list.\n"
+            + ": Copy the application URL identified by the index number used in the displayed application list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
