@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <GridPane HBox.hgrow="ALWAYS" hgap="20" >
+  <GridPane HBox.hgrow="ALWAYS" hgap="8" >
     <padding>
       <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
@@ -18,7 +18,7 @@
       <ColumnConstraints prefWidth="40"/>   <!-- ID -->
       <ColumnConstraints prefWidth="100"/>  <!-- Company -->
       <ColumnConstraints prefWidth="200"/>  <!-- Role -->
-      <ColumnConstraints prefWidth="80"/>  <!-- Status -->
+      <ColumnConstraints prefWidth="100"/>  <!-- Status -->
       <ColumnConstraints prefWidth="100"/>  <!-- Date -->
       <ColumnConstraints prefWidth="80"/>   <!-- URL -->
     </columnConstraints>
@@ -43,7 +43,7 @@
     <!-- Status -->
     <Label fx:id="status"
            GridPane.columnIndex="3"
-           styleClass="cell_big_label"/>
+           styleClass="status"/>
 
     <!-- Date -->
     <Label fx:id="applicationDate"
