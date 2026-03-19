@@ -30,7 +30,17 @@
 * [User Guide]({{ baseUrl }}/UserGuide.html) :expanded:
   * [About LockedIn]({{ baseUrl }}/UserGuide.html#about-lockedin)
   * [Quick Start]({{ baseUrl }}/UserGuide.html#quick-start)
-  * [Features]({{ baseUrl }}/UserGuide.html#features)
+  * [Features]({{ baseUrl }}/UserGuide.html#features) :expanded:
+    * [Help Command]({{ baseUrl }}/UserGuide.html#help)
+    * [Add Command]({{ baseUrl }}/UserGuide.html#add)
+    * [List Command]({{ baseUrl }}/UserGuide.html#list)
+    * [Edit Command]({{ baseUrl }}/UserGuide.html#edit)
+    * [Next Command]({{ baseUrl }}/UserGuide.html#next)
+    * [Copy Command]({{ baseUrl }}/UserGuide.html#copy)
+    * [Find Command]({{ baseUrl }}/UserGuide.html#find)
+    * [Delete Command]({{ baseUrl }}/UserGuide.html#delete)
+    * [Clear Command]({{ baseUrl }}/UserGuide.html#clear)
+    * [Exit Command]({{ baseUrl }}/UserGuide.html#exit)
   * [Saving and Editing Data]({{ baseUrl }}/UserGuide.html#saving-and-editing-data)
   * [FAQ]({{ baseUrl }}/UserGuide.html#faq)
   * [Known Issues]({{ baseUrl }}/UserGuide.html#known-issues)

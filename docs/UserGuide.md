@@ -6,6 +6,7 @@ pageNav: 3
 
 <h1 style="color:#e16a1f;">LockedIn User Guide</h1>
 
+
 LockedIn is a desktop app for **Computer Science undergraduates applying for internships**. It helps you keep track of applications, roles, links, and statuses in one place.
 
 LockedIn is optimized for users who prefer typing commands. If you are comfortable with keyboard-driven workflows, LockedIn helps you update and check your applications faster while reducing context switching between job portals, spreadsheets, and email threads.
@@ -106,7 +107,7 @@ Open a terminal in that folder and run:
 
 A GUI similar to the one below should appear in a few seconds. The app starts with sample data so that you can see how LockedIn works.
 
-![Ui](images/Ui.png)
+![firstLaunch](images/firstLaunch.png)
 
 ---
 
@@ -166,6 +167,7 @@ Notes about the command format
 
 ---
 
+<a id="help"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 View help: <code>help</code>
 </h3>
@@ -181,15 +183,16 @@ Opens the help window.
 
 ---
 
+<a id="add"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Add an application: <code>add</code>
 </h3>
 
 Adds a new application to LockedIn.
 
-| Before                | After                 |
-|-----------------------|-----------------------|
-| ![Add](images/Ui.png) | ![Add](images/Ui.png) |
+| Before                             | After                           |
+|------------------------------------|---------------------------------|
+| ![beforeAdd](images/beforeAdd.png) | ![afterAdd](images/afterAdd.png) |
 
 **Format:** `add n/COMPANY r/ROLE d/APPLICATION_DATE [u/URL] [s/STATUS]`
 
@@ -223,11 +226,16 @@ If you omit `s/STATUS`, LockedIn uses `Applied` as the default status.
 
 ---
 
+<a id="list"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 List all applications: <code>list</code>
 </h3>
 
 Shows all applications in LockedIn.
+
+| Before                              | After                              |
+|-------------------------------------|------------------------------------|
+| ![beforeList](images/beforeList.png) | ![afterList](images/afterList.png) |
 
 **Format:** `list`
 
@@ -237,11 +245,16 @@ Shows all applications in LockedIn.
 
 ---
 
+<a id="edit"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Edit an application: <code>edit</code>
 </h3>
 
 Edits an existing application in LockedIn.
+
+| Before                               | After                              |
+|--------------------------------------|------------------------------------|
+| ![beforeEdit](images/beforeEdit.png) | ![afterEdit](images/afterEdit.png) |
 
 **Format:** `edit INDEX [n/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]`
 
@@ -265,11 +278,16 @@ Edits an existing application in LockedIn.
 
 ---
 
+<a id="next"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Move an application to the next stage: <code>next</code>
 </h3>
 
 Moves an application to the next stage in the application workflow.
+
+| Before                              | After                            |
+|-------------------------------------|----------------------------------|
+| ![beforeNext](images/beforeNext.png) | ![afterEdit](images/afterNext.png) |
 
 **Format:** `next INDEX`
 
@@ -297,11 +315,16 @@ Moves an application to the next stage in the application workflow.
 
 ---
 
+<a id="copy"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Copy an application URL: <code>copy</code>
 </h3>
 
 Copies the URL of an application to your system clipboard.
+
+| Before                               | After                              |
+|--------------------------------------|------------------------------------|
+| ![beforeCopy](images/beforeCopy.png) | ![afterCopy](images/afterCopy.png) |
 
 **Format:** `copy INDEX`
 
@@ -320,11 +343,16 @@ Copies the URL of an application to your system clipboard.
 
 ---
 
+<a id="find"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Find applications: <code>find</code>
 </h3>
 
 Finds applications whose company names, roles, application dates, or statuses match the given keywords.
+
+| Before                               | After                              |
+|--------------------------------------|------------------------------------|
+| ![beforeFind](images/beforeFind.png) | ![afterFind](images/afterFind.png) |
 
 **Format:** `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...`
 
@@ -358,11 +386,16 @@ After using `find`, use `list` to return to the full application list.
 
 ---
 
+<a id="delete"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Delete an application: <code>delete</code>
 </h3>
 
 Deletes the specified application from LockedIn.
+
+| Before                                   | After                                  |
+|------------------------------------------|----------------------------------------|
+| ![beforeDelete](images/beforeDelete.png) | ![afterDelete](images/afterDelete.png) |
 
 **Format:** `delete INDEX`
 
@@ -379,11 +412,16 @@ Deletes the specified application from LockedIn.
 
 ---
 
+<a id="clear"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Clear all applications: <code>clear</code>
 </h3>
 
 Deletes all applications from LockedIn.
+
+| Before                                 | After                                |
+|----------------------------------------|--------------------------------------|
+| ![beforeCLear](images/beforeClear.png) | ![afterClear](images/afterClear.png) |
 
 **Format:** `clear`
 
@@ -399,6 +437,7 @@ This command removes every application in LockedIn. Use it carefully.
 
 ---
 
+<a id="exit"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Exit LockedIn: <code>exit</code>
 </h3>
