@@ -342,25 +342,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The `n/COMPANY` field is missing.
 
-  * 2a1. LockedIn shows an error message indicating that the company name is required.  
-  
+  * 2a1. LockedIn shows an error message indicating that the company name is required.
+
     Use case ends.
 
 * 2b. The `r/ROLE` field is missing.
 
-  * 2b1. LockedIn shows an error message indicating that the role is required.  
-  
+  * 2b1. LockedIn shows an error message indicating that the role is required.
+
     Use case ends.
 
 * 2c. The provided `APPLICATION_DATE` is invalid.
 
-  * 2c1. LockedIn shows an error message indicating that the date format is invalid.  
-  
+  * 2c1. LockedIn shows an error message indicating that the date format is invalid.
+
     Use case ends.
 
 * 2d. The provided `STATUS` is invalid.
-   
-   * 2d1. LockedIn shows an error message indicating that the status must be one of:  
+
+   * 2d1. LockedIn shows an error message indicating that the status must be one of:
           `APPLIED`, `INTERVIEW`, `OFFERED`, `REJECTED`, `WITHDRAWN`.
 
      Use case ends.

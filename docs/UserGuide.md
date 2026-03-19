@@ -119,19 +119,19 @@ Type a command in the command box and press Enter to run it.
 
 Here are a few commands you can try:
 
-- `list`  
+- `list`
   Shows all saved applications.
 
-- `add n/Google r/Software Engineer Intern d/2025-02-14 u/https://careers.google.com s/Applied`  
+- `add n/Google r/Software Engineer Intern d/2025-02-14 u/https://careers.google.com s/Applied`
   Adds a new application.
 
-- `delete 3`  
+- `delete 3`
   Deletes the 3rd application shown in the current list.
 
-- `clear`  
+- `clear`
   Deletes all applications.
 
-- `help`  
+- `help`
   Opens the help window.
 
 <br>
@@ -149,16 +149,16 @@ Notes about the command format
 
 **How to read command formats**
 
-- Words in `UPPER_CASE` are values to be supplied by the user.  
+- Words in `UPPER_CASE` are values to be supplied by the user.
   Example: in `add n/COMPANY`, `COMPANY` can be used as `Google`.
 
-- Items in square brackets are optional.  
+- Items in square brackets are optional.
   Example: `n/COMPANY [u/URL]` can be used as `n/Google u/https://careers.google.com` or as `n/Google`.
 
-- Parameters can be entered in any order.  
+- Parameters can be entered in any order.
   Example: if the command specifies `n/COMPANY r/ROLE`, `r/ROLE n/COMPANY` is also accepted.
 
-- Extra words for commands that do not take parameters, such as `help`, `list`, `exit`, and `clear`, are ignored.  
+- Extra words for commands that do not take parameters, such as `help`, `list`, `exit`, and `clear`, are ignored.
   Example: `help 123` is treated as `help`.
 
 - If you are using a PDF version of this document, be careful when copying commands that wrap across multiple lines. Spaces around line breaks may be omitted when pasted into the app.
@@ -210,7 +210,7 @@ Adds a new application to LockedIn.
 
 <box type="tip" seamless>
 
-**Tip:**  
+**Tip:**
 If you omit `s/STATUS`, LockedIn uses `Applied` as the default status.
 
 </box>
@@ -296,7 +296,7 @@ Moves an application to the next stage in the application workflow.
 - `INDEX` must be a positive integer.
 - LockedIn updates the selected application to the next stage in the status sequence.
 
-**Current status sequence**  
+**Current status sequence**
 `Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`
 
 **Examples**
@@ -308,7 +308,7 @@ Moves an application to the next stage in the application workflow.
 
 <box type="warning" seamless>
 
-**Warning:**  
+**Warning:**
 `next` follows a fixed sequence. If you want to set a specific status directly, use `edit INDEX s/STATUS` instead.
 
 </box>
@@ -358,11 +358,11 @@ Finds applications whose company names, roles, application dates, or statuses ma
 
 **Notes**
 - You must provide at least one parameter.
-- The search is case-insensitive.  
+- The search is case-insensitive.
   Example: `n/google` matches `Google`.
-- The order of keywords does not matter.  
+- The order of keywords does not matter.
   Example: `n/Google Meta` matches both Google and Meta.
-- Only full words are matched.  
+- Only full words are matched.
   Example: `n/Goog` does **not** match `Google`.
 - Applications matching at least one keyword in the same field are returned.
 - If multiple fields are specified, applications must match all those fields.
@@ -379,7 +379,7 @@ Finds applications whose company names, roles, application dates, or statuses ma
 
 <box type="tip" seamless>
 
-**Tip:**  
+**Tip:**
 After using `find`, use `list` to return to the full application list.
 
 </box>
@@ -430,7 +430,7 @@ Deletes all applications from LockedIn.
 
 <box type="warning" seamless>
 
-**Warning:**  
+**Warning:**
 This command removes every application in LockedIn. Use it carefully.
 
 </box>
@@ -480,7 +480,7 @@ Advanced users may update data directly by editing that file.
 
 <box type="warning" seamless>
 
-**Caution:**  
+**Caution:**
 If your changes make the data file invalid, LockedIn may discard the data and start with an empty data file the next time it runs.
 
 Before editing the data file:
@@ -497,17 +497,17 @@ Before editing the data file:
 ## <span style="color:#4a90e2; text-decoration: underline;">FAQ</span>
 <br>
 
-**Q: What date format should I use?**  
+**Q: What date format should I use?**
 A: Use the format `yyyy-MM-dd`. For example, `2025-02-14`.
 
 <br>
 
-**Q: What does `INDEX` mean?**  
+**Q: What does `INDEX` mean?**
 A: `INDEX` is the number shown next to an application in the current displayed list. Use it for commands like `edit`, `delete`, `next`, and `copy`.
 
 <br>
 
-**Q: Why does my command not work?**  
+**Q: Why does my command not work?**
 A: Check the command format carefully. Common mistakes include:
 - using the wrong date format
 - entering an invalid index
@@ -516,22 +516,22 @@ A: Check the command format carefully. Common mistakes include:
 
 <br>
 
-**Q: Why can’t I copy a URL?**  
+**Q: Why can’t I copy a URL?**
 A: The selected application may not have a URL saved. Add one first using `edit INDEX u/URL`.
 
 <br>
 
-**Q: How do I return to the full application list after using `find`?**  
+**Q: How do I return to the full application list after using `find`?**
 A: Use the `list` command.
 
 <br>
 
-**Q: What statuses can an application have?**  
+**Q: What statuses can an application have?**
 A: LockedIn currently uses these statuses: `Applied`, `OA`, `Interview`, `Offered`, `Rejected`, and `Withdrawn`.
 
 <br>
 
-**Q: How do I move my data to another computer?**  
+**Q: How do I move my data to another computer?**
 A: Install LockedIn on the other computer and replace the empty data file it creates with the data file from your current LockedIn home folder.
 
 <br>
@@ -543,21 +543,21 @@ A: Install LockedIn on the other computer and replace the empty data file it cre
 
 ##### 1. Application opens off-screen after switching displays
 
-   **Problem:**  
-   When using multiple screens, the application window may be placed on a secondary screen.  
+   **Problem:**
+   When using multiple screens, the application window may be placed on a secondary screen.
    If you later switch back to using only the primary screen, the GUI may open off-screen.
 
-   **Solution:**  
+   **Solution:**
    Delete the `preferences.json` file before starting the application again.
 
 ##### 2. Help window does not appear after being minimized
 
-   **Problem:**  
+   **Problem:**
    If the Help window is minimized and you run `help` again:
    - the existing Help window may stay minimized
    - no new Help window may be shown <br>
-   
-   **Solution:**  
+
+   **Solution:**
    Manually restore the minimized Help window.
 
 <br>
