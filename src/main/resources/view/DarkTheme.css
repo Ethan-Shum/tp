@@ -385,6 +385,11 @@
     -fx-text-fill: #616161 !important;
 }
 
+.status-oa {
+    -fx-background-color: #bfe1f6;
+    -fx-text-fill: #1976d2 !important;
+}
+
 .application-list-header {
     -fx-background-color: derive(#1d1d1d, 15%);
     -fx-border-color: derive(#1d1d1d, 5%);
