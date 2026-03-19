@@ -28,7 +28,7 @@ public class AddCommand extends Command {
             + "[" + PREFIX_URL + "URL] "
             + "[" + PREFIX_STATUS + "STATUS]\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_COMPANY + "John Doe "
+            + PREFIX_COMPANY + "Google "
             + PREFIX_ROLE + "Software Engineer "
             + PREFIX_APPLICATION_DATE + "2025-02-14 "
             + PREFIX_URL + "https://www.example.com "

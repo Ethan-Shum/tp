@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.application.Application;
 import seedu.address.testutil.ApplicationBuilder;
 
-
 public class ApplicationCardTest {
 
     @Test
