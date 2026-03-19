@@ -129,6 +129,21 @@ Examples:
 * `list` followed by `next 1` increments the 1st application's status to the next stage.
 * `next 3` increments the 3rd application's status.
 
+### Copying application URL : `copy`
+
+Copies the URL of an application to the system clipboard.
+
+Format: `copy INDEX`
+
+* Copies the URL of the application at the specified `INDEX`.
+* The index refers to the index number shown in the displayed application list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* If the application does not have a URL, an error message will be shown.
+
+Examples:
+* `list` followed by `copy 1` copies the 1st application's URL to the clipboard.
+* `find Betsy` followed by `copy 2` copies the 2nd application's URL in the results of the `find` command.
+
 ### Locating applications: `find`
 
 Finds applications whose company names, roles, application dates or statuses contain any of the specified keywords.
@@ -217,6 +232,7 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Next**   | `next INDEX`<br> e.g., `next 3`
+**Copy**   | `copy INDEX`<br> e.g., `copy 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...`<br> e.g., `find n/Google r/Intern`
 **List**   | `list`
