@@ -25,6 +25,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.UnaliasCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.ApplicationContainsKeywordsPredicate;
@@ -106,6 +107,22 @@ public class AddressBookParserTest {
         AddressBookParser aliasParser = new AddressBookParser(aliases);
 
         assertTrue(aliasParser.parseCommand("ls") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_unalias() throws Exception {
+        UnaliasCommand command = (UnaliasCommand) parser.parseCommand("unalias ls");
+        assertEquals(new UnaliasCommand("ls"), command);
+    }
+
+    @Test
+    public void parseCommand_aliasRemoved_noLongerWorks() throws Exception {
+        java.util.Map<String, String> aliases = new java.util.HashMap<>();
+        aliases.put("ls", "list");
+        aliases.remove("ls");
+        AddressBookParser aliasParser = new AddressBookParser(aliases);
+
+        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> aliasParser.parseCommand("ls"));
     }
 
     @Test

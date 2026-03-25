@@ -26,4 +26,13 @@ public class UserPrefsTest {
         org.junit.jupiter.api.Assertions.assertEquals("list", userPrefs.getAliases().get("ls"));
     }
 
+    @Test
+    public void removeAlias_success() {
+        UserPrefs userPrefs = new UserPrefs();
+        userPrefs.setAlias("ls", "list");
+        userPrefs.removeAlias("ls");
+
+        org.junit.jupiter.api.Assertions.assertFalse(userPrefs.getAliases().containsKey("ls"));
+    }
+
 }
