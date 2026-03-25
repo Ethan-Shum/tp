@@ -343,6 +343,33 @@ Copies the URL of an application to your system clipboard.
 
 ---
 
+<a id="alias"></a>
+<h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
+Give an alias to a command word: <code>alias</code>
+</h3>
+
+Creates a shortcut for an existing command word.
+
+| Setting an alias                 | Success                                  |
+|----------------------------------|------------------------------------------|
+| ![setAlias](images/setAlias.png) | ![successAlias](images/successAlias.png) |
+
+| Using an alias                   | Result                                 |
+|----------------------------------|----------------------------------------|
+| ![useAlias](images/useAlias.png) | ![resultAlias](images/resultAlias.png) |
+
+**Format:** `alias ALIAS COMMAND_WORD`
+
+**Examples**
+- `alias ls list`
+- `alias rm delete`
+
+**What you should expect**
+- You can use the alias in place of the original command word.
+- Example: after `alias ls list`, entering `ls` will run `list`.
+
+---
+
 <a id="find"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
 Find applications: <code>find</code>

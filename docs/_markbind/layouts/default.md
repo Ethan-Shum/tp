@@ -37,6 +37,7 @@
     * [Edit Command]({{ baseUrl }}/UserGuide.html#edit)
     * [Next Command]({{ baseUrl }}/UserGuide.html#next)
     * [Copy Command]({{ baseUrl }}/UserGuide.html#copy)
+    * [Alias Command]({{ baseUrl }}/UserGuide.html#alias)
     * [Find Command]({{ baseUrl }}/UserGuide.html#find)
     * [Delete Command]({{ baseUrl }}/UserGuide.html#delete)
     * [Clear Command]({{ baseUrl }}/UserGuide.html#clear)
