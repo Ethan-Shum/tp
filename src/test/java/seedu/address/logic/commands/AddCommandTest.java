@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalApplications.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -116,6 +117,16 @@ public class AddCommandTest {
 
         @Override
         public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Map<String, String> getAliases() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setAlias(String alias, String commandWord) {
             throw new AssertionError("This method should not be called.");
         }
 
