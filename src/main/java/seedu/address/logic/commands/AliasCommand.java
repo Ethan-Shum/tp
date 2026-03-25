@@ -36,7 +36,8 @@ public class AliasCommand extends Command {
             ExitCommand.COMMAND_WORD,
             HelpCommand.COMMAND_WORD,
             CopyCommand.COMMAND_WORD,
-            COMMAND_WORD
+            COMMAND_WORD,
+            UnaliasCommand.COMMAND_WORD
     );
 
     private final String alias;
