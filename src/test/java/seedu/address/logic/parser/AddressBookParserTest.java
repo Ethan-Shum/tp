@@ -9,12 +9,14 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AliasCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -32,7 +34,7 @@ import seedu.address.testutil.EditApplicationDescriptorBuilder;
 
 public class AddressBookParserTest {
 
-    private final AddressBookParser parser = new AddressBookParser();
+    private final AddressBookParser parser = new AddressBookParser(new HashMap<>());
 
     @Test
     public void parseCommand_add() throws Exception {
@@ -89,6 +91,21 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_alias() throws Exception {
+        AliasCommand command = (AliasCommand) parser.parseCommand("alias ls list");
+        assertEquals(new AliasCommand("ls", "list"), command);
+    }
+
+    @Test
+    public void parseCommand_aliasResolution() throws Exception {
+        java.util.Map<String, String> aliases = new java.util.HashMap<>();
+        aliases.put("ls", "list");
+        AddressBookParser aliasParser = new AddressBookParser(aliases);
+
+        assertTrue(aliasParser.parseCommand("ls") instanceof ListCommand);
     }
 
     @Test
