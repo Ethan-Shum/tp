@@ -28,7 +28,7 @@ deactivate DropCommand
 AddressBookParser --> LogicManager : d
 deactivate AddressBookParser
 
-LogicManager -> DropCommand : execute(Model)
+LogicManager -> DropCommand : execute(model)
 activate DropCommand
 
 DropCommand -> Model : getFilteredApplicationList()
@@ -36,15 +36,23 @@ activate Model
 Model --> DropCommand : filteredApplicationList
 deactivate Model
 
-DropCommand -> DropCommand : filter rejected/withdrawn applications
+loop for each application in filteredApplicationList
+    DropCommand -> DropCommand : check hasTerminalStatus()
+    alt application has terminal status
+        DropCommand -> DropCommand : add to applicationsToDrop
+    end
+end
 
-DropCommand -> Model : deleteApplications(applicationsToDelete)
-activate Model
-Model --> DropCommand
-deactivate Model
+loop for each application in applicationsToDrop
+    DropCommand -> Model : deleteApplication(application)
+    activate Model
+    Model --> DropCommand
+    deactivate Model
+end
 
 DropCommand --> LogicManager : result
 deactivate DropCommand
+
 DropCommand -[hidden]-> LogicManager : result
 destroy DropCommand
 
