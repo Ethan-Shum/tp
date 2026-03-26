@@ -39,7 +39,6 @@ deactivate DeleteCommand
 
 DeleteCommandParser --> AddressBookParser : d
 deactivate DeleteCommandParser
-'Hidden arrow to position the destroy marker below the end of the activation bar.
 DeleteCommandParser -[hidden]-> AddressBookParser
 destroy DeleteCommandParser
 
@@ -49,9 +48,13 @@ deactivate AddressBookParser
 LogicManager -> DeleteCommand : execute(m)
 activate DeleteCommand
 
-DeleteCommand -> Model : deletePerson(1)
+DeleteCommand -> Model : getFilteredApplicationList()
 activate Model
+Model --> DeleteCommand : lastShownList
+deactivate Model
 
+DeleteCommand -> Model : deleteApplication(applicationToDelete)
+activate Model
 Model --> DeleteCommand
 deactivate Model
 

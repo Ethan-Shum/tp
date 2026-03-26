@@ -7,26 +7,34 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <GridPane hgap="8" styleClass="application-list-header" minWidth="790" prefWidth="790">
+<VBox fx:id="containerVBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <GridPane fx:id="headerGridPane" hgap="8" styleClass="application-list-header" VBox.vgrow="NEVER">
     <padding>
       <Insets top="8" right="20" bottom="8" left="20"/>
     </padding>
     <columnConstraints>
-      <ColumnConstraints prefWidth="40"/>
-      <ColumnConstraints prefWidth="100"/>
-      <ColumnConstraints prefWidth="175"/>
-      <ColumnConstraints prefWidth="100"/>
-      <ColumnConstraints prefWidth="100"/>
-      <ColumnConstraints prefWidth="200"/>
+      <ColumnConstraints percentWidth="5.4"/>
+      <ColumnConstraints percentWidth="13.4"/>
+      <ColumnConstraints percentWidth="23.5"/>
+      <ColumnConstraints percentWidth="17.5"/>
+      <ColumnConstraints percentWidth="13.4"/>
+      <ColumnConstraints percentWidth="26.8"/>
     </columnConstraints>
 
     <Label text="ID" GridPane.columnIndex="0" styleClass="application-list-header-label"/>
-    <Label text="Company" GridPane.columnIndex="1" styleClass="application-list-header-label"/>
-    <Label text="Role" GridPane.columnIndex="2" styleClass="application-list-header-label"/>
-    <Label text="Status" GridPane.columnIndex="3" styleClass="application-list-header-label"/>
-    <Label text="Date" GridPane.columnIndex="4" styleClass="application-list-header-label"/>
-    <Label text="URL" GridPane.columnIndex="5" styleClass="application-list-header-label"/>
+    <Label text="COMPANY" GridPane.columnIndex="1" styleClass="application-list-header-label"/>
+    <Label text="ROLE" GridPane.columnIndex="2" styleClass="application-list-header-label"/>
+    <Label text="STATUS" GridPane.columnIndex="3" styleClass="application-list-header-label"/>
+    <Label text="DATE" GridPane.columnIndex="4" styleClass="application-list-header-label">
+      <GridPane.margin>
+        <Insets left="12"/>
+      </GridPane.margin>
+    </Label>
+    <Label text="URL" GridPane.columnIndex="5" styleClass="application-list-header-label">
+      <GridPane.margin>
+        <Insets left="12"/>
+      </GridPane.margin>
+    </Label>
   </GridPane>
 
   <ListView fx:id="applicationListView" VBox.vgrow="ALWAYS" />

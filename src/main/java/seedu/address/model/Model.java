@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -45,7 +46,27 @@ public interface Model {
     void setAddressBookFilePath(Path addressBookFilePath);
 
     /**
-     * Replaces address book data with the data in {@code addressBook}.
+     * Returns the user prefs' alias.
+     */
+    Map<String, String> getAliases();
+
+    /**
+     * Sets the user prefs' alias.
+     */
+    void setAlias(String alias, String commandWord);
+
+    /**
+     * Returns true if the alias exists.
+     */
+    boolean hasAlias(String alias);
+
+    /**
+     * Removes the given alias.
+     */
+    void removeAlias(String alias);
+
+    /**
+     * * Replaces address book data with the data in {@code addressBook}.
      */
     void setAddressBook(ReadOnlyAddressBook addressBook);
 

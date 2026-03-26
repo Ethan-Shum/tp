@@ -13,8 +13,10 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.application.ApplicationContainsKeywordsPredicate;
+import seedu.address.model.application.Status;
 
 public class FindCommandParserTest {
 
@@ -54,6 +56,21 @@ public class FindCommandParserTest {
     public void parse_noPrefix_throwsParseException() {
         assertParseFailure(parser, "Alice Bob", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_invalidStatus_throwsParseException() {
+        assertParseFailure(parser, " " + PREFIX_STATUS + "hi", Status.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " " + PREFIX_COMPANY + "Google " + PREFIX_STATUS + "hi",
+                Status.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_duplicatePrefixes_throwsParseException() {
+        assertParseFailure(parser, " " + PREFIX_COMPANY + "Google " + PREFIX_COMPANY + "Meta",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_COMPANY));
+        assertParseFailure(parser, " " + PREFIX_COMPANY + "Google random " + PREFIX_COMPANY + "Meta",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_COMPANY));
     }
 
 }

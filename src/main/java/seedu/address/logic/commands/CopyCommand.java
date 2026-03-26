@@ -23,7 +23,7 @@ public class CopyCommand extends Command {
     public static final String COMMAND_WORD = "copy";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Copy the application URL identified by the index number used in the displayed application list.\n"
+            + ": Copies the application URL identified by the index number used in the displayed application list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 

@@ -9,12 +9,15 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AliasCommand;
+import seedu.address.logic.commands.AliasListCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DropCommand;
@@ -24,6 +27,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.UnaliasCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.ApplicationContainsKeywordsPredicate;
@@ -33,7 +37,7 @@ import seedu.address.testutil.EditApplicationDescriptorBuilder;
 
 public class AddressBookParserTest {
 
-    private final AddressBookParser parser = new AddressBookParser();
+    private final AddressBookParser parser = new AddressBookParser(new HashMap<>());
 
     @Test
     public void parseCommand_add() throws Exception {
@@ -100,6 +104,43 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_alias() throws Exception {
+        AliasCommand command = (AliasCommand) parser.parseCommand("alias ls list");
+        assertEquals(new AliasCommand("ls", "list"), command);
+    }
+
+    @Test
+    public void parseCommand_aliasResolution() throws Exception {
+        java.util.Map<String, String> aliases = new java.util.HashMap<>();
+        aliases.put("ls", "list");
+        AddressBookParser aliasParser = new AddressBookParser(aliases);
+
+        assertTrue(aliasParser.parseCommand("ls") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_aliasRemoved_noLongerWorks() throws Exception {
+        java.util.Map<String, String> aliases = new java.util.HashMap<>();
+        aliases.put("ls", "list");
+        aliases.remove("ls");
+        AddressBookParser aliasParser = new AddressBookParser(aliases);
+
+        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> aliasParser.parseCommand("ls"));
+    }
+
+    @Test
+    public void parseCommand_unalias() throws Exception {
+        UnaliasCommand command = (UnaliasCommand) parser.parseCommand("unalias ls");
+        assertEquals(new UnaliasCommand("ls"), command);
+    }
+
+    @Test
+    public void parseCommand_aliasList() throws Exception {
+        assertTrue(parser.parseCommand(AliasListCommand.COMMAND_WORD) instanceof AliasListCommand);
+        assertTrue(parser.parseCommand(AliasListCommand.COMMAND_WORD + " 3") instanceof AliasListCommand);
     }
 
     @Test

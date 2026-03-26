@@ -7,23 +7,23 @@
 <?import javafx.scene.layout.HBox?>
 
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <GridPane HBox.hgrow="ALWAYS" hgap="8" >
+  <GridPane fx:id="cardGridPane" HBox.hgrow="ALWAYS" hgap="8" >
     <padding>
       <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     <columnConstraints>
-      <ColumnConstraints prefWidth="40"/>   <!-- ID -->
-      <ColumnConstraints prefWidth="100"/>  <!-- Company -->
-      <ColumnConstraints prefWidth="175"/>  <!-- Role -->
-      <ColumnConstraints prefWidth="100"/>  <!-- Status -->
-      <ColumnConstraints prefWidth="100"/>  <!-- Date -->
-      <ColumnConstraints prefWidth="200"/>   <!-- URL -->
+      <ColumnConstraints percentWidth="5.4"/>   <!-- ID -->
+      <ColumnConstraints percentWidth="13.4"/>  <!-- Company -->
+      <ColumnConstraints percentWidth="23.5"/>  <!-- Role -->
+      <ColumnConstraints percentWidth="17.5"/>  <!-- Status -->
+      <ColumnConstraints percentWidth="13.4"/>  <!-- Date -->
+      <ColumnConstraints percentWidth="26.8"/>   <!-- URL -->
     </columnConstraints>
 
     <!-- ID -->
     <Label fx:id="id"
            GridPane.columnIndex="0"
-           styleClass="cell_big_label"/>
+           styleClass="cell_index_label"/>
 
     <!-- Company -->
     <Label fx:id="company"
@@ -34,7 +34,7 @@
     <!-- Role -->
     <Label fx:id="role"
            GridPane.columnIndex="2"
-           styleClass="cell_big_label"
+           styleClass="cell_mid_label"
            wrapText="true"/>
 
     <!-- Status -->
@@ -45,12 +45,20 @@
     <!-- Date -->
     <Label fx:id="applicationDate"
            GridPane.columnIndex="4"
-           styleClass="cell_small_label"/>
+                                    styleClass="cell_small_label">
+                     <GridPane.margin>
+                            <Insets left="12"/>
+                     </GridPane.margin>
+              </Label>
 
     <!-- URL -->
     <Label fx:id="url"
            GridPane.columnIndex="5"
            styleClass="cell_small_label"
-           wrapText="true"/>
+           wrapText="true">
+      <GridPane.margin>
+        <Insets left="12"/>
+      </GridPane.margin>
+    </Label>
   </GridPane>
 </HBox>
