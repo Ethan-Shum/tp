@@ -158,7 +158,7 @@ Notes about the command format
 - Parameters can be entered in any order.
   Example: if the command specifies `n/COMPANY r/ROLE`, `r/ROLE n/COMPANY` is also accepted.
 
-- Extra words for commands that do not take parameters, such as `help`, `list`, `exit`, and `clear`, are ignored.
+- Extra words for commands that do not take parameters, such as `help`, `list`, `exit`, `clear` and `drop` are ignored.
   Example: `help 123` is treated as `help`.
 
 - If you are using a PDF version of this document, be careful when copying commands that wrap across multiple lines. Spaces around line breaks may be omitted when pasted into the app.
@@ -480,6 +480,22 @@ Deletes the specified application from LockedIn.
 
 **What you should expect**
 - The selected application is removed from the list.
+
+---
+
+<a id="drop"></a>
+<h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
+Drop Rejected or Withdrawn application: <code>drop</code>
+</h3>
+
+Deletes applications that has `Rejected` or `Withdrawn` status from the
+current list view in LockedIn.
+
+**Format:** `drop`
+
+**What you should expect**
+- Those application from the current list that has `Rejected` and `
+ Withdrawn` status are removed from the list.
 
 ---
 
