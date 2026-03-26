@@ -42,6 +42,7 @@
     * [Alias-List Command]({{ baseUrl }}/UserGuide.html#alias-list)
     * [Find Command]({{ baseUrl }}/UserGuide.html#find)
     * [Delete Command]({{ baseUrl }}/UserGuide.html#delete)
+    * [Drop Command]({{ baseUrl }}/UserGuide.html#drop)
     * [Clear Command]({{ baseUrl }}/UserGuide.html#clear)
     * [Exit Command]({{ baseUrl }}/UserGuide.html#exit)
   * [Saving and Editing Data]({{ baseUrl }}/UserGuide.html#saving-and-editing-data)

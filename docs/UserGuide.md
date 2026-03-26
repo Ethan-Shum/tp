@@ -492,17 +492,17 @@ Deletes the specified application from LockedIn.
 
 <a id="drop"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
-Drop Rejected or Withdrawn application: <code>drop</code>
+Drop Rejected or Withdrawn applications: <code>drop</code>
 </h3>
 
 Deletes applications that has `Rejected` or `Withdrawn` status from the
-current list view in LockedIn.
+current displayed application list view in LockedIn.
 
 **Format:** `drop`
 
 **What you should expect**
-- Those application from the current list that has `Rejected` and `
- Withdrawn` status are removed from the list.
+- Those application from the current displayed application list that 
+has `Rejected` and `Withdrawn` status are removed from the list.
 
 ---
 
