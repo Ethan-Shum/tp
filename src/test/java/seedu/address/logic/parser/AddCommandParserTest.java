@@ -21,7 +21,6 @@ import static seedu.address.logic.commands.CommandTestUtil.URL_DESC_BYTEDANCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_APPLICATION_DATE_BYTEDANCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BYTEDANCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_BYTEDANCE;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_STATUS_AMAZON;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STATUS_BYTEDANCE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_APPLICATION_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
@@ -50,17 +49,21 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Application expectedApplication = new ApplicationBuilder(BOB).withStatus(VALID_STATUS_BYTEDANCE).build();
+        Application expectedApplication = new ApplicationBuilder(BOB)
+                .withStatus(VALID_STATUS_BYTEDANCE)
+                .build();
 
-        //whitespace only preamble
-        assertParseSuccess(parser, PREAMBLE_WHITESPACE + COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
-                + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE, new AddCommand(expectedApplication));
+        // whitespace only preamble
+        assertParseSuccess(parser,
+                PREAMBLE_WHITESPACE + COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE
+                        + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
+                new AddCommand(expectedApplication));
     }
 
     @Test
     public void parse_repeatedSingleValue_failure() {
-        String validExpectedApplicationString = COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
-                + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE;
+        String validExpectedApplicationString = COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE
+                + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE;
 
         // multiple company names
         assertParseFailure(parser, COMPANY_DESC_AMAZON + validExpectedApplicationString,
@@ -84,8 +87,9 @@ public class AddCommandParserTest {
 
         // multiple fields repeated
         assertParseFailure(parser,
-                validExpectedApplicationString + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON + COMPANY_DESC_AMAZON
-                        + URL_DESC_AMAZON + STATUS_DESC_AMAZON + validExpectedApplicationString,
+                validExpectedApplicationString + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON
+                        + COMPANY_DESC_AMAZON + URL_DESC_AMAZON + STATUS_DESC_AMAZON
+                        + validExpectedApplicationString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_COMPANY, PREFIX_URL,
                         PREFIX_APPLICATION_DATE, PREFIX_ROLE, PREFIX_STATUS));
 
@@ -130,14 +134,16 @@ public class AddCommandParserTest {
     public void parse_optionalFieldsMissing_success() {
         // missing url
         Application expectedApplication = new ApplicationBuilder(AMY).withUrl(null).build();
-        assertParseSuccess(parser, COMPANY_DESC_AMAZON + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON
-                        + STATUS_DESC_AMAZON,
+        assertParseSuccess(parser,
+                COMPANY_DESC_AMAZON + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON + STATUS_DESC_AMAZON,
                 new AddCommand(expectedApplication));
 
         // missing status -> defaults to Applied
-        expectedApplication = new ApplicationBuilder(AMY).withStatus(Status.DEFAULT.toString()).build();
-        assertParseSuccess(parser, COMPANY_DESC_AMAZON + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON
-                        + URL_DESC_AMAZON,
+        expectedApplication = new ApplicationBuilder(AMY)
+                .withStatus(Status.DEFAULT.toString())
+                .build();
+        assertParseSuccess(parser,
+                COMPANY_DESC_AMAZON + ROLE_DESC_AMAZON + APPLICATION_DATE_DESC_AMAZON + URL_DESC_AMAZON,
                 new AddCommand(expectedApplication));
     }
 
@@ -168,33 +174,44 @@ public class AddCommandParserTest {
     @Test
     public void parse_invalidValue_failure() {
         // invalid company
-        assertParseFailure(parser, INVALID_COMPANY_DESC + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE
-                + STATUS_DESC_BYTEDANCE, Company.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+                INVALID_COMPANY_DESC + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
+                        + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
+                Company.MESSAGE_CONSTRAINTS);
 
         // invalid role
-        assertParseFailure(parser, COMPANY_DESC_BYTEDANCE + INVALID_ROLE_DESC + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE
-                + STATUS_DESC_BYTEDANCE, Role.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+                COMPANY_DESC_BYTEDANCE + INVALID_ROLE_DESC + APPLICATION_DATE_DESC_BYTEDANCE
+                        + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
+                Role.MESSAGE_CONSTRAINTS);
 
         // invalid application date
-        assertParseFailure(parser, COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + INVALID_APPLICATION_DATE_DESC + URL_DESC_BYTEDANCE
-                + STATUS_DESC_BYTEDANCE, ApplicationDate.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+                COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + INVALID_APPLICATION_DATE_DESC
+                        + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
+                ApplicationDate.MESSAGE_CONSTRAINTS);
 
         // invalid url
-        assertParseFailure(parser, COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE + INVALID_URL_DESC
-                + STATUS_DESC_BYTEDANCE, Url.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+                COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
+                        + INVALID_URL_DESC + STATUS_DESC_BYTEDANCE,
+                Url.MESSAGE_CONSTRAINTS);
 
         // invalid status
-        assertParseFailure(parser, COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE
-                + INVALID_STATUS_DESC, Status.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser,
+                COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
+                        + URL_DESC_BYTEDANCE + INVALID_STATUS_DESC,
+                Status.MESSAGE_CONSTRAINTS);
 
         // two invalid values, only first invalid value reported
-        assertParseFailure(parser, INVALID_COMPANY_DESC + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
-                        + INVALID_URL_DESC,
+        assertParseFailure(parser,
+                INVALID_COMPANY_DESC + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE + INVALID_URL_DESC,
                 Company.MESSAGE_CONSTRAINTS);
 
         // non-empty preamble
-        assertParseFailure(parser, PREAMBLE_NON_EMPTY + COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE + APPLICATION_DATE_DESC_BYTEDANCE
-                + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
+        assertParseFailure(parser,
+                PREAMBLE_NON_EMPTY + COMPANY_DESC_BYTEDANCE + ROLE_DESC_BYTEDANCE
+                        + APPLICATION_DATE_DESC_BYTEDANCE + URL_DESC_BYTEDANCE + STATUS_DESC_BYTEDANCE,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }

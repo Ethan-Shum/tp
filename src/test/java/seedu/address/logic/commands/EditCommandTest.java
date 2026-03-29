@@ -57,11 +57,16 @@ public class EditCommandTest {
         Application lastApplication = model.getFilteredApplicationList().get(indexLastApplication.getZeroBased());
 
         ApplicationBuilder applicationInList = new ApplicationBuilder(lastApplication);
-        Application editedApplication = applicationInList.withCompany(VALID_COMPANY_BYTEDANCE).withRole(VALID_ROLE_BYTEDANCE)
-                .withStatus(VALID_STATUS_BYTEDANCE).build();
+        Application editedApplication = applicationInList.withCompany(VALID_COMPANY_BYTEDANCE)
+                .withRole(VALID_ROLE_BYTEDANCE)
+                .withStatus(VALID_STATUS_BYTEDANCE)
+                .build();
 
-        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder().withCompany(VALID_COMPANY_BYTEDANCE)
-                .withRole(VALID_ROLE_BYTEDANCE).withStatus(VALID_STATUS_BYTEDANCE).build();
+        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder()
+                .withCompany(VALID_COMPANY_BYTEDANCE)
+                .withRole(VALID_ROLE_BYTEDANCE)
+                .withStatus(VALID_STATUS_BYTEDANCE)
+                .build();
         EditCommand editCommand = new EditCommand(indexLastApplication, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS,
@@ -92,7 +97,8 @@ public class EditCommandTest {
 
         Application applicationInFilteredList = model.getFilteredApplicationList()
                 .get(INDEX_FIRST_APPLICATION.getZeroBased());
-        Application editedApplication = new ApplicationBuilder(applicationInFilteredList).withCompany(VALID_COMPANY_BYTEDANCE)
+        Application editedApplication = new ApplicationBuilder(applicationInFilteredList)
+                .withCompany(VALID_COMPANY_BYTEDANCE)
                 .build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
                 new EditApplicationDescriptorBuilder().withCompany(VALID_COMPANY_BYTEDANCE).build());
@@ -131,7 +137,8 @@ public class EditCommandTest {
     @Test
     public void execute_invalidApplicationIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredApplicationList().size() + 1);
-        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder().withCompany(VALID_COMPANY_BYTEDANCE)
+        EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder()
+                .withCompany(VALID_COMPANY_BYTEDANCE)
                 .build();
         EditCommand editCommand = new EditCommand(outOfBoundIndex, descriptor);
 
@@ -185,8 +192,8 @@ public class EditCommandTest {
         Index index = Index.fromOneBased(1);
         EditApplicationDescriptor editApplicationDescriptor = new EditApplicationDescriptor();
         EditCommand editCommand = new EditCommand(index, editApplicationDescriptor);
-        String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editApplicationDescriptor="
-                + editApplicationDescriptor + "}";
+        String expected = EditCommand.class.getCanonicalName()
+                + "{index=" + index + ", editApplicationDescriptor=" + editApplicationDescriptor + "}";
         assertEquals(expected, editCommand.toString());
     }
 
