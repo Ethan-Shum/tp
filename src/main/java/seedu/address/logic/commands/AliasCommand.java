@@ -80,7 +80,7 @@ public class AliasCommand extends Command {
 
         if (isOverwrite) {
             return new CommandResult(String.format(MESSAGE_OVERWRITE_SUCCESS,
-                    alias, commandWord, previousCommand));
+                    alias, previousCommand, commandWord));
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, alias, commandWord));

@@ -52,7 +52,7 @@ public class AliasCommandTest {
         CommandResult result = command.execute(model);
 
         assertEquals(String.format(AliasCommand.MESSAGE_OVERWRITE_SUCCESS,
-                "ls", "copy", "list"), result.getFeedbackToUser());
+                "ls", "list", "copy"), result.getFeedbackToUser());
         assertEquals("copy", model.getAliases().get("ls"));
     }
 
