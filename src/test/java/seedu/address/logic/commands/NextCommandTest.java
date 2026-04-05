@@ -73,6 +73,7 @@ public class NextCommandTest {
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setApplication(applicationToUpdate, updatedApplication);
+        showApplicationAtIndex(expectedModel, INDEX_FIRST_APPLICATION);
 
         assertCommandSuccess(nextCommand, model, expectedMessage, expectedModel);
     }

@@ -25,18 +25,18 @@ public class ApplicationTest {
         // null -> returns false
         assertFalse(ALICE.isSameApplication(null));
 
-        // same company and role, all other attributes different -> returns true
+        // same company and role, different application date -> returns false
         Application editedAlice = new ApplicationBuilder(ALICE).withApplicationDate(VALID_APPLICATION_DATE_BYTEDANCE)
                 .withUrl(VALID_URL_BYTEDANCE).withStatus(VALID_STATUS_BYTEDANCE).build();
-        assertTrue(ALICE.isSameApplication(editedAlice));
+        assertFalse(ALICE.isSameApplication(editedAlice));
 
         // different company, all other attributes same -> returns false
         editedAlice = new ApplicationBuilder(ALICE).withCompany(VALID_COMPANY_BYTEDANCE).build();
         assertFalse(ALICE.isSameApplication(editedAlice));
 
-        // name differs in case, all other attributes same -> returns false
+        // name differs in case, all other attributes same -> returns true (case-insensitive)
         Application editedBob = new ApplicationBuilder(BOB).withCompany(VALID_COMPANY_BYTEDANCE.toLowerCase()).build();
-        assertFalse(BOB.isSameApplication(editedBob));
+        assertTrue(BOB.isSameApplication(editedBob));
 
         // name has trailing spaces, all other attributes same -> returns false
         String nameWithTrailingSpaces = VALID_COMPANY_BYTEDANCE + " ";
