@@ -78,7 +78,7 @@ public class Application {
 
     /**
      * Returns true if both applications share the same identity fields.
-     * Identity is defined by company and role.
+     * Identity is defined by company (case-insensitive) and role (case-insensitive).
      */
     public boolean isSameApplication(Application otherApplication) {
         if (otherApplication == this) {
@@ -86,8 +86,9 @@ public class Application {
         }
 
         return otherApplication != null
-                && otherApplication.getCompany().equals(getCompany())
-                && otherApplication.getRole().equals(getRole());
+                && otherApplication.getCompany().value.equalsIgnoreCase(getCompany().value)
+                && otherApplication.getRole().value.equalsIgnoreCase(getRole().value)
+                && applicationDate.equals(otherApplication.applicationDate);
     }
 
     /**
@@ -106,8 +107,8 @@ public class Application {
         }
 
         Application otherApplication = (Application) other;
-        return company.equals(otherApplication.company)
-                && role.equals(otherApplication.role)
+        return company.value.equalsIgnoreCase(otherApplication.company.value)
+                && role.value.equalsIgnoreCase(otherApplication.role.value)
                 && applicationDate.equals(otherApplication.applicationDate)
                 && url.equals(otherApplication.url)
                 && status.equals(otherApplication.status)

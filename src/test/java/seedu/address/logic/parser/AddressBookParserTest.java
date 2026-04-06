@@ -52,7 +52,6 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_clear() throws Exception {
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
     }
 
     @Test
@@ -68,8 +67,8 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_dropWithArgs_returnsDropCommand() throws Exception {
-        assertEquals(new DropCommand(), parser.parseCommand(DropCommand.COMMAND_WORD + " 1"));
+    public void parseCommand_dropWithoutArgs_returnsDropCommand() throws Exception {
+        assertEquals(new DropCommand(), parser.parseCommand(DropCommand.COMMAND_WORD));
     }
 
     @Test

@@ -37,15 +37,16 @@ public class Messages {
      */
     public static String format(Application application) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(application.getCompany())
+        builder.append("Company: ")
+                .append(application.getCompany())
                 .append("; Role: ")
                 .append(application.getRole())
+                .append("; Status: ")
+                .append(application.getStatus())
                 .append("; Application Date: ")
                 .append(application.getApplicationDate())
                 .append("; URL: ")
                 .append(application.getUrl().map(u -> u.value).orElse("-"))
-                .append("; Status: ")
-                .append(application.getStatus())
                 .append("; Note: ")
                 .append(application.getNote().toString().isEmpty() ? "-" : application.getNote());
         return builder.toString();

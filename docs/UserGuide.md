@@ -158,8 +158,10 @@ Notes about the command format
 - Parameters can be entered in any order.
   Example: if the command specifies `n/COMPANY r/ROLE`, `r/ROLE n/COMPANY` is also accepted.
 
-- Extra words for commands that do not take parameters, such as `help`, `list`, `exit`, `clear` and `drop` are ignored.
+- Extra words for commands that do not take parameters, such as `help`, `list`, and `exit` are ignored.
   Example: `help 123` is treated as `help`.
+- Commands like `clear` and `drop` do not accept any arguments. Using arguments will result in an error.
+  Example: `clear 4` will show an error message.
 
 - If you are using a PDF version of this document, be careful when copying commands that wrap across multiple lines. Spaces around line breaks may be omitted when pasted into the app.
 
@@ -212,8 +214,10 @@ Adds a new application to LockedIn.
 
 **Notes**
 - `COMPANY` and `ROLE` must contain only alphanumeric characters and spaces, and must not be blank.
+- Company and role comparisons are case-insensitive. For example, `Google` and `GOOGLE` are treated as the same company.
 - `APPLICATION_DATE` must be a valid date in the format `yyyy-MM-dd`.
 - `URL`, if provided, must start with `http://` or `https://`.
+- Duplicate applications have the same company (case-insensitive), role (case-insensitive), and application date. LockedIn will reject duplicate applications.
 
 <box type="tip" seamless>
 
@@ -302,6 +306,7 @@ Moves an application to the next stage in the application workflow.
 - `INDEX` refers to the index number shown in the displayed list.
 - `INDEX` must be a positive integer.
 - LockedIn updates the selected application to the next stage in the status sequence.
+- If you are viewing a filtered list, the filter is preserved after the command executes. This allows you to track status changes within your filtered view.
 
 **Current status sequence**
 `Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`
@@ -495,37 +500,48 @@ Deletes the specified application from LockedIn.
 Drop Rejected or Withdrawn applications: <code>drop</code>
 </h3>
 
-Deletes applications that has `Rejected` or `Withdrawn` status from the
+Deletes applications with `Rejected` or `Withdrawn` status from the
 current displayed application list view in LockedIn.
 
 **Format:** `drop`
 
+**Notes**
+- The `drop` command does not accept any arguments.
+- Only applications in the current filtered list with terminal statuses are deleted.
+
 **What you should expect**
-- Those application from the current displayed application list that 
-has `Rejected` and `Withdrawn` status are removed from the list.
+- Applications with `Rejected` and `Withdrawn` status from the current displayed list are removed.
+- A message shows how many applications were dropped and lists them.
 
 ---
 
 <a id="clear"></a>
 <h3 style="font-size: 1.3em; color: #d9730d; margin-top: 1.2em; margin-bottom: 0.4em;">
-Clear all applications: <code>clear</code>
+Clear applications: <code>clear</code>
 </h3>
 
-Deletes all applications from LockedIn.
+Deletes all applications from the current displayed list.
 
 | Before                                 | After                                |
 |----------------------------------------|--------------------------------------|
-| ![beforeCLear](images/beforeClear.png) | ![afterClear](images/afterClear.png) |
+| ![beforeClear](images/beforeClear.png) | ![afterClear](images/afterClear.png) |
 
 **Format:** `clear`
 
+**Notes**
+- The `clear` command does not accept any arguments.
+- Only applications in the current filtered list are deleted.
+- If you are viewing all applications (via `list`), all applications are deleted.
+- If you are viewing a filtered subset (via `find`), only those applications are deleted.
+
 **What you should expect**
-- All saved applications are removed.
+- Applications from the current displayed list are removed.
+- A message shows how many applications were cleared and lists them.
 
 <box type="warning" seamless>
 
 **Warning:**
-This command removes every application in LockedIn. Use it carefully.
+This command removes all applications from the current displayed list. Use it carefully. If you want to remove all applications in LockedIn, first run `list` to show all applications, then run `clear`.
 
 </box>
 
@@ -622,7 +638,23 @@ A: Use the `list` command.
 A: LockedIn currently uses these statuses: `Applied`, `OA`, `Interview`, `Offered`, `Rejected`, and `Withdrawn`.
 
 <br>
+**Q: Does company name matching work with different cases?**<br>
+A: Yes. Company and role names are matched case-insensitively. For example, adding `Google` and `google` with the same role and date will be treated as duplicates.
 
+<br>
+
+**Q: What makes two applications duplicates?**<br>
+A: Two applications are considered duplicates if they have the same company name (case-insensitive), role (case-insensitive), and application date. The URL, status, and note fields do not affect duplicate detection. LockedIn will reject any attempt to add a duplicate application.
+
+<br>
+
+**Q: What's the difference between `delete`, `clear`, and `drop`?**<br>
+A: 
+- `delete INDEX` removes a single application by its index number.
+- `clear` removes all applications from the current displayed list (use `list` first to delete everything).
+- `drop` removes only applications with `Rejected` or `Withdrawn` status from the current list.
+
+<br>
 **Q: How do I move my data to another computer?**<br>
 A: Install LockedIn on the other computer and replace the empty data file it creates with the data file from your current LockedIn home folder.
 

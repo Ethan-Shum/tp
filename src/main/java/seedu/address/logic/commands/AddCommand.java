@@ -35,7 +35,8 @@ public class AddCommand extends Command {
             + PREFIX_STATUS + "Applied ";
 
     public static final String MESSAGE_SUCCESS = "New application added: %1$s";
-    public static final String MESSAGE_DUPLICATE_APPLICATION = "This application already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_APPLICATION = "This application already exists in the address book. "
+            + "Duplicate applications are identified by having the same company, role, and application date.";
 
     private final Application toAdd;
 

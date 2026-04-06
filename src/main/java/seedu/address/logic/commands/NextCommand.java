@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_APPLICATIONS;
 
 import java.util.List;
 
@@ -50,7 +49,6 @@ public class NextCommand extends Command {
                 applicationToUpdate.getUrl(), nextStatus, applicationToUpdate.getNote());
 
         model.setApplication(applicationToUpdate, updatedApplication);
-        model.updateFilteredApplicationList(PREDICATE_SHOW_ALL_APPLICATIONS);
         return new CommandResult(String.format(MESSAGE_NEXT_APPLICATION_SUCCESS,
                 Messages.format(updatedApplication)));
     }
