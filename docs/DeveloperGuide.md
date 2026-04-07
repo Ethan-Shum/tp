@@ -407,14 +407,44 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 4a1. LockedIn shows an error message.
 
-      Use case resumes at step 3.
+      Use case ends.
 
 * 4b. The specified URL is invalid.
 
     * 4b1. LockedIn shows an error message.
 
-      Use case resumes at step 3.
+      Use case ends.
 
+**Use case: Copy job URL**
+
+**Preconditions:**
+* At least one application record is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to copy a job URL from an application record.
+2. User requests to view the application records.
+3. LockedIn shows the application records.
+4. User specifies the application record whose URL is to be copied.
+5. LockedIn copies the URL of the specified application record to the system clipboard.
+6. LockedIn shows a confirmation message indicating that the URL has been copied.
+
+   Use case ends.
+
+**Extensions:**
+
+* 4a. The specified index is invalid.
+
+    * 4a1. LockedIn shows an error message.
+
+      Use case ends.
+
+* 4b. The specified application record does not have a saved URL.
+
+    * 4b1. LockedIn shows an error message indicating that there is no URL to copy.
+
+      Use case ends.
+  
 
 **Use case: Create an alias for a command word**
 
@@ -536,6 +566,32 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. The input format is invalid.
 
     * 1a1. LockedIn shows an error message.
+
+      Use case ends.
+
+**Use case: View command history**
+
+**Preconditions:**
+* The user has previously entered at least one command in the current session.
+
+**MSS:**
+
+1. User requests to navigate to a previous or next command.
+2. LockedIn displays the previous or next command from the command history.
+
+   Use case ends.
+
+**Extensions:**
+
+* 1a. There is no earlier command in the history.
+
+    * 1a1. LockedIn keeps the command box unchanged.
+
+      Use case ends.
+
+* 1b. There is no later command in the history.
+
+    * 1b1. LockedIn clears the command box or keeps it at the latest state.
 
       Use case ends.
 
