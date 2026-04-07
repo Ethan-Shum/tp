@@ -10,13 +10,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Company {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Company names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Company names can contain letters, numbers, spaces, and symbols, and must not be blank";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * The first character must not be a whitespace,
+     * otherwise \" \" (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "[^\\s].*";
 
     public final String value;
 
@@ -38,7 +38,6 @@ public class Company {
         return test.matches(VALIDATION_REGEX);
     }
 
-
     @Override
     public String toString() {
         return value;
@@ -50,7 +49,6 @@ public class Company {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof Company)) {
             return false;
         }
@@ -63,5 +61,4 @@ public class Company {
     public int hashCode() {
         return value.hashCode();
     }
-
 }

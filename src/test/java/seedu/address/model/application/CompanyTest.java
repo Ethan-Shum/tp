@@ -27,15 +27,15 @@ public class CompanyTest {
         // invalid company
         assertFalse(Company.isValidCompany("")); // empty string
         assertFalse(Company.isValidCompany(" ")); // spaces only
-        assertFalse(Company.isValidCompany("^")); // only non-alphanumeric characters
-        assertFalse(Company.isValidCompany("peter*")); // contains non-alphanumeric characters
+        assertFalse(Company.isValidCompany(" Google")); // leading space
 
         // valid company
-        assertTrue(Company.isValidCompany("peter jack")); // alphabets only
-        assertTrue(Company.isValidCompany("12345")); // numbers only
-        assertTrue(Company.isValidCompany("peter the 2nd")); // alphanumeric characters
-        assertTrue(Company.isValidCompany("Capital Tan")); // with capital letters
-        assertTrue(Company.isValidCompany("David Roger Jackson Ray Jr 2nd")); // long company names
+        assertTrue(Company.isValidCompany("^")); // symbol only
+        assertTrue(Company.isValidCompany("OpenAI"));
+        assertTrue(Company.isValidCompany("ByteDance Pte. Ltd."));
+        assertTrue(Company.isValidCompany("TikTok (SG)"));
+        assertTrue(Company.isValidCompany("AT&T"));
+        assertTrue(Company.isValidCompany("R&D Labs"));
     }
 
     @Test
