@@ -44,7 +44,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> roleKeywords = parseKeywords(argMultimap, PREFIX_ROLE);
         List<String> urlKeywords = parseKeywords(argMultimap, PREFIX_URL);
         List<String> statusKeywords = parseStatusKeywords(argMultimap);
-        
+
         LocalDate[] dateRange = parseDateRange(argMultimap);
         LocalDate startDate = dateRange[0];
         LocalDate endDate = dateRange[1];
