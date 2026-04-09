@@ -429,12 +429,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 2d. An application with the same company, role, and application date already exists.
+* 2d. The provided URL is invalid, does not begin with http:// or https://
 
-    * 2d1. LockedIn shows an error message indicating that a duplicate application record already exists.
+    * 2d1. LockedIn shows an error message indicating that the URL format is invalid.
 
       Use case ends.
 
+* 2e. An application with the same company, role, and application date already exists.
+
+    * 2e1. LockedIn shows an error message indicating that a duplicate application record already exists.
+
+      Use case ends.
+  
+* 2f. The user provides an unrecognized or invalid prefix.
+
+    * 2f1. LockedIn shows an error message indicating that the command format is invalid.
+
+       Use case ends.
 
 **Use case: Delete an application record**
 
@@ -454,40 +465,125 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The specified index is invalid.
 
-    * 2a1. LockedIn shows an error message.
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
 
       Use case ends.
 
-
-**Use case: Add Job URL**
-
-**Preconditions:**
-* At least one application record exists in the system.
+**Use case: List all applications**
 
 **MSS:**
 
-1. User wants to add a job URL to an application record.
-2. User requests to view the application records.
-3. LockedIn shows the application records.
-4. User specifies the application record and the URL to be added.
-5. LockedIn updates the application record with the URL.
-6. LockedIn shows a confirmation message.
+1. User wants to view all application records.
+2. User requests to list all applications.
+3. LockedIn retrieves all saved application records.
+4. LockedIn displays all application records.
 
    Use case ends.
 
 **Extensions:**
 
-* 4a. The specified index is invalid.
+* 3a. There are no saved application records.
 
-    * 4a1. LockedIn shows an error message.
+    * 3a1. LockedIn shows an empty application list.
+
+      Use case ends.
+
+
+**Use case: Find applications**
+
+**MSS:**
+
+1. User wants to search for application records that match given criteria.
+2. User specifies one or more supported search prefixes and their corresponding keywords.
+3. LockedIn filters the application list based on the specified criteria.
+4. LockedIn displays the matching application records.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The user does not provide any search criteria.
+
+    * 2a1.  LockedIn shows an error message indicating that the command format is invalid.
 
       Use case ends.
 
-* 4b. The specified URL is invalid.
+* 2b. The user provides an unsupported or invalid prefix.
 
-    * 4b1. LockedIn shows an error message.
+    * 2b1. LockedIn shows an error message indicating that the command format is invalid.
 
       Use case ends.
+
+* 2c. The user provides an invalid status value.
+
+    * 2c1. LockedIn shows an error message indicating that the status is invalid.
+
+      Use case ends.
+
+* 3a. No application records match the specified criteria.
+
+    * 3a1. LockedIn shows an empty filtered list.
+
+      Use case ends.
+
+**Use case: Edit an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to update an existing application record.
+2. User specifies the index of the target application and the fields to be updated.
+3. LockedIn updates the specified fields of the selected application record.
+4. LockedIn shows a confirmation message displaying the updated application record.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The user does not provide any field to edit.
+
+    * 2b1. LockedIn shows an error message indicating that at least one editable field must be provided.
+
+      Use case ends.
+
+* 2c. The provided application date is invalid.
+
+    * 2c1. LockedIn shows an error message indicating that the date is invalid.
+
+      Use case ends.
+
+* 2d. The provided status is invalid.
+
+    * 2d1. LockedIn shows an error message indicating that the status is invalid.
+
+      Use case ends.
+
+* 2e. The provided URL is invalid.
+
+    * 2e1. LockedIn shows an error message indicating that the URL format is invalid.
+
+      Use case ends.
+
+* 2f. The updated application would duplicate an existing application record.
+
+    * 2f1. LockedIn shows an error message indicating that a duplicate application record already exists.
+
+      Use case ends.
+
+* 2g. The user provides an unsupported or invalid prefix.
+
+    * 2g1. LockedIn shows an error message indicating that the command format is invalid.
+
+      Use case ends.
+
 
 **Use case: Copy job URL**
 
@@ -497,28 +593,128 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1. User wants to copy a job URL from an application record.
-2. User requests to view the application records.
-3. LockedIn shows the application records.
-4. User specifies the application record whose URL is to be copied.
-5. LockedIn copies the URL of the specified application record to the system clipboard.
-6. LockedIn shows a confirmation message indicating that the URL has been copied.
+2. User specifies the index of the target application record.
+3. LockedIn copies the URL of the specified application record to the system clipboard.
+4. LockedIn shows a confirmation message indicating that the URL has been copied.
 
    Use case ends.
 
 **Extensions:**
 
-* 4a. The specified index is invalid.
+* 2a. The specified index is invalid.
 
-    * 4a1. LockedIn shows an error message.
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The specified application record does not have a saved URL.
+
+    * 2b1. LockedIn shows an error message indicating that there is no URL to copy.
 
       Use case ends.
 
-* 4b. The specified application record does not have a saved URL.
+**Use case: Advance application status**
 
-    * 4b1. LockedIn shows an error message indicating that there is no URL to copy.
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to advance an application's status.
+2. User specifies the index of the target application.
+3. LockedIn updates the application's status to the next stage in a cyclic status sequence (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
+4. LockedIn shows a confirmation message with the updated application details.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
 
       Use case ends.
-  
+
+
+
+**Use case: Drop terminal applications from current list**
+
+**MSS:**
+
+1. User wants to remove terminal applications from the currently displayed list.
+2. User executes the drop command.
+3. LockedIn finds applications with status `Rejected` or `Withdrawn` in the current list.
+4. LockedIn deletes those applications.
+5. LockedIn shows a summary message with the number of removed applications.
+
+   Use case ends.
+
+**Extensions:**
+
+* 3a. No terminal applications are found in the current displayed list.
+
+    * 3a1. LockedIn shows an error message indicating that there is nothing to drop.
+
+      Use case ends.
+
+
+**Use case: Set a note for an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to add or update a note for an application.
+2. User specifies the index of the target application and the note content after correct prefix.
+3. LockedIn updates the note field for the selected application.
+4. LockedIn shows a confirmation message.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The note input is empty.
+
+    * 2b1. LockedIn shows an error message indicating note cannot be empty.
+
+      Use case ends.
+
+* 2d. The note exceeds the maximum allowed length.
+
+    * 2d1. LockedIn shows an error message indicating that the note is too long.
+
+      Use case ends.
+
+
+**Use case: Clear a note from an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to remove a note from an application.
+2. User specifies the index of the target application.
+3. LockedIn clears the note field for the selected application.
+4. LockedIn shows a confirmation message.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
 
 **Use case: Create an alias for a command word**
 
@@ -607,77 +803,49 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
+**Use case: Clear applications from current list**
 
-**Use case: Advance application status**
+**MSS:**
+
+1. User wants to remove all application records in the current displayed list.
+2. User executes the clear command.
+3. LockedIn deletes all application records in the current displayed list.
+4. LockedIn shows a confirmation message indicating that the displayed application records have been removed.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The user provides additional arguments.
+
+    * 2a1. LockedIn shows an error message indicating that the command format is invalid.
+
+      Use case ends.
+
+
+**Use case: View command history**
 
 **Preconditions:**
-* At least one application is shown in the current displayed list.
+* The user has previously entered at least one command in the current session.
 
 **MSS:**
 
-1. User wants to advance an application's status.
-2. User specifies the index of the target application.
-3. LockedIn updates the application's status to the next stage in a cyclic status sequence (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
-4. LockedIn shows a confirmation message with the updated application details.
+1. User requests to navigate to a previous or next command.
+2. LockedIn displays the previous or next command from the command history.
 
    Use case ends.
 
 **Extensions:**
 
-* 2a. The specified index is invalid.
+* 1a. There is no earlier command in the history.
 
-    * 2a1. LockedIn shows an error message.
-
-      Use case ends.
-
-
-**Use case: Drop terminal applications from current list**
-
-**MSS:**
-
-1. User wants to remove terminal applications from the currently displayed list.
-2. User executes the drop command.
-3. LockedIn finds applications with status `Rejected` or `Withdrawn` in the current list.
-4. LockedIn deletes those applications.
-5. LockedIn shows a summary message with the number of removed applications.
-
-   Use case ends.
-
-**Extensions:**
-
-* 3a. No terminal applications are found in the current displayed list.
-
-    * 3a1. LockedIn shows an error message indicating that there is nothing to drop.
+    * 1a1. LockedIn keeps the command box unchanged.
 
       Use case ends.
 
+* 1b. There is no later command in the history.
 
-**Use case: Set or clear an application note**
-
-**Preconditions:**
-* At least one application is shown in the current displayed list.
-
-**MSS:**
-
-1. User wants to set or clear a note for an application.
-2. User specifies the target index.
-3. User provides either note text (`note`) or requests note removal (`clearnote`).
-4. LockedIn updates the note field for the selected application.
-5. LockedIn shows a confirmation message.
-
-   Use case ends.
-
-**Extensions:**
-
-* 2a. The specified index is invalid.
-
-    * 2a1. LockedIn shows an error message.
-
-      Use case ends.
-
-* 3a. `note` input is empty or malformed.
-
-    * 3a1. LockedIn shows an error message with the correct command format.
+    * 1b1. LockedIn clears the command box or keeps it at the latest state.
 
       Use case ends.
 
@@ -716,33 +884,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1a1. LockedIn shows an error message.
 
       Use case ends.
-
-**Use case: View command history**
-
-**Preconditions:**
-* The user has previously entered at least one command in the current session.
-
-**MSS:**
-
-1. User requests to navigate to a previous or next command.
-2. LockedIn displays the previous or next command from the command history.
-
-   Use case ends.
-
-**Extensions:**
-
-* 1a. There is no earlier command in the history.
-
-    * 1a1. LockedIn keeps the command box unchanged.
-
-      Use case ends.
-
-* 1b. There is no later command in the history.
-
-    * 1b1. LockedIn clears the command box or keeps it at the latest state.
-
-      Use case ends.
-
+  
 *{More to be added}*
 
 ### Non-Functional Requirements
@@ -954,7 +1096,7 @@ testers are expected to do more *exploratory* testing.
 
 2. Clearing notes (`clearnote`)
 
-    1. Prerequisites: At least one application has a non-empty note.
+    1. Prerequisites: At least one application exists.
 
     2. Test case: `clearnote 1`  
        Expected: Note for the first application is removed.
