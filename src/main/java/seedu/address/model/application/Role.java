@@ -14,7 +14,7 @@ public class Role {
     public static final String MESSAGE_CONSTRAINTS =
             "Roles can only contain English letters, numbers, spaces, "
                     + "and these symbols: ` ~ ! @ # $ % ^ & * ( ) - _ = + [ { ] } \\ | ; : ' \" , < . > / ? "
-                    + "\nRoles must not exceed " + MAX_LENGTH + " characters.";
+                    + "\n" + "Roles must not exceed " + MAX_LENGTH + " characters.";
 
     public static final String VALIDATION_REGEX =
             "(?=.*[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\\\",<.>/?])"

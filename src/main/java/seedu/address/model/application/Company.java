@@ -14,7 +14,7 @@ public class Company {
     public static final String MESSAGE_CONSTRAINTS =
             "Company names can only contain English letters, numbers, spaces, "
                     + "and these symbols: ` ~ ! @ # $ % ^ & * ( ) - _ = + [ { ] } \\ | ; : ' \" , < . > / ? "
-                    + "\nNames must not exceed " + MAX_LENGTH + " characters.";
+                    + "\n" + "Names must not exceed " + MAX_LENGTH + " characters.";
 
     public static final String VALIDATION_REGEX =
             "(?=.*[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\\\",<.>/?])"
