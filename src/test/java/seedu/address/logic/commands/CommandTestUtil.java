@@ -11,7 +11,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_URL;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -129,6 +128,7 @@ public class CommandTestUtil {
 
         Application application = model.getFilteredApplicationList().get(targetIndex.getZeroBased());
         final String[] splitName = application.getCompany().value.split("\\s+");
+
         model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(
                 Collections.singletonList(splitName[0]), new ArrayList<>(), null, null, new ArrayList<>(),
                 new ArrayList<>()));
