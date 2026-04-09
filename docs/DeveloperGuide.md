@@ -135,6 +135,8 @@ The `Model` component,
 * stores a `UserPrefs` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
+`Application` identity is defined by `Application#isSameApplication(...)`, which considers two applications identical when their `Company`, `Role`, and `ApplicationDate` all match (with `Company` and `Role` compared case-insensitively). This is a weaker notion of identity than `equals()`, which additionally requires matching `Url`, `Status`, and `Note`. `UniqueApplicationList` uses `isSameApplication` to enforce uniqueness, so a user cannot add a duplicate application that differs only in letter casing.
+
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-W12-2/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
@@ -252,16 +254,49 @@ Predicate logic (`ApplicationContainsKeywordsPredicate`):
 
 <puml src="diagrams/FindSequenceDiagram.puml" alt="Interactions inside Logic and Model for find command" />
 
+### List cleanup feature (`clear`)
+
+`clear` removes all applications in the currently displayed list. It is distinct from `drop` in that it operates on every visible application regardless of status, not just terminal ones.
+
+Implementation details:
+
+* `ClearCommandParser` rejects any extra arguments. The command word alone is the complete input.
+* `ClearCommand` collects all entries from `Model#getFilteredApplicationList()` and deletes each one via `Model#deleteApplication(...)`.
+* If the list is empty, the command still succeeds but removes nothing.
+
+<box type="info" seamless>
+
+**Note:** Because `clear` operates on the *filtered* list, using it after a `find` command removes only the matching applications. To remove all applications regardless of filters, run `list` first to restore the full view, then `clear`.
+
+</box>
+
+### Command validation strategy
+
+Several commands in LockedIn use a **deferred validation** pattern to control the priority of error messages surfaced to the user. When a parser encounters an input that has a parseable index but an otherwise invalid format, it constructs the command object with a stored error message rather than throwing a `ParseException` immediately. The command then performs its index bounds check in `execute()` first; only if the index is valid does it throw the deferred format error.
+
+This pattern is used by `EditCommandParser` (which stores a `deferredErrorMessage` in `EditCommand`) and `NoteCommandParser` (which constructs a `NoteCommand.withoutNote()` sentinel). The effect is that an invalid index always produces an index error, regardless of whether the rest of the command format was also incorrect — this gives the user the most actionable error first.
+
 ### Auto-save behavior and error handling
 
 The save behavior is centralized in `LogicManager#execute(...)`:
 
 1. Parse command.
 1. Execute command against `Model`.
-1. Save address book JSON.
+1. Save application data JSON (`lockedin.json`).
 1. Save user preferences JSON.
 
 If file writes fail, `LogicManager` converts IO failures into user-facing `CommandException` messages, including a specific message for insufficient write permissions.
+
+### Command history feature
+
+LockedIn supports navigating previously entered commands using the up and down arrow keys. This feature is implemented entirely within the `UI` layer — specifically in `CommandBox` — and involves no `Logic` or `Model` interaction.
+
+Implementation details:
+
+* `CommandBox` maintains an `ArrayList<String> commandHistory` and an integer `historyIndex` pointing to the current position in that list.
+* When the user submits a command, it is appended to `commandHistory` unless it is identical to the most recently stored entry (consecutive duplicates are suppressed). The `historyIndex` is reset to point past the end of the list.
+* Pressing the **up arrow** decrements `historyIndex` and populates the command input field with the corresponding entry. Pressing the **down arrow** increments it; when the index moves past the end of the list, the field is restored to whatever text the user had typed before beginning navigation (the current-command buffer).
+* History is held in memory only and is not persisted across sessions.
 
 ### [Proposed] Undo/redo feature
 
@@ -283,11 +318,11 @@ Step 1. On first launch, `VersionedAddressBook` is initialized with one state, a
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th application. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/Google r/SWE Intern d/2025-04-01` to add a new application. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
@@ -335,7 +370,7 @@ Step 5. The user then decides to execute the command `list`. Commands that do no
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the previous add application command. This is the behavior that most modern desktop applications follow.
 
 <puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
@@ -353,7 +388,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the application being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
@@ -699,7 +734,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1. User wants to add or update a note for an application.
-2. User specifies the index of the target application and the note content after correct prefix.
+2. User specifies the index of the target application followed by the note text (e.g., `note 1 Interview at 10am`).
 3. LockedIn updates the note field for the selected application.
 4. LockedIn shows a confirmation message.
 
@@ -719,9 +754,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 2d. The note exceeds the maximum allowed length.
+* 2c. The note exceeds the maximum allowed length.
 
-    * 2d1. LockedIn shows an error message indicating that the note is too long.
+    * 2c1. LockedIn shows an error message indicating that the note is too long.
 
       Use case ends.
 
@@ -747,12 +782,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 2a1. LockedIn shows an error message indicating the specified index is invalid.
 
       Use case ends.
-  
-* 2a. The note field for the selected application is already empty.
 
-  * 2a1. LockedIn shows an message indicating the note field is already empty.
+* 2b. The note field for the selected application is already empty.
 
-    Use case ends.
+    * 2b1. LockedIn shows a message indicating the note field is already empty.
+
+      Use case ends.
 
 
 **Use case: Create an alias for a command word**
