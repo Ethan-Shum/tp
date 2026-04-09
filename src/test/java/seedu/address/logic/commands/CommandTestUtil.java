@@ -128,7 +128,8 @@ public class CommandTestUtil {
         Application application = model.getFilteredApplicationList().get(targetIndex.getZeroBased());
         final String[] splitName = application.getCompany().value.split("\\s+");
         model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(
-                Collections.singletonList(splitName[0]), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+                Collections.singletonList(splitName[0]), new ArrayList<>(), null, null, new ArrayList<>(),
+                new ArrayList<>()));
 
         assertEquals(1, model.getFilteredApplicationList().size());
     }

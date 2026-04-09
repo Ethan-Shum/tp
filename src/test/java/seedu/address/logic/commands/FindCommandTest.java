@@ -11,6 +11,7 @@ import static seedu.address.testutil.TypicalApplications.ELLE;
 import static seedu.address.testutil.TypicalApplications.FIONA;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,10 +34,10 @@ public class FindCommandTest {
     public void equals() {
         ApplicationContainsKeywordsPredicate firstPredicate =
                 new ApplicationContainsKeywordsPredicate(Collections.singletonList("first"), new ArrayList<>(),
-                        new ArrayList<>(), new ArrayList<>());
+                        null, null, new ArrayList<>(), new ArrayList<>());
         ApplicationContainsKeywordsPredicate secondPredicate =
                 new ApplicationContainsKeywordsPredicate(Collections.singletonList("second"), new ArrayList<>(),
-                        new ArrayList<>(), new ArrayList<>());
+                        null, null, new ArrayList<>(), new ArrayList<>());
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -57,7 +58,8 @@ public class FindCommandTest {
     public void execute_zeroKeywords_noApplicationFound() {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 0);
         ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
-                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+                Collections.emptyList(), Collections.emptyList(), null, null, Collections.emptyList(),
+                Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -78,7 +80,8 @@ public class FindCommandTest {
     public void execute_roleKeywords_applicationFound() {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 1);
         ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
-                new ArrayList<>(), Collections.singletonList("Data"), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), Collections.singletonList("Data"), null, null, new ArrayList<>(),
+                new ArrayList<>());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -88,8 +91,21 @@ public class FindCommandTest {
     @Test
     public void execute_applicationDateKeywords_applicationFound() {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 1);
+        LocalDate date = LocalDate.parse("2026-01-02");
         ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
-                new ArrayList<>(), new ArrayList<>(), Collections.singletonList("2026-01-02"), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), date, date, new ArrayList<>(), new ArrayList<>());
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(BENSON), model.getFilteredApplicationList());
+    }
+
+    @Test
+    public void execute_urlKeywords_applicationFound() {
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 1);
+        ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
+                new ArrayList<>(), new ArrayList<>(), null, null,
+                Collections.singletonList("http://benson.example.com"), new ArrayList<>());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -100,7 +116,8 @@ public class FindCommandTest {
     public void execute_statusKeywords_applicationFound() {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 1);
         ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), Collections.singletonList("Interview"));
+                new ArrayList<>(), new ArrayList<>(), null, null, new ArrayList<>(),
+                Collections.singletonList("Interview"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -110,7 +127,7 @@ public class FindCommandTest {
     @Test
     public void toStringMethod() {
         ApplicationContainsKeywordsPredicate predicate = new ApplicationContainsKeywordsPredicate(
-                Arrays.asList("keyword"), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                Arrays.asList("keyword"), new ArrayList<>(), null, null, new ArrayList<>(), new ArrayList<>());
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
@@ -121,6 +138,6 @@ public class FindCommandTest {
      */
     private ApplicationContainsKeywordsPredicate preparePredicate(String userInput) {
         return new ApplicationContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>());
+                null, null, new ArrayList<>(), new ArrayList<>());
     }
 }

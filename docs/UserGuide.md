@@ -337,13 +337,14 @@ Deletes the specified application from LockedIn.
 Find applications: <code>find</code>
 </h3>
 
-Finds applications whose company names, roles, application dates, date ranges, or statuses match the given filters.
+Finds applications whose company names, roles, application dates, URLs, or statuses match the given filters.
+For date fields, it can either find exact dates or find dates within a range (inclusive).
 
 | Before                               | After                              |
 | ------------------------------------ | ---------------------------------- |
 | ![beforeFind](images/beforeFind.png) | ![afterFind](images/afterFind.png) |
 
-**Format:** `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [s/STATUS]`
+**Format:** `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`
 
 **Date formats supported**
 
@@ -353,9 +354,10 @@ Finds applications whose company names, roles, application dates, date ranges, o
 **Notes**
 
 * You must provide at least one field.
+* You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g. `find n/` is invalid).
 * The search is case-insensitive.
   Example: `n/google` matches `Google`.
-* For company, role, and status, applications matching at least one keyword in the same field are returned.
+* For company, role, URL, and status, applications matching at least one keyword in the same field are returned.
 * If multiple fields are specified, applications must match all those fields.
 * `d/START_DATE:END_DATE` returns applications whose application dates fall within the range, inclusive.
 * `START_DATE` must be earlier than or equal to `END_DATE`.
@@ -366,6 +368,7 @@ Finds applications whose company names, roles, application dates, date ranges, o
 * `find n/Google`
 * `find r/Intern`
 * `find n/Google r/Intern`
+* `find u/https://www.google.com/`
 * `find s/Applied`
 * `find d/2025-03-14`
 * `find d/2025-03-01:2025-03-31`
@@ -374,6 +377,7 @@ Finds applications whose company names, roles, application dates, date ranges, o
 **What you should expect**
 
 * The application list updates to show only matching entries.
+* The success message shows the number of applications found and hints you can use `list` to restore the full list.
 
 <box type="tip" seamless>
 
@@ -882,7 +886,7 @@ Manually restore the minimized Help window.
 | **Drop**       | `drop`                                                                    | `drop`                                                 |
 | **Edit**       | `edit INDEX [n/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]` | `edit 2 n/OpenAI s/Offered`                            |
 | **Exit**       | `exit`                                                                    | `exit`                                                 |
-| **Find**       | `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [s/STATUS]`             | `find n/Google d/2025-03-01:2025-03-31`                |
+| **Find**       | `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`     | `find n/Google d/2025-03-01:2025-03-31`                |
 | **Help**       | `help`                                                                    | `help`                                                 |
 | **List**       | `list`                                                                    | `list`                                                 |
 | **Next**       | `next INDEX`                                                              | `next 3`                                               |

@@ -16,10 +16,12 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all applications whose company names, roles, "
-            + "application dates or statuses contain any of the specified keywords (case-insensitive) and "
+            + "application dates, urls or statuses contain any of the specified keywords (case-insensitive) and "
             + "displays them as a list with index numbers.\n"
-            + "Parameters: [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...\n"
-            + "Example: " + COMMAND_WORD + " n/Google r/Intern d/2022-12-12 s/Applied";
+            + "Parameters: [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] or [d/START_DATE:END_DATE] [u/URL] "
+            + "[s/STATUS]...\n"
+            + "Example: " + COMMAND_WORD + " n/Google r/Intern d/2022-12-12:2022-12-15 "
+            + "u/https://www.google.com/ s/Applied";
 
     private final ApplicationContainsKeywordsPredicate predicate;
 

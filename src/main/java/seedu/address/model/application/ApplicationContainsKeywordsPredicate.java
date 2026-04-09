@@ -1,5 +1,6 @@
 package seedu.address.model.application;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -13,31 +14,38 @@ import seedu.address.commons.util.ToStringBuilder;
 public class ApplicationContainsKeywordsPredicate implements Predicate<Application> {
     private final List<String> companyKeywords;
     private final List<String> roleKeywords;
-    private final List<String> applicationDateKeywords;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final List<String> urlKeywords;
     private final List<String> statusKeywords;
 
     /**
-     * Constructs a predicate that checks if an application matches the given company, role, application date
-     * and status keywords.
+     * Constructs a predicate that checks if an application matches the given company, role, application date,
+     * url and status keywords.
      * At least one list of keywords must be non-empty.
      *
      * @param companyKeywords list of keywords to match against the company name
      * @param roleKeywords list of keywords to match against the role
-     * @param applicationDateKeywords list of keywords to match against the application date
+     * @param startDate start date to match against the application date
+     * @param endDate end date to match against the application date
+     * @param urlKeywords list of keywords to match against the url
      * @param statusKeywords list of keywords to match against the status
      */
     public ApplicationContainsKeywordsPredicate(List<String> companyKeywords, List<String> roleKeywords,
-                                                List<String> applicationDateKeywords, List<String> statusKeywords) {
+                                                LocalDate startDate, LocalDate endDate, List<String> urlKeywords,
+                                                List<String> statusKeywords) {
         this.companyKeywords = companyKeywords;
         this.roleKeywords = roleKeywords;
-        this.applicationDateKeywords = applicationDateKeywords;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.urlKeywords = urlKeywords;
         this.statusKeywords = statusKeywords;
     }
 
     @Override
     public boolean test(Application application) {
-        if (companyKeywords.isEmpty() && roleKeywords.isEmpty() && applicationDateKeywords.isEmpty()
-                && statusKeywords.isEmpty()) {
+        if (companyKeywords.isEmpty() && roleKeywords.isEmpty() && startDate == null && endDate == null
+                && urlKeywords.isEmpty() && statusKeywords.isEmpty()) {
             return false;
         }
 
@@ -47,14 +55,23 @@ public class ApplicationContainsKeywordsPredicate implements Predicate<Applicati
         boolean matchesRole = roleKeywords.isEmpty() || roleKeywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(application.getRole().value, keyword));
 
-        boolean matchesApplicationDate = applicationDateKeywords.isEmpty() || applicationDateKeywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(application.getApplicationDate().toString(),
-                        keyword));
+        boolean matchesApplicationDate = true;
+        LocalDate appDate = application.getApplicationDate().getValue();
+        if (startDate != null && appDate.isBefore(startDate)) {
+            matchesApplicationDate = false;
+        }
+        if (endDate != null && appDate.isAfter(endDate)) {
+            matchesApplicationDate = false;
+        }
+
+        boolean matchesUrl = urlKeywords.isEmpty() || (application.getUrl().isPresent()
+                && urlKeywords.stream().anyMatch(keyword ->
+                StringUtil.containsWordIgnoreCase(application.getUrl().get().value, keyword)));
 
         boolean matchesStatus = statusKeywords.isEmpty() || statusKeywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(application.getStatus().toString(), keyword));
 
-        return matchesCompany && matchesRole && matchesApplicationDate && matchesStatus;
+        return matchesCompany && matchesRole && matchesApplicationDate && matchesUrl && matchesStatus;
     }
 
     @Override
@@ -70,7 +87,11 @@ public class ApplicationContainsKeywordsPredicate implements Predicate<Applicati
         ApplicationContainsKeywordsPredicate otherPredicate = (ApplicationContainsKeywordsPredicate) other;
         return companyKeywords.equals(otherPredicate.companyKeywords)
                 && roleKeywords.equals(otherPredicate.roleKeywords)
-                && applicationDateKeywords.equals(otherPredicate.applicationDateKeywords)
+                && ((startDate == null && otherPredicate.startDate == null)
+                    || (startDate != null && startDate.equals(otherPredicate.startDate)))
+                && ((endDate == null && otherPredicate.endDate == null)
+                    || (endDate != null && endDate.equals(otherPredicate.endDate)))
+                && urlKeywords.equals(otherPredicate.urlKeywords)
                 && statusKeywords.equals(otherPredicate.statusKeywords);
     }
 
@@ -79,7 +100,9 @@ public class ApplicationContainsKeywordsPredicate implements Predicate<Applicati
         return new ToStringBuilder(this)
                 .add("companyKeywords", companyKeywords)
                 .add("roleKeywords", roleKeywords)
-                .add("applicationDateKeywords", applicationDateKeywords)
+                .add("startDate", startDate)
+                .add("endDate", endDate)
+                .add("urlKeywords", urlKeywords)
                 .add("statusKeywords", statusKeywords)
                 .toString();
     }
