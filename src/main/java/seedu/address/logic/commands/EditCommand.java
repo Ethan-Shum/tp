@@ -52,17 +52,28 @@ public class EditCommand extends Command {
 
     private final Index index;
     private final EditApplicationDescriptor editApplicationDescriptor;
+    private final String deferredErrorMessage;
 
     /**
      * @param index of the application in the filtered application list to edit
      * @param editApplicationDescriptor details to edit the application with
      */
     public EditCommand(Index index, EditApplicationDescriptor editApplicationDescriptor) {
+        this(index, editApplicationDescriptor, null);
+    }
+
+    /**
+     * @param index of the application in the filtered application list to edit
+     * @param editApplicationDescriptor details to edit the application with
+     * @param deferredErrorMessage error message to throw after bounds check, or null if none
+     */
+    public EditCommand(Index index, EditApplicationDescriptor editApplicationDescriptor, String deferredErrorMessage) {
         requireNonNull(index);
         requireNonNull(editApplicationDescriptor);
 
         this.index = index;
         this.editApplicationDescriptor = new EditApplicationDescriptor(editApplicationDescriptor);
+        this.deferredErrorMessage = deferredErrorMessage;
     }
 
     @Override
@@ -72,6 +83,10 @@ public class EditCommand extends Command {
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_APPLICATION_DISPLAYED_INDEX);
+        }
+
+        if (deferredErrorMessage != null) {
+            throw new CommandException(deferredErrorMessage);
         }
 
         Application applicationToEdit = lastShownList.get(index.getZeroBased());
@@ -120,7 +135,8 @@ public class EditCommand extends Command {
 
         EditCommand otherEditCommand = (EditCommand) other;
         return index.equals(otherEditCommand.index)
-                && editApplicationDescriptor.equals(otherEditCommand.editApplicationDescriptor);
+                && editApplicationDescriptor.equals(otherEditCommand.editApplicationDescriptor)
+                && Objects.equals(deferredErrorMessage, otherEditCommand.deferredErrorMessage);
     }
 
     @Override
