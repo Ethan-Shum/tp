@@ -553,6 +553,10 @@ Drop rejected or withdrawn applications: <code>drop</code>
 
 Deletes applications with `Rejected` or `Withdrawn` status from the current displayed list.
 
+| Before                               | After                              |
+|--------------------------------------|------------------------------------|
+| ![beforeDrop](images/beforeDrop.png) | ![afterDrop](images/afterDrop.png) |
+
 **Format:** `drop`
 
 **Notes**
