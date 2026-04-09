@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.NOTE_DESC_AMAZON;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -16,24 +17,29 @@ public class NoteCommandParserTest {
     private final NoteCommandParser parser = new NoteCommandParser();
 
     @Test
+    public void parse_nullArgs_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> parser.parse(null));
+    }
+
+    @Test
     public void parse_validArgs_returnsNoteCommand() {
         assertParseSuccess(parser, "1" + NOTE_DESC_AMAZON,
                 new NoteCommand(INDEX_FIRST_APPLICATION, new Note("Follow up next Monday.")));
     }
 
     @Test
-    public void parse_missingNoteValue_throwsParseException() {
-        assertParseFailure(parser, "1", Note.MESSAGE_EMPTY_NOTE);
+    public void parse_missingNoteValue_returnsNoteCommandWithoutNote() {
+        assertParseSuccess(parser, "1", NoteCommand.withoutNote(INDEX_FIRST_APPLICATION));
     }
 
     @Test
-    public void parse_whitespaceOnlyNoteValue_throwsParseException() {
-        assertParseFailure(parser, "1   ", Note.MESSAGE_EMPTY_NOTE);
+    public void parse_whitespaceOnlyNoteValue_returnsNoteCommandWithoutNote() {
+        assertParseSuccess(parser, "1   ", NoteCommand.withoutNote(INDEX_FIRST_APPLICATION));
     }
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
-        assertParseFailure(parser, "a hello", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertInvalidIndexParseFailure("a hello");
     }
 
     @Test
@@ -60,11 +66,15 @@ public class NoteCommandParserTest {
 
     @Test
     public void parse_zeroIndex_throwsParseException() {
-        assertParseFailure(parser, "0 hello", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertInvalidIndexParseFailure("0 hello");
     }
 
     @Test
     public void parse_negativeIndex_throwsParseException() {
-        assertParseFailure(parser, "-1 hello", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertInvalidIndexParseFailure("-1 hello");
+    }
+
+    private void assertInvalidIndexParseFailure(String userInput) {
+        assertParseFailure(parser, userInput, ParserUtil.MESSAGE_INVALID_INDEX);
     }
 }
