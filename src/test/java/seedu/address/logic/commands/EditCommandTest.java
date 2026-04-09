@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMAZON;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BYTEDANCE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_COMPANY_BYTEDANCE;
@@ -160,6 +161,33 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(outOfBoundIndex,
                 new EditApplicationDescriptorBuilder().withCompany(VALID_COMPANY_BYTEDANCE).build());
 
+        assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_APPLICATION_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_noFieldSpecifiedUnfilteredList_failure() {
+        // "edit 1" with no fields: parser defers MESSAGE_NOT_EDITED; valid index so bounds check passes first
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
+                new EditApplicationDescriptor(), EditCommand.MESSAGE_NOT_EDITED);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_NOT_EDITED);
+    }
+
+    @Test
+    public void execute_invalidFormatUnfilteredList_failure() {
+        // "edit 1 garbage": valid in-bounds index with extra preamble text -> invalid format
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
+                new EditApplicationDescriptor(), expectedMessage);
+        assertCommandFailure(editCommand, model, expectedMessage);
+    }
+
+    @Test
+    public void execute_invalidFormatOutOfBoundsUnfilteredList_failure() {
+        // "edit 100 garbage": out-of-bounds index with extra preamble text -> invalid index takes priority
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredApplicationList().size() + 1);
+        String deferredFormat = String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+        EditCommand editCommand = new EditCommand(outOfBoundIndex,
+                new EditApplicationDescriptor(), deferredFormat);
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_APPLICATION_DISPLAYED_INDEX);
     }
 

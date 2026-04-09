@@ -18,7 +18,16 @@ Class ApplicationDate
 Class Url
 Class Company
 Class Role
-Class Status
+Class Note
+Class "<<enumeration>>\nStatus" as Status {
+  APPLIED
+  OA
+  INTERVIEW
+  OFFERED
+  REJECTED
+  WITHDRAWN
+}
+show Status members
 
 Class I #FFFFFF
 }
@@ -39,9 +48,10 @@ AddressBook *--> "1" UniqueApplicationList
 UniqueApplicationList --> "~* all" Application
 Application *--> Company
 Application *--> Role
-Application *--> "       0..1"Url
+Application *--> " 0..1"Url
 Application *--> ApplicationDate
-Application *--> "   0..1" Status
+Application *--> Status
+Application *--> Note
 
 Application -[hidden]up--> I
 UniqueApplicationList -[hidden]right-> I

@@ -29,19 +29,24 @@ public class EditCommandParser implements Parser<EditCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_COMPANY, PREFIX_ROLE, PREFIX_APPLICATION_DATE, PREFIX_URL,
                         PREFIX_STATUS);
 
-        Index index;
+        String preamble = argMultimap.getPreamble().trim();
 
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-
-            if (argMultimap.getPreamble().isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
-            } else {
-                throw pe;
-            }
+        if (preamble.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
         }
+
+        // Split preamble into index token and any extra trailing text
+        int spacePos = preamble.indexOf(' ');
+        String indexStr = spacePos == -1 ? preamble : preamble.substring(0, spacePos);
+        String extraText = spacePos == -1 ? "" : preamble.substring(spacePos + 1).trim();
+
+        // Validate index syntax; throws MESSAGE_INVALID_INDEX for non-positive or non-numeric values
+        Index index = ParserUtil.parseIndex(indexStr);
+
+        // Extra text in preamble means invalid format; defer the error so bounds check runs first
+        String deferredErrorMessage = extraText.isEmpty()
+                ? null
+                : String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COMPANY, PREFIX_ROLE, PREFIX_APPLICATION_DATE, PREFIX_URL,
                 PREFIX_STATUS);
@@ -65,11 +70,12 @@ public class EditCommandParser implements Parser<EditCommand> {
             editApplicationDescriptor.setStatus(ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS).get()));
         }
 
-        if (!editApplicationDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
+        // No fields edited and no prior deferred error: defer MESSAGE_NOT_EDITED so bounds check runs first
+        if (!editApplicationDescriptor.isAnyFieldEdited() && deferredErrorMessage == null) {
+            deferredErrorMessage = EditCommand.MESSAGE_NOT_EDITED;
         }
 
-        return new EditCommand(index, editApplicationDescriptor);
+        return new EditCommand(index, editApplicationDescriptor, deferredErrorMessage);
     }
 
 }

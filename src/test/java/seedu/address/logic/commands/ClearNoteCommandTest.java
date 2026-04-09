@@ -18,6 +18,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.Note;
+import seedu.address.testutil.ApplicationBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code ClearNoteCommand}.
@@ -29,23 +30,33 @@ public class ClearNoteCommandTest {
     @Test
     public void execute_validIndexUnfilteredList_success() {
         Application applicationToClear = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application applicationWithNote = new ApplicationBuilder(applicationToClear).withNote("follow up soon")
+            .build();
+        model.setApplication(applicationToClear, applicationWithNote);
         ClearNoteCommand clearNoteCommand = new ClearNoteCommand(INDEX_FIRST_APPLICATION);
 
         Application updatedApplication = new Application(
-                applicationToClear.getCompany(),
-                applicationToClear.getRole(),
-                applicationToClear.getApplicationDate(),
-                applicationToClear.getUrl(),
-                applicationToClear.getStatus(),
+            applicationWithNote.getCompany(),
+            applicationWithNote.getRole(),
+            applicationWithNote.getApplicationDate(),
+            applicationWithNote.getUrl(),
+            applicationWithNote.getStatus(),
                 Note.EMPTY);
 
         String expectedMessage = String.format(ClearNoteCommand.MESSAGE_CLEAR_NOTE_SUCCESS,
                 Messages.format(updatedApplication));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setApplication(applicationToClear, updatedApplication);
+        expectedModel.setApplication(applicationWithNote, updatedApplication);
 
         assertCommandSuccess(clearNoteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_emptyNote_throwsCommandException() {
+        ClearNoteCommand clearNoteCommand = new ClearNoteCommand(INDEX_FIRST_APPLICATION);
+
+        assertCommandFailure(clearNoteCommand, model, ClearNoteCommand.MESSAGE_APPLICATION_NOTE_ALREADY_EMPTY);
     }
 
     @Test
@@ -58,17 +69,19 @@ public class ClearNoteCommandTest {
 
     @Test
     public void execute_validIndexFilteredList_success() {
-        CommandTestUtil.showApplicationAtIndex(model, INDEX_FIRST_APPLICATION);
-
         Application applicationToClear = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application applicationWithNote = new ApplicationBuilder(applicationToClear).withNote("follow up soon")
+            .build();
+        model.setApplication(applicationToClear, applicationWithNote);
+        CommandTestUtil.showApplicationAtIndex(model, INDEX_FIRST_APPLICATION);
         ClearNoteCommand clearNoteCommand = new ClearNoteCommand(INDEX_FIRST_APPLICATION);
 
         Application updatedApplication = new Application(
-                applicationToClear.getCompany(),
-                applicationToClear.getRole(),
-                applicationToClear.getApplicationDate(),
-                applicationToClear.getUrl(),
-                applicationToClear.getStatus(),
+            applicationWithNote.getCompany(),
+            applicationWithNote.getRole(),
+            applicationWithNote.getApplicationDate(),
+            applicationWithNote.getUrl(),
+            applicationWithNote.getStatus(),
                 Note.EMPTY);
 
         String expectedMessage = String.format(ClearNoteCommand.MESSAGE_CLEAR_NOTE_SUCCESS,
@@ -76,7 +89,7 @@ public class ClearNoteCommandTest {
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         CommandTestUtil.showApplicationAtIndex(expectedModel, INDEX_FIRST_APPLICATION);
-        expectedModel.setApplication(applicationToClear, updatedApplication);
+        expectedModel.setApplication(applicationWithNote, updatedApplication);
 
         assertCommandSuccess(clearNoteCommand, model, expectedMessage, expectedModel);
     }

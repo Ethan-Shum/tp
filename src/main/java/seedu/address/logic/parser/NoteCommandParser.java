@@ -2,8 +2,10 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -14,6 +16,8 @@ import seedu.address.model.application.Note;
  */
 public class NoteCommandParser implements Parser<NoteCommand> {
 
+    private static final Logger logger = LogsCenter.getLogger(NoteCommandParser.class);
+
     /**
      * Parses the given {@code String} of arguments in the context of the {@code NoteCommand}
      * and returns a {@code NoteCommand} object for execution.
@@ -23,33 +27,33 @@ public class NoteCommandParser implements Parser<NoteCommand> {
     @Override
     public NoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NOTE);
 
-        if (argMultimap.getValue(PREFIX_NOTE).isEmpty()) {
+        String trimmedArgs = args.trim();
+        if (trimmedArgs.isEmpty()) {
+            logger.info("Rejected note command: empty arguments");
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NOTE);
+        String[] tokens = splitIntoIndexAndNote(trimmedArgs);
+        Index index = parseIndexToken(tokens[0]);
+        Note note = parseNoteToken(tokens);
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
+        logger.info(() -> "Parsed note command for index " + index.getOneBased());
+        return note == null ? NoteCommand.withoutNote(index) : new NoteCommand(index, note);
+    }
 
-            if (argMultimap.getPreamble().isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE), pe);
-            } else {
-                throw pe;
-            }
+    private String[] splitIntoIndexAndNote(String trimmedArgs) {
+        return trimmedArgs.split("\\s+", 2);
+    }
+
+    private Index parseIndexToken(String indexToken) throws ParseException {
+        return ParserUtil.parseIndex(indexToken);
+    }
+
+    private Note parseNoteToken(String[] tokens) throws ParseException {
+        if (tokens.length < 2 || tokens[1].trim().isEmpty()) {
+            return null;
         }
-
-        String noteValue = argMultimap.getValue(PREFIX_NOTE).get().trim();
-        if (noteValue.isEmpty()) {
-            throw new ParseException(Note.MESSAGE_EMPTY_NOTE);
-        }
-
-        Note note = ParserUtil.parseNote(noteValue);
-        return new NoteCommand(index, note);
+        return ParserUtil.parseNote(tokens[1]);
     }
 }

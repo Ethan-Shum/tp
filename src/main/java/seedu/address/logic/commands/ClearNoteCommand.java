@@ -27,6 +27,8 @@ public class ClearNoteCommand extends Command {
 
     public static final String MESSAGE_CLEAR_NOTE_SUCCESS = "Cleared note for Application: %1$s";
 
+    public static final String MESSAGE_APPLICATION_NOTE_ALREADY_EMPTY = "The note for this application is empty.";
+
     private final Index targetIndex;
 
     /**
@@ -47,6 +49,11 @@ public class ClearNoteCommand extends Command {
         }
 
         Application applicationToUpdate = lastShownList.get(targetIndex.getZeroBased());
+
+        if (applicationToUpdate.getNote().equals(Note.EMPTY)) {
+            throw new CommandException(MESSAGE_APPLICATION_NOTE_ALREADY_EMPTY);
+        }
+
         Application updatedApplication = new Application(
                 applicationToUpdate.getCompany(),
                 applicationToUpdate.getRole(),

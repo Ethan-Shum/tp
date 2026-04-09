@@ -15,7 +15,8 @@ public class DropCommandParser implements Parser<DropCommand> {
      */
     public DropCommand parse(String args) throws ParseException {
         if (!args.trim().isEmpty()) {
-            throw new ParseException("Drop command will delete all applications with WITHDRAWN and REJECTED status, "
+            throw new ParseException("Drop command will delete all applications with "
+                    + "WITHDRAWN and REJECTED status in the current list, "
                     + "and it does not take any arguments.");
         }
         return new DropCommand();

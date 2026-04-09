@@ -1,10 +1,11 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -23,15 +24,16 @@ public class NoteCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds/updates a note for the application identified by the index number "
             + "used in the displayed application list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_NOTE + "NOTE\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_NOTE + "Interview at 10am on 2025-12-22.";
+            + "Parameters: INDEX (must be a positive integer) NOTE\n"
+            + "Example: " + COMMAND_WORD + " 1 Interview at 10am on 2025-12-22.";
 
     public static final String MESSAGE_ADD_NOTE_SUCCESS = "Set note for Application: %1$s";
 
+    private static final Logger logger = LogsCenter.getLogger(NoteCommand.class);
+
     private final Index targetIndex;
     private final Note note;
+    private final boolean hasNoteText;
 
     /**
      * @param targetIndex of the application in the filtered application list to update the note
@@ -40,21 +42,62 @@ public class NoteCommand extends Command {
     public NoteCommand(Index targetIndex, Note note) {
         requireNonNull(targetIndex);
         requireNonNull(note);
-
         this.targetIndex = targetIndex;
         this.note = note;
+        this.hasNoteText = true;
+    }
+
+    private NoteCommand(Index targetIndex, Note note, boolean hasNoteText) {
+        this.targetIndex = targetIndex;
+        this.note = note;
+        this.hasNoteText = hasNoteText;
+    }
+
+    /**
+     * Creates a command with missing note text so execute() can validate index first.
+     */
+    public static NoteCommand withoutNote(Index targetIndex) {
+        requireNonNull(targetIndex);
+        return new NoteCommand(targetIndex, Note.EMPTY, false);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Application> lastShownList = model.getFilteredApplicationList();
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+        List<Application> displayedApplications = model.getFilteredApplicationList();
+        Application applicationToUpdate = getTargetApplication(displayedApplications);
+
+        if (!hasNoteText) {
+            logger.info(() -> "Rejected note update due to missing note text at index "
+                    + targetIndex.getOneBased());
+            throw new CommandException(Note.MESSAGE_EMPTY_NOTE);
+        }
+
+        Application updatedApplication = createUpdatedApplication(applicationToUpdate);
+
+        model.setApplication(applicationToUpdate, updatedApplication);
+        logger.info(() -> "Updated note for application at index " + targetIndex.getOneBased());
+
+        return new CommandResult(String.format(MESSAGE_ADD_NOTE_SUCCESS, Messages.format(updatedApplication)));
+    }
+
+    private Application getTargetApplication(List<Application> displayedApplications) throws CommandException {
+        assert displayedApplications != null : "Displayed applications should never be null";
+
+        if (isTargetIndexOutOfBounds(displayedApplications.size())) {
+            logger.info(() -> "Rejected note update due to invalid index: " + targetIndex.getOneBased());
             throw new CommandException(Messages.MESSAGE_INVALID_APPLICATION_DISPLAYED_INDEX);
         }
 
-        Application applicationToUpdate = lastShownList.get(targetIndex.getZeroBased());
+        return displayedApplications.get(targetIndex.getZeroBased());
+    }
+
+    private boolean isTargetIndexOutOfBounds(int displayedListSize) {
+        return targetIndex.getZeroBased() >= displayedListSize;
+    }
+
+    private Application createUpdatedApplication(Application applicationToUpdate) {
         Application updatedApplication = new Application(
                 applicationToUpdate.getCompany(),
                 applicationToUpdate.getRole(),
@@ -62,10 +105,8 @@ public class NoteCommand extends Command {
                 applicationToUpdate.getUrl(),
                 applicationToUpdate.getStatus(),
                 note);
-
-        model.setApplication(applicationToUpdate, updatedApplication);
-
-        return new CommandResult(String.format(MESSAGE_ADD_NOTE_SUCCESS, Messages.format(updatedApplication)));
+        assert updatedApplication.getNote().equals(note) : "Updated application should carry the new note";
+        return updatedApplication;
     }
 
     @Override
@@ -74,14 +115,13 @@ public class NoteCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof NoteCommand)) {
+        if (!(other instanceof NoteCommand otherNoteCommand)) {
             return false;
         }
 
-        NoteCommand otherNoteCommand = (NoteCommand) other;
         return targetIndex.equals(otherNoteCommand.targetIndex)
-                && note.equals(otherNoteCommand.note);
+                && note.equals(otherNoteCommand.note)
+                && hasNoteText == otherNoteCommand.hasNoteText;
     }
 
     @Override
@@ -89,6 +129,7 @@ public class NoteCommand extends Command {
         return new ToStringBuilder(this)
                 .add("targetIndex", targetIndex)
                 .add("note", note)
+                .add("hasNoteText", hasNoteText)
                 .toString();
     }
 }

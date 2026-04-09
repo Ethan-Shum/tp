@@ -9,13 +9,17 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Role {
 
+    public static final int MAX_LENGTH = 100;
+
     public static final String MESSAGE_CONSTRAINTS =
             "Roles can only contain English letters, numbers, spaces, "
-                    + "and these symbols: ` ~ ! @ # $ % ^ & * ( ) - _ = + [ { ] } \\ | ; : ' \" , < . > / ?";
+                    + "and these symbols: ` ~ ! @ # $ % ^ & * ( ) - _ = + [ { ] } \\ | ; : ' \" , < . > / ? "
+                    + "\n" + "Roles must not be empty "
+                    + "and should not exceed " + MAX_LENGTH + " characters.";
 
     public static final String VALIDATION_REGEX =
-            "(?=.*[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\",<.>/?])"
-                    + "[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\",<.>/? ]+";
+            "(?=.*[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\\\",<.>/?])"
+                    + "[A-Za-z0-9`~!@#$%^&*()\\-_=+\\[\\{\\]\\}\\\\|;:'\\\",<.>/? ]+";
 
     public final String value;
 
@@ -31,10 +35,12 @@ public class Role {
     }
 
     /**
-     * Returns true if a given string is a valid company name.
+     * Returns true if a given string is a valid role.
      */
     public static boolean isValidRole(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+        return test.matches(VALIDATION_REGEX)
+                && test.length() <= MAX_LENGTH;
     }
 
     @Override

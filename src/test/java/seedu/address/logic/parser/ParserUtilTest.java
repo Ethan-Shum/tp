@@ -21,7 +21,8 @@ public class ParserUtilTest {
     private static final String INVALID_URL = "invalid_url";
     private static final String INVALID_APPLICATION_DATE = "2026/03/09";
     private static final String INVALID_STATUS = "Pending";
-    private static final String INVALID_NOTE = "a".repeat(201);
+    private static final String INVALID_NOTE_TOO_LONG = "a".repeat(501);
+    private static final String INVALID_NOTE_CHARACTERS = "hello🙂";
 
     private static final String VALID_COMPANY = "Rachel  Walker & Co.";
     private static final String VALID_ROLE = "QA   Engineer";
@@ -40,7 +41,7 @@ public class ParserUtilTest {
     @Test
     public void parseIndex_outOfRangeInput_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, () -> ParserUtil.parseIndex(
-                Long.toString(Integer.MAX_VALUE + 1)));
+                String.valueOf((long) Integer.MAX_VALUE + 1)));
     }
 
     @Test
@@ -51,7 +52,7 @@ public class ParserUtilTest {
 
     @Test
     public void parseCompany_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseCompany((String) null));
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseCompany(null));
     }
 
     @Test
@@ -79,7 +80,7 @@ public class ParserUtilTest {
 
     @Test
     public void parseRole_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseRole((String) null));
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseRole(null));
     }
 
     @Test
@@ -107,7 +108,7 @@ public class ParserUtilTest {
 
     @Test
     public void parseUrl_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseUrl((String) null));
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseUrl(null));
     }
 
     @Test
@@ -130,7 +131,7 @@ public class ParserUtilTest {
 
     @Test
     public void parseApplicationDate_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseApplicationDate((String) null));
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseApplicationDate(null));
     }
 
     @Test
@@ -178,8 +179,15 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseNote_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseNote(INVALID_NOTE));
+    public void parseNote_invalidTooLongValue_throwsParseException() {
+        assertThrows(ParseException.class, Note.MESSAGE_LENGTH_CONSTRAINTS, ()
+                -> ParserUtil.parseNote(INVALID_NOTE_TOO_LONG));
+    }
+
+    @Test
+    public void parseNote_invalidCharacters_throwsParseException() {
+        assertThrows(ParseException.class, Note.MESSAGE_CONSTRAINTS, ()
+                -> ParserUtil.parseNote(INVALID_NOTE_CHARACTERS));
     }
 
     @Test

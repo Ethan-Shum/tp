@@ -44,6 +44,15 @@ public class CompanyTest {
     }
 
     @Test
+    public void isValidCompany_lengthLimit() {
+        String withinLimitChars = "A".repeat(100);
+        String outsideLimitChars = "A".repeat(101);
+
+        assertTrue(Company.isValidCompany(withinLimitChars));
+        assertFalse(Company.isValidCompany(outsideLimitChars));
+    }
+
+    @Test
     public void equals() {
         Company company = new Company("Valid Company");
 

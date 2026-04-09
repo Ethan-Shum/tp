@@ -168,3 +168,8 @@ h5,
 h6 {
   color: #e46c0a;
 }
+
+/* Prevent sticky header from covering anchor targets */
+:target {
+  scroll-margin-top: calc(var(--sticky-header-height) + 12px);
+}

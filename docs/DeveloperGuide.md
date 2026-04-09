@@ -92,8 +92,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : `Logic.java`
-
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-W12-2/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
@@ -124,30 +123,23 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : `Model.java`
+**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-W12-2/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
 
 The `Model` component,
 
-* stores the application data i.e., all `Application` objects (which are contained in a `UniqueApplicationList` object).
+* stores the application data i.e., all `Application` objects (containing `Company`, `Role`, `ApplicationDate`, optional `Url`, `Status`, and `Note`) which are contained in a `UniqueApplicationList` object.
 * stores the currently displayed `Application` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Application>` that can be observed. For example, the UI can be bound to this list so that it automatically updates when the data in the list changes.
 * stores a `UserPrefs` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<box type="info" seamless>
-
-**Note:** An alternative (arguably, a more OOP) model is given below. It separates out more model responsibilities into dedicated classes, while keeping the same core application-tracking domain.<br>
-
-<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
-
-</box>
-
+`Application` identity is defined by `Application#isSameApplication(...)`, which considers two applications identical when their `Company`, `Role`, and `ApplicationDate` all match (with `Company` and `Role` compared case-insensitively). This is a weaker notion of identity than `equals()`, which additionally requires matching `Url`, `Status`, and `Note`. `UniqueApplicationList` uses `isSameApplication` to enforce uniqueness, so a user cannot add a duplicate application that differs only in letter casing.
 
 ### Storage component
 
-**API** : `Storage.java`
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-W12-2/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -212,20 +204,72 @@ Implementation details:
 
 <puml src="diagrams/DropActivityDiagram.puml" alt="Activity flow for drop command" width="420" />
 
+The sequence diagram below shows the internal `Logic` and `Model` interactions when `drop` is executed:
+
+<puml src="diagrams/DropSequenceDiagram-Logic.puml" alt="Interactions inside Logic and Model for drop command" />
+
 ### Notes feature (`note` and `clearnote`)
 
 LockedIn stores free-form notes in the immutable `Application` entity through the `Note` value object.
 
 Behavior:
 
-* `note INDEX n/TEXT` replaces the note for the target application.
+* `note INDEX NOTE` replaces the note for the target application.
 * `clearnote INDEX` resets the note to `Note.EMPTY`.
 * Both commands use index-based lookup against the filtered list and persist updates through `Model#setApplication(...)`.
 
 Validation:
 
-* `NoteCommandParser` enforces exactly one `n/` prefix and rejects empty note text.
+* `NoteCommandParser` parses `note INDEX NOTE` and rejects empty note text.
 * `ClearNoteCommandParser` only accepts a single index argument.
+
+### Copy URL feature (`copy`)
+
+`copy INDEX` copies the URL of the specified application to the system clipboard.
+
+Implementation flow:
+
+1. `CopyCommandParser` validates the index argument.
+1. `CopyCommand` resolves the target application from `Model#getFilteredApplicationList()`.
+1. It retrieves the `Optional<Url>` field; if empty, throws a `CommandException` with a descriptive message.
+1. It writes the URL string to the system clipboard via JavaFX `Clipboard.getSystemClipboard()`.
+
+<puml src="diagrams/CopySequenceDiagram.puml" alt="Interactions inside Logic and Model for copy command" />
+
+Design note: The command requires a URL to be present; applications without a URL will always fail this command with a clear error message.
+
+### Find feature (`find`)
+
+`find` filters the displayed application list using one or more of the following prefixes: `n/COMPANY`, `r/ROLE`, `d/DATE`, `s/STATUS`. At least one prefix must be provided.
+
+Implementation flow:
+
+1. `FindCommandParser` tokenizes the input using `ArgumentTokenizer`, validates that at least one recognized prefix is present, and rejects invalid `Status` values early.
+1. It constructs an `ApplicationContainsKeywordsPredicate` with separate keyword lists per field.
+1. `FindCommand` calls `Model#updateFilteredApplicationList(predicate)` to apply the filter.
+
+Predicate logic (`ApplicationContainsKeywordsPredicate`):
+* Keywords within the same field are matched with **OR** logic (any keyword match passes).
+* Different fields are combined with **AND** logic (all provided fields must match).
+
+<puml src="diagrams/FindSequenceDiagram.puml" alt="Interactions inside Logic and Model for find command" />
+
+### List cleanup feature (`clear`)
+
+`clear` removes all applications in the currently displayed list. It is distinct from `drop` in that it operates on every visible application regardless of status, not just terminal ones.
+
+Implementation details:
+
+* `ClearCommandParser` rejects any extra arguments. The command word alone is the complete input.
+* `ClearCommand` collects all entries from `Model#getFilteredApplicationList()` and deletes each one via `Model#deleteApplication(...)`.
+* If the list is empty, the command still succeeds but removes nothing.
+
+<box type="info" seamless>
+
+**Note:** Because `clear` operates on the *filtered* list, using it after a `find` command removes only the matching applications. To remove all applications regardless of filters, run `list` first to restore the full view, then `clear`.
+
+</box>
+
 
 ### Auto-save behavior and error handling
 
@@ -233,110 +277,21 @@ The save behavior is centralized in `LogicManager#execute(...)`:
 
 1. Parse command.
 1. Execute command against `Model`.
-1. Save address book JSON.
+1. Save application data JSON (`lockedin.json`).
 1. Save user preferences JSON.
 
 If file writes fail, `LogicManager` converts IO failures into user-facing `CommandException` messages, including a specific message for insufficient write permissions.
 
-### [Proposed] Undo/redo feature
+### Command history feature
 
-#### Proposed Implementation
+LockedIn supports navigating previously entered commands using the up and down arrow keys. This feature is implemented entirely within the `UI` layer — specifically in `CommandBox` — and involves no `Logic` or `Model` interaction.
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
+Implementation details:
 
-It implements the following operations:
-
-* `VersionedAddressBook#commit()` - Saves the current address book state in history.
-* `VersionedAddressBook#undo()` - Restores the previous state from history.
-* `VersionedAddressBook#redo()` - Restores a previously undone state from history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()`, and `Model#redoAddressBook()`.
-
-Example usage scenario:
-
-Step 1. On first launch, `VersionedAddressBook` is initialized with one state, and `currentStatePointer` points to it.
-
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</box>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</box>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-<puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
-
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-<puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<box type="info" seamless>
-
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</box>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+* `CommandBox` maintains an `ArrayList<String> commandHistory` and an integer `historyIndex` pointing to the current position in that list.
+* When the user submits a command, it is appended to `commandHistory` unless it is identical to the most recently stored entry (consecutive duplicates are suppressed). The `historyIndex` is reset to point past the end of the list.
+* Pressing the **up arrow** decrements `historyIndex` and populates the command input field with the corresponding entry. Pressing the **down arrow** increments it; when the index moves past the end of the list, the field is restored to whatever text the user had typed before beginning navigation (the current-command buffer).
+* History is held in memory only and is not persisted across sessions.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -371,34 +326,34 @@ in a CLI environment. It allows target users to log application updates, record 
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                     | I want to …​                                 | So that I can…​                                                        |
-|----------|--------------------------------------------|---------------------------------------------|-----------------------------------------------------------------------|
-| `* * *`  | first time user                            | add an application record                   | track my application                                                  |
-| `* * *`  | first time user                            | view all applications in a list             | see all my applications                                               |
-| `* * *`  | first time user                            | delete application records                  | remove companies I am no longer interested in                         |
-| `* * *`  | first time user                            | edit an application's details               | correct mistakes I made                                               |
-| `* * *`  | user                                       | update an application status                | track the progress of my application                                  |
-| `* * *`  | user                                       | tag a deadline to each company              | track my deadlines efficiently                                        |
-| `* * *`  | user                                       | save data on my hard disk                   | access my records locally                                             |
-| `* * *`  | user                                       | add a job URL to an entry                   | quickly revisit the job posting                                       |
-| `* *`    | user                                       | sort company list by deadline               | know which deadlines are coming up                                    |
-| `* *`    | user                                       | filter the list by status                   | see only my active applications                                       |
-| `* *`    | user                                       | view the potential pay of each position     | know which applications result in higher pay                          |
-| `* *`    | user                                       | filter the list by pay range                | determine expected salary levels                                      |
-| `* *`    | user                                       | view total number of applications by status | track my overall progress                                             |
-| `* *`    | user                                       | auto save my data after every command       | avoid losing data if the terminal closes                              |
-| `* *`    | user                                       | copy contact info between entries           | avoid retyping everything                                             |
-| `* *`    | user                                       | favourite companies                         | track companies I am particularly interested in                       |
-| `* *`    | first time user                            | see dummy data                              | understand how the data is structured                                 |
-| `* *`    | first time user                            | find company contact details by name        | follow up with companies easily                                       |
-| `*`      | user                                       | pin the application window on top           | keep the logbook visible while browsing job portals                   |
-| `*`      | user                                       | undo a command                              | recover from accidental deletions                                     |
-| `*`      | expert user                                | use short aliases                           | type commands faster                                                  |
-| `*`      | expert user                                | use tab completion                          | avoid typing full commands                                            |
-| `*`      | expert user                                | cycle through previous commands             | reuse previously typed commands                                       |
-| `*`      | expert user                                | bulk delete applications by status          | remove rejected or ghosted applications quickly                       |
-| `*`      | expert user                                | export data into another file format        | keep backups or reuse data elsewhere                                  |
-| `*`      | expert user                                | add tags to companies                       | record additional information about companies                         |
+| Priority | As a …​                                     | I want to …​                                   | So that I can…​                                     |
+|----------|--------------------------------------------|------------------------------------------------|-----------------------------------------------------|
+| `* * *`  | first time user                            | add an application record                      | track my application                                |
+| `* * *`  | first time user                            | view all applications in a list                | see all my applications                             |
+| `* * *`  | first time user                            | delete application records                     | remove companies I am no longer interested in       |
+| `* * *`  | first time user                            | edit an application's details                  | correct mistakes I made                             |
+| `* * *`  | user                                       | update an application status                   | track the progress of my application                |
+| `* * *`  | user                                       | save the application date for each application | track my applications efficiently                   |
+| `* * *`  | user                                       | save data on my hard disk                      | access my records locally                           |
+| `* * *`  | user                                       | add a job URL to an entry                      | quickly revisit the job posting                     |
+| `* *`    | user                                       | sort company list by application date          | know which applications need follow-up first              |
+| `* *`    | user                                       | filter the list by status                      | see only my active applications                     |
+| `* *`    | user                                       | view the potential pay of each position        | know which applications result in higher pay        |
+| `* *`    | user                                       | filter the list by pay range                   | determine expected salary levels                    |
+| `* *`    | user                                       | view total number of applications by status    | track my overall progress                           |
+| `* *`    | user                                       | auto save my data after every command          | avoid losing data if the terminal closes            |
+| `* *`    | user                                       | copy contact info between entries              | avoid retyping everything                           |
+| `* *`    | user                                       | favourite companies                            | track companies I am particularly interested in     |
+| `* *`    | first time user                            | see dummy data                                 | understand how the data is structured               |
+| `* *`    | first time user                            | find company contact details by name           | follow up with companies easily                     |
+| `*`      | user                                       | pin the application window on top              | keep the logbook visible while browsing job portals |
+| `*`      | user                                       | undo a command                                 | recover from accidental deletions                   |
+| `*`      | expert user                                | use short aliases                              | type commands faster                                |
+| `*`      | expert user                                | use tab completion                             | avoid typing full commands                          |
+| `*`      | expert user                                | cycle through previous commands                | reuse previously typed commands                     |
+| `*`      | expert user                                | bulk delete applications by status             | remove rejected or ghosted applications quickly     |
+| `*`      | expert user                                | export data into another file format           | keep backups or reuse data elsewhere                |
+| `*`      | expert user                                | add tags to companies                          | record additional information about companies       |
 
 
 ### Use cases
@@ -437,12 +392,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 2d. An application with the same company, role, and application date already exists.
+* 2d. The provided URL is invalid, does not begin with http:// or https://
 
-    * 2d1. LockedIn shows an error message indicating that a duplicate application record already exists.
+    * 2d1. LockedIn shows an error message indicating that the URL format is invalid.
 
       Use case ends.
 
+* 2e. An application with the same company, role, and application date already exists.
+
+    * 2e1. LockedIn shows an error message indicating that a duplicate application record already exists.
+
+      Use case ends.
+  
+* 2f. The user provides an unrecognized or invalid prefix.
+
+    * 2f1. LockedIn shows an error message indicating that the command format is invalid.
+
+       Use case ends.
 
 **Use case: Delete an application record**
 
@@ -462,40 +428,125 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. The specified index is invalid.
 
-    * 2a1. LockedIn shows an error message.
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
 
       Use case ends.
 
-
-**Use case: Add Job URL**
-
-**Preconditions:**
-* At least one application record exists in the system.
+**Use case: List all applications**
 
 **MSS:**
 
-1. User wants to add a job URL to an application record.
-2. User requests to view the application records.
-3. LockedIn shows the application records.
-4. User specifies the application record and the URL to be added.
-5. LockedIn updates the application record with the URL.
-6. LockedIn shows a confirmation message.
+1. User wants to view all application records.
+2. User requests to list all applications.
+3. LockedIn retrieves all saved application records.
+4. LockedIn displays all application records.
 
    Use case ends.
 
 **Extensions:**
 
-* 4a. The specified index is invalid.
+* 3a. There are no saved application records.
 
-    * 4a1. LockedIn shows an error message.
+    * 3a1. LockedIn shows an empty application list.
+
+      Use case ends.
+
+
+**Use case: Find applications**
+
+**MSS:**
+
+1. User wants to search for application records that match given criteria.
+2. User specifies one or more supported search prefixes and their corresponding keywords.
+3. LockedIn filters the application list based on the specified criteria.
+4. LockedIn displays the matching application records.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The user does not provide any search criteria.
+
+    * 2a1.  LockedIn shows an error message indicating that the command format is invalid.
 
       Use case ends.
 
-* 4b. The specified URL is invalid.
+* 2b. The user provides an unsupported or invalid prefix.
 
-    * 4b1. LockedIn shows an error message.
+    * 2b1. LockedIn shows an error message indicating that the command format is invalid.
 
       Use case ends.
+
+* 2c. The user provides an invalid status value.
+
+    * 2c1. LockedIn shows an error message indicating that the status is invalid.
+
+      Use case ends.
+
+* 3a. No application records match the specified criteria.
+
+    * 3a1. LockedIn shows an empty filtered list.
+
+      Use case ends.
+
+**Use case: Edit an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to update an existing application record.
+2. User specifies the index of the target application and the fields to be updated.
+3. LockedIn updates the specified fields of the selected application record.
+4. LockedIn shows a confirmation message displaying the updated application record.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The user does not provide any field to edit.
+
+    * 2b1. LockedIn shows an error message indicating that at least one editable field must be provided.
+
+      Use case ends.
+
+* 2c. The provided application date is invalid.
+
+    * 2c1. LockedIn shows an error message indicating that the date is invalid.
+
+      Use case ends.
+
+* 2d. The provided status is invalid.
+
+    * 2d1. LockedIn shows an error message indicating that the status is invalid.
+
+      Use case ends.
+
+* 2e. The provided URL is invalid.
+
+    * 2e1. LockedIn shows an error message indicating that the URL format is invalid.
+
+      Use case ends.
+
+* 2f. The updated application would duplicate an existing application record.
+
+    * 2f1. LockedIn shows an error message indicating that a duplicate application record already exists.
+
+      Use case ends.
+
+* 2g. The user provides an unsupported or invalid prefix.
+
+    * 2g1. LockedIn shows an error message indicating that the command format is invalid.
+
+      Use case ends.
+
 
 **Use case: Copy job URL**
 
@@ -505,28 +556,134 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1. User wants to copy a job URL from an application record.
-2. User requests to view the application records.
-3. LockedIn shows the application records.
-4. User specifies the application record whose URL is to be copied.
-5. LockedIn copies the URL of the specified application record to the system clipboard.
-6. LockedIn shows a confirmation message indicating that the URL has been copied.
+2. User specifies the index of the target application record.
+3. LockedIn copies the URL of the specified application record to the system clipboard.
+4. LockedIn shows a confirmation message indicating that the URL has been copied.
 
    Use case ends.
 
 **Extensions:**
 
-* 4a. The specified index is invalid.
+* 2a. The specified index is invalid.
 
-    * 4a1. LockedIn shows an error message.
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The specified application record does not have a saved URL.
+
+    * 2b1. LockedIn shows an error message indicating that there is no URL to copy.
 
       Use case ends.
 
-* 4b. The specified application record does not have a saved URL.
+**Use case: Advance application status**
 
-    * 4b1. LockedIn shows an error message indicating that there is no URL to copy.
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to advance an application's status.
+2. User specifies the index of the target application.
+3. LockedIn updates the application's status to the next stage in a cyclic status sequence (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
+4. LockedIn shows a confirmation message with the updated application details.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
 
       Use case ends.
-  
+
+
+
+**Use case: Drop terminal applications from current list**
+
+**MSS:**
+
+1. User wants to remove terminal applications from the currently displayed list.
+2. User executes the drop command.
+3. LockedIn finds applications with status `Rejected` or `Withdrawn` in the current list.
+4. LockedIn deletes those applications.
+5. LockedIn shows a summary message with the number of removed applications.
+
+   Use case ends.
+
+**Extensions:**
+
+* 3a. No terminal applications are found in the current displayed list.
+
+    * 3a1. LockedIn shows an error message indicating that there is nothing to drop.
+
+      Use case ends.
+
+
+**Use case: Set a note for an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to add or update a note for an application.
+2. User specifies the index of the target application followed by the note text (e.g., `note 1 Interview at 10am`).
+3. LockedIn updates the note field for the selected application.
+4. LockedIn shows a confirmation message.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The note input is empty.
+
+    * 2b1. LockedIn shows an error message indicating note cannot be empty.
+
+      Use case ends.
+
+* 2c. The note exceeds the maximum allowed length.
+
+    * 2c1. LockedIn shows an error message indicating that the note is too long.
+
+      Use case ends.
+
+
+**Use case: Clear a note from an application**
+
+**Preconditions:**
+* At least one application is shown in the current displayed list.
+
+**MSS:**
+
+1. User wants to remove a note from an application.
+2. User specifies the index of the target application.
+3. LockedIn clears the note field for the selected application.
+4. LockedIn shows a confirmation message.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The specified index is invalid.
+
+    * 2a1. LockedIn shows an error message indicating the specified index is invalid.
+
+      Use case ends.
+
+* 2b. The note field for the selected application is already empty.
+
+    * 2b1. LockedIn shows a message indicating the note field is already empty.
+
+      Use case ends.
+
 
 **Use case: Create an alias for a command word**
 
@@ -615,77 +772,49 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
+**Use case: Clear applications from current list**
 
-**Use case: Advance application status**
+**MSS:**
+
+1. User wants to remove all application records in the current displayed list.
+2. User executes the clear command.
+3. LockedIn deletes all application records in the current displayed list.
+4. LockedIn shows a confirmation message indicating that the displayed application records have been removed.
+
+   Use case ends.
+
+**Extensions:**
+
+* 2a. The user provides additional arguments.
+
+    * 2a1. LockedIn shows an error message indicating that the command format is invalid.
+
+      Use case ends.
+
+
+**Use case: View command history**
 
 **Preconditions:**
-* At least one application is shown in the current displayed list.
+* The user has previously entered at least one command in the current session.
 
 **MSS:**
 
-1. User wants to advance an application's status.
-2. User specifies the index of the target application.
-3. LockedIn updates the application's status to the next stage in a cyclic status sequence (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
-4. LockedIn shows a confirmation message with the updated application details.
+1. User requests to navigate to a previous or next command.
+2. LockedIn displays the previous or next command from the command history.
 
    Use case ends.
 
 **Extensions:**
 
-* 2a. The specified index is invalid.
+* 1a. There is no earlier command in the history.
 
-    * 2a1. LockedIn shows an error message.
-
-      Use case ends.
-
-
-**Use case: Drop terminal applications from current list**
-
-**MSS:**
-
-1. User wants to remove terminal applications from the currently displayed list.
-2. User executes the drop command.
-3. LockedIn finds applications with status `Rejected` or `Withdrawn` in the current list.
-4. LockedIn deletes those applications.
-5. LockedIn shows a summary message with the number of removed applications.
-
-   Use case ends.
-
-**Extensions:**
-
-* 3a. No terminal applications are found in the current displayed list.
-
-    * 3a1. LockedIn shows an error message indicating that there is nothing to drop.
+    * 1a1. LockedIn keeps the command box unchanged.
 
       Use case ends.
 
+* 1b. There is no later command in the history.
 
-**Use case: Set or clear an application note**
-
-**Preconditions:**
-* At least one application is shown in the current displayed list.
-
-**MSS:**
-
-1. User wants to set or clear a note for an application.
-2. User specifies the target index.
-3. User provides either note text (`note`) or requests note removal (`clearnote`).
-4. LockedIn updates the note field for the selected application.
-5. LockedIn shows a confirmation message.
-
-   Use case ends.
-
-**Extensions:**
-
-* 2a. The specified index is invalid.
-
-    * 2a1. LockedIn shows an error message.
-
-      Use case ends.
-
-* 3a. `note` input is empty or malformed.
-
-    * 3a1. LockedIn shows an error message with the correct command format.
+    * 1b1. LockedIn clears the command box or keeps it at the latest state.
 
       Use case ends.
 
@@ -724,33 +853,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1a1. LockedIn shows an error message.
 
       Use case ends.
-
-**Use case: View command history**
-
-**Preconditions:**
-* The user has previously entered at least one command in the current session.
-
-**MSS:**
-
-1. User requests to navigate to a previous or next command.
-2. LockedIn displays the previous or next command from the command history.
-
-   Use case ends.
-
-**Extensions:**
-
-* 1a. There is no earlier command in the history.
-
-    * 1a1. LockedIn keeps the command box unchanged.
-
-      Use case ends.
-
-* 1b. There is no later command in the history.
-
-    * 1b1. LockedIn clears the command box or keeps it at the latest state.
-
-      Use case ends.
-
+  
 *{More to be added}*
 
 ### Non-Functional Requirements
@@ -798,14 +901,14 @@ testers are expected to do more *exploratory* testing.
 
     1. Download the jar file and copy it into an empty folder.
 
-    2. Double-click the jar file.  
+    2. Open a command window. Launch the jar file using the java -jar command
        Expected: The GUI shows a set of sample application records. The window size may not be optimum.
 
 2. Saving window preferences
 
     1. Resize the window to a preferred size. Move the window to a different location. Close the window.
 
-    2. Re-launch the app by double-clicking the jar file.  
+    2. Re-launch the app by using the java -jar command.  
        Expected: The most recent window size and location are retained.
 
 3. Exiting the application
@@ -815,6 +918,37 @@ testers are expected to do more *exploratory* testing.
 
     2. Test case: `exit now`  
        Expected: The application closes, as extra words after `exit` are ignored.
+
+### Adding an application
+
+1. Adding a new application
+
+    1. Test case: `add n/Google r/Software Engineer Intern d/2025-04-01`  
+       Expected: A new application is added with the given company name, role, and application date. Status defaults to `Applied`.
+
+    2. Test case: `add n/OpenAI r/Research Intern d/2025-04-05 u/https://jobs.openai.com s/Interview`  
+       Expected: A new application is added with the given company name, role, date, URL, and status.
+
+    3. Test case: `add n/Shopee r/Backend Intern u/https://careers.shopee.sg`  
+       Expected: A new application is added. The current date is used as the application date, and status defaults to `Applied`.
+
+    4. Test case: `add n/Google r/Software Engineer Intern d/2025-04-01` when an identical application already exists  
+       Expected: No application is added. An error message is shown because duplicate applications are not allowed.
+
+    5. Test case: `add n/ r/Software Engineer Intern d/2025-04-01`  
+       Expected: No application is added. An error message is shown because the company name cannot be blank.
+
+    6. Test case: `add n/Google r/ d/2025-04-01`  
+       Expected: No application is added. An error message is shown because the role cannot be blank.
+
+    7. Test case: `add n/Google r/Software Engineer Intern d/2025-02-30`  
+       Expected: No application is added. An error message is shown because the date is invalid.
+
+    8. Test case: `add n/Google r/Software Engineer Intern u/google.com`  
+       Expected: No application is added. An error message is shown because the URL must start with `http://` or `https://`.
+
+    9. Test case: `add n/Google r/Software Engineer Intern s/InvalidStatus`  
+       Expected: No application is added. An error message is shown because only supported status values are accepted.
 
 
 ### Listing applications
@@ -826,23 +960,6 @@ testers are expected to do more *exploratory* testing.
 
     2. Test case: `list abc`  
        Expected: All application records are shown, as extra words after `list` are ignored.
-
-
-### Deleting an application
-
-1. Deleting an application while all applications are being shown
-
-    1. Prerequisites: Use the `list` command. Multiple application records in the list.
-
-    2. Test case: `delete 1`  
-       Expected: The first application is deleted from the list. Details of the deleted application are shown in the result message.
-
-    3. Test case: `delete 0`  
-       Expected: No application is deleted. An error message is shown.
-
-    4. Other incorrect delete commands to try: `delete`, `delete x`, `delete 999`  
-       Expected: Similar to the previous case.
-
 
 ### Editing an application
 
@@ -862,6 +979,21 @@ testers are expected to do more *exploratory* testing.
     5. Test case: `edit 1 d/2025-02-30`  
        Expected: No application is edited. An error message is shown.
 
+### Deleting an application
+
+1. Deleting an application while all applications are being shown
+
+    1. Prerequisites: Use the `list` command. Multiple application records in the list.
+
+    2. Test case: `delete 1`  
+       Expected: The first application is deleted from the list. Details of the deleted application are shown in the result message.
+
+    3. Test case: `delete 0`  
+       Expected: No application is deleted. An error message is shown.
+
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `delete 999`  
+       Expected: Similar to the previous case.
+
 
 ### Finding applications
 
@@ -870,14 +1002,76 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: Multiple application records exist.
 
     2. Test case: `find n/Google`  
-       Expected: Only matching applications are shown.
+       Expected: Only applications with company names matching `Google` are shown.
 
-    3. Test case: `find`  
-       Expected: An error message is shown.
+    3. Test case: `find r/Software Engineer`  
+       Expected: Only applications with matching role names are shown.
 
-    4. Test case: `find n/NoSuchCompany`  
-       Expected: An empty filtered list is shown.
+    4. Test case: `find s/Interview`  
+       Expected: Only applications with status `Interview` are shown.
 
+    5. Test case: `find n/Google s/OA`  
+       Expected: Only applications matching both company name `Google` and status `OA` are shown.
+
+    6. Test case: `find n/Google r/Intern`  
+       Expected: Only applications matching both company name `Google` and role containing `Intern` are shown.
+
+    7. Test case: `find`  
+       Expected: An error message is shown because at least one search prefix must be provided.
+
+   8. Test case: `find abc`  
+       Expected: An error message is shown because the input does not contain valid prefixes.
+
+   9. Test case: `find s/InvalidStatus`  
+       Expected: An error message is shown because the status is invalid and only supported status values are accepted.
+
+### Next and drop commands
+
+1. Advancing application status (`next`)
+
+    1. Prerequisites: Use the `list` command. Multiple application records in the list.
+
+    2. Test case: `next 1`  
+       Expected: The first application's status advances by one step in the fixed cycle (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
+
+    3. Test case: Execute `next 1` repeatedly after status becomes `Withdrawn`.  
+       Expected: The next update cycles status back to `Applied`.
+
+    4. Test case: `next 0`  
+       Expected: No application is updated. An error message is shown.
+
+2. Dropping terminal applications (`drop`)
+
+    1. Prerequisites: Current displayed list contains at least one application with status `Rejected` or `Withdrawn`.
+
+    2. Test case: `drop`  
+       Expected: All `Rejected`/`Withdrawn` applications in the current list are deleted, and a summary is shown.
+
+    3. Test case: `drop now`  
+       Expected: No deletion occurs. An error message is shown because `drop` does not accept arguments.
+
+
+### Notes commands
+
+1. Setting notes (`note`)
+
+    1. Prerequisites: At least one application exists.
+
+    2. Test case: `note 1 Prepare for OA this weekend.`  
+       Expected: Note field for the first application is updated.
+
+    3. Test case: `note 1`  
+       Expected: No note is saved. An error message is shown.
+
+2. Clearing notes (`clearnote`)
+
+    1. Prerequisites: At least one application exists.
+
+    2. Test case: `clearnote 1`  
+       Expected: Note for the first application is removed.
+
+    3. Test case: `clearnote 1 extra`  
+       Expected: Command is rejected as invalid format.
 
 ### Copying a URL
 
@@ -888,7 +1082,7 @@ testers are expected to do more *exploratory* testing.
     2. Test case: `copy 1`  
        Expected: The URL of the specified application is copied to the clipboard. A success message is shown.
 
-    3. Test case: `copy 999`  
+    3. Test case: `copy -1`  
        Expected: An error message is shown.
 
     4. Test case: `copy INDEX_WITHOUT_URL`  
@@ -923,55 +1117,26 @@ testers are expected to do more *exploratory* testing.
     3. Test case: `unalias noSuchAlias`  
        Expected: An error message is shown.
 
+### Clearing all applications
 
-### Next and drop commands
+1. Clearing all applications from the list
 
-1. Advancing application status (`next`)
+    1. Prerequisites: Multiple application records exist.
 
-    1. Prerequisites: Use the `list` command. Multiple application records in the list.
+    2. Test case: `clear`  
+       Expected: All application records are removed from the application list.
 
-    2. Test case: `next 1`  
-       Expected: The first application's status advances by one step in the fixed cycle (`Applied -> OA -> Interview -> Offered -> Rejected -> Withdrawn -> Applied`).
+    3. Test case: `find n/Google` followed by `clear`  
+       Expected: All applications in the current filtered list are removed, while applications not shown in the filtered list remain in the application list.
 
-    3. Test case: Execute `next 1` repeatedly after status becomes `Withdrawn`.  
-       Expected: The next update cycles status back to `Applied`.
+    4. Test case: `clear now`  
+       Expected: No applications are removed. An error message is shown because `clear` does not accept any arguments.
 
-    4. Test case: `next 0`  
-       Expected: No application is updated. An error message is shown.
+    5. Test case: `clear 1`  
+       Expected: No applications are removed. An error message is shown because `clear` does not accept any arguments.
 
-2. Dropping terminal applications (`drop`)
-
-    1. Prerequisites: Current displayed list contains at least one application with status `Rejected` or `Withdrawn`.
-
-    2. Test case: `drop`  
-       Expected: All `Rejected`/`Withdrawn` applications in the current list are deleted, and a summary is shown.
-
-    3. Test case: `drop now`  
-       Expected: No deletion occurs. An error message is shown because `drop` does not accept arguments.
-
-
-### Notes commands
-
-1. Setting notes (`note`)
-
-    1. Prerequisites: At least one application exists.
-
-    2. Test case: `note 1 n/Prepare for OA this weekend.`  
-       Expected: Note field for the first application is updated.
-
-    3. Test case: `note 1 n/`  
-       Expected: No note is saved. An error message is shown.
-
-2. Clearing notes (`clearnote`)
-
-    1. Prerequisites: At least one application has a non-empty note.
-
-    2. Test case: `clearnote 1`  
-       Expected: Note for the first application is removed.
-
-    3. Test case: `clearnote 1 extra`  
-       Expected: Command is rejected as invalid format.
-
+    6. Test case: Use `list` after `clear`  
+       Expected: The application list is empty if all applications were previously cleared.
 
 ### Saving data
 
@@ -985,5 +1150,5 @@ testers are expected to do more *exploratory* testing.
 
 2. Verifying automatic save
 
-    1. Add, edit, or delete an application, then close the app and relaunch it.  
+    1. Add, edit, or delete an application, then close the app and relaunch it.
        Expected: The latest changes are retained.

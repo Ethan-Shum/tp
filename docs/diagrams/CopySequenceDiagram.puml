@@ -1,0 +1,62 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":CopyCommandParser" as CopyCommandParser LOGIC_COLOR
+participant "c:CopyCommand" as CopyCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("copy 1")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("copy 1")
+activate AddressBookParser
+create CopyCommandParser
+AddressBookParser -> CopyCommandParser
+activate CopyCommandParser
+AddressBookParser -> CopyCommandParser : parse(" 1")
+create CopyCommand
+CopyCommandParser -> CopyCommand
+activate CopyCommand
+CopyCommand --> CopyCommandParser
+deactivate CopyCommand
+CopyCommandParser --> AddressBookParser : c
+deactivate CopyCommandParser
+AddressBookParser --> LogicManager : c
+deactivate AddressBookParser
+
+LogicManager -> CopyCommand : execute(m)
+activate CopyCommand
+CopyCommand -> Model : getFilteredApplicationList()
+activate Model
+Model --> CopyCommand : lastShownList
+deactivate Model
+
+CopyCommand -> CopyCommand : getUrl()
+
+note right of CopyCommand
+  Throws CommandException
+  if URL is absent
+end note
+
+CopyCommand -> CopyCommand : Clipboard.getSystemClipboard()
+
+create CommandResult
+CopyCommand -> CommandResult
+activate CommandResult
+CommandResult --> CopyCommand
+deactivate CommandResult
+
+CopyCommand --> LogicManager : r
+deactivate CopyCommand
+[<--LogicManager : r
+deactivate LogicManager
+@enduml

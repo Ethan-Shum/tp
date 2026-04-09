@@ -1,5 +1,6 @@
 package seedu.address.model.application;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -15,8 +16,15 @@ public class NoteTest {
 
     @Test
     public void constructor_invalidNote_throwsIllegalArgumentException() {
-        String invalidNote = "a".repeat(201);
-        assertThrows(IllegalArgumentException.class, () -> new Note(invalidNote));
+        String invalidNote = "a".repeat(501);
+        assertThrows(IllegalArgumentException.class, Note.MESSAGE_LENGTH_CONSTRAINTS, ()
+                -> new Note(invalidNote));
+    }
+
+    @Test
+    public void constructor_invalidCharacters_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, Note.MESSAGE_CONSTRAINTS, ()
+                -> new Note("hello🙂"));
     }
 
     @Test
@@ -25,20 +33,20 @@ public class NoteTest {
 
         assertTrue(Note.isValidNote(""));
         assertTrue(Note.isValidNote("prepare for behavioral round"));
-        assertTrue(Note.isValidNote("a".repeat(200)));
+        assertTrue(Note.isValidNote("a".repeat(500)));
+        assertTrue(Note.isValidNote("Interview at 10am on 2025-12-22."));
 
-        assertFalse(Note.isValidNote("a".repeat(201)));
+        assertFalse(Note.isValidNote("a".repeat(501)));
+        assertFalse(Note.isValidNote("hello🙂"));
     }
 
     @Test
     public void equals() {
         Note note = new Note("Valid note");
 
-        assertTrue(note.equals(new Note("Valid note")));
-        assertTrue(note.equals(note));
+        assertEquals(new Note("Valid note"), note);
         assertFalse(note.equals(null));
         assertFalse(note.equals(5.0f));
         assertFalse(note.equals(new Note("Other note")));
     }
 }
-

@@ -120,10 +120,9 @@ public class DropCommandTest {
 
     private static String getExpectedDropMessage(List<Application> droppedApplications) {
         String message = String.format(DropCommand.MESSAGE_DROP_APPLICATIONS_SUCCESS, droppedApplications.size());
-
         String details = droppedApplications.stream()
                 .map(application -> "- " + Messages.format(application))
                 .collect(Collectors.joining("\n"));
-        return message + "\n" + DropCommand.MESSAGE_DROPPED_APPLICATIONS_HEADER + "\n" + details;
+        return message + "\n" + details;
     }
 }

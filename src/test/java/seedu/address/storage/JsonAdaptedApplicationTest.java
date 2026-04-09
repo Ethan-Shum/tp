@@ -21,7 +21,8 @@ public class JsonAdaptedApplicationTest {
     private static final String INVALID_URL = "invalid_url";
     private static final String INVALID_APPLICATION_DATE = "2026/03/09";
     private static final String INVALID_STATUS = "Pending";
-    private static final String INVALID_NOTE = "a".repeat(201);
+    private static final String INVALID_NOTE = "a".repeat(501);
+    private static final String INVALID_NOTE_CHARACTERS = "hello🙂";
 
     private static final String VALID_COMPANY = BENSON.getCompany().toString();
     private static final String VALID_ROLE = BENSON.getRole().toString();
@@ -109,6 +110,14 @@ public class JsonAdaptedApplicationTest {
         JsonAdaptedApplication application =
                 new JsonAdaptedApplication(VALID_COMPANY, VALID_ROLE, VALID_APPLICATION_DATE,
                         VALID_URL, VALID_STATUS, INVALID_NOTE);
+        assertThrows(IllegalValueException.class, Note.MESSAGE_LENGTH_CONSTRAINTS, application::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidNoteCharacters_throwsIllegalValueException() {
+        JsonAdaptedApplication application =
+                new JsonAdaptedApplication(VALID_COMPANY, VALID_ROLE, VALID_APPLICATION_DATE,
+                        VALID_URL, VALID_STATUS, INVALID_NOTE_CHARACTERS);
         assertThrows(IllegalValueException.class, Note.MESSAGE_CONSTRAINTS, application::toModelType);
     }
 

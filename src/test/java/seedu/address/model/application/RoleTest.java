@@ -44,6 +44,15 @@ public class RoleTest {
     }
 
     @Test
+    public void isValidRole_lengthLimit() {
+        String withinLimitChars = "A".repeat(100);
+        String outsideLimitChars = "A".repeat(101);
+
+        assertTrue(Role.isValidRole(withinLimitChars));
+        assertFalse(Role.isValidRole(outsideLimitChars));
+    }
+
+    @Test
     public void equals() {
         Role role = new Role("Software Engineer");
 
