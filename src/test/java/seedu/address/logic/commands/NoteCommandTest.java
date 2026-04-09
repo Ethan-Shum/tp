@@ -108,4 +108,35 @@ public class NoteCommandTest {
                 + "{targetIndex=" + INDEX_FIRST_APPLICATION + ", note=Prep}";
         assertEquals(expected, noteCommand.toString());
     }
+
+    @Test
+    public void execute_replaceExistingNote_success() {
+        Application originalApplication = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application applicationWithOldNote = copyWithNote(originalApplication, "old");
+        model.setApplication(originalApplication, applicationWithOldNote);
+
+        NoteCommand noteCommand = new NoteCommand(INDEX_FIRST_APPLICATION, new Note("new"));
+        Application updatedApplication = copyWithNote(applicationWithOldNote, "new");
+
+        String expectedMessage = String.format(
+                NoteCommand.MESSAGE_ADD_NOTE_SUCCESS, Messages.format(updatedApplication));
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setApplication(applicationWithOldNote, updatedApplication);
+
+        assertCommandSuccess(noteCommand, model, expectedMessage, expectedModel);
+    }
+
+    /**
+     * Returns a copy of {@code source} with all fields preserved except note.
+     */
+    private static Application copyWithNote(Application source, String noteValue) {
+        return new Application(
+                source.getCompany(),
+                source.getRole(),
+                source.getApplicationDate(),
+                source.getUrl(),
+                source.getStatus(),
+                new Note(noteValue));
+    }
 }

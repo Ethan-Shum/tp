@@ -256,7 +256,7 @@ Adds a note to an existing application in LockedIn.
 |------------------------------------|---------------------------------|
 |  | |
 
-**Format:** `note INDEX nt/NOTE`
+**Format:** `note INDEX NOTE`
 
 **Notes**
 - `INDEX` refers to the index number shown in the displayed list.
@@ -268,9 +268,9 @@ Adds a note to an existing application in LockedIn.
 - Notes can be used to store reminders, interview details, recruiter names, deadlines, or any other application-related information.
 
 **Examples**
-- `note 1 nt/Submitted resume through referral`
-- `note 2 nt/OA deadline is 2025-03-15`
-- `note 3 nt/Recruiter mentioned response within 2 weeks`
+- `note 1 Submitted resume through referral`
+- `note 2 OA deadline is 2025-03-15`
+- `note 3 Recruiter mentioned response within 2 weeks`
 
 **What you should expect**
 - A success message appears.

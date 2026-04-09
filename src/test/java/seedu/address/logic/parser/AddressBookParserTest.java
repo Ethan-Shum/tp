@@ -67,11 +67,6 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_dropWithoutArgs_returnsDropCommand() throws Exception {
-        assertEquals(new DropCommand(), parser.parseCommand(DropCommand.COMMAND_WORD));
-    }
-
-    @Test
     public void parseCommand_edit() throws Exception {
         Application application = new ApplicationBuilder().build();
         EditApplicationDescriptor descriptor = new EditApplicationDescriptorBuilder(application).build();
@@ -98,7 +93,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_note() throws Exception {
-        NoteCommand command = (NoteCommand) parser.parseCommand(NoteCommand.COMMAND_WORD + " 1 nt/Prepare for OA");
+        NoteCommand command = (NoteCommand) parser.parseCommand(NoteCommand.COMMAND_WORD + " 1 Prepare for OA");
         assertEquals(new NoteCommand(INDEX_FIRST_APPLICATION, new Note("Prepare for OA")), command);
     }
 

@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteCommand;
@@ -23,33 +22,20 @@ public class NoteCommandParser implements Parser<NoteCommand> {
     @Override
     public NoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NOTE);
 
-        if (argMultimap.getValue(PREFIX_NOTE).isEmpty()) {
+        String trimmedArgs = args.trim();
+        if (trimmedArgs.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NOTE);
+        String[] parts = trimmedArgs.split("\\s+", 2);
+        Index index = ParserUtil.parseIndex(parts[0]);
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-
-            if (argMultimap.getPreamble().isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE), pe);
-            } else {
-                throw pe;
-            }
-        }
-
-        String noteValue = argMultimap.getValue(PREFIX_NOTE).get().trim();
-        if (noteValue.isEmpty()) {
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
             throw new ParseException(Note.MESSAGE_EMPTY_NOTE);
         }
 
-        Note note = ParserUtil.parseNote(noteValue);
+        Note note = ParserUtil.parseNote(parts[1]);
         return new NoteCommand(index, note);
     }
 }

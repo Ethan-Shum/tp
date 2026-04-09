@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
 import java.util.List;
 
@@ -23,10 +22,8 @@ public class NoteCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds/updates a note for the application identified by the index number "
             + "used in the displayed application list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_NOTE + "NOTE\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_NOTE + "Interview at 10am on 2025-12-22.";
+            + "Parameters: INDEX (must be a positive integer) NOTE\n"
+            + "Example: " + COMMAND_WORD + " 1 Interview at 10am on 2025-12-22.";
 
     public static final String MESSAGE_ADD_NOTE_SUCCESS = "Set note for Application: %1$s";
 
@@ -74,12 +71,10 @@ public class NoteCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof NoteCommand)) {
+        if (!(other instanceof NoteCommand otherNoteCommand)) {
             return false;
         }
 
-        NoteCommand otherNoteCommand = (NoteCommand) other;
         return targetIndex.equals(otherNoteCommand.targetIndex)
                 && note.equals(otherNoteCommand.note);
     }

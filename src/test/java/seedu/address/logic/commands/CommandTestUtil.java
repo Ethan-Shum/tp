@@ -4,14 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_APPLICATION_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URL;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
@@ -52,8 +51,8 @@ public class CommandTestUtil {
     public static final String URL_DESC_BYTEDANCE = " " + PREFIX_URL + VALID_URL_BYTEDANCE;
     public static final String STATUS_DESC_AMAZON = " " + PREFIX_STATUS + VALID_STATUS_AMAZON;
     public static final String STATUS_DESC_BYTEDANCE = " " + PREFIX_STATUS + VALID_STATUS_BYTEDANCE;
-    public static final String NOTE_DESC_AMAZON = " " + PREFIX_NOTE + VALID_NOTE_AMAZON;
-    public static final String NOTE_DESC_BYTEDANCE = " " + PREFIX_NOTE + VALID_NOTE_BYTEDANCE;
+    public static final String NOTE_DESC_AMAZON = " " + VALID_NOTE_AMAZON;
+    public static final String NOTE_DESC_BYTEDANCE = " " + VALID_NOTE_BYTEDANCE;
 
     public static final String INVALID_COMPANY_DESC = " " + PREFIX_COMPANY + "Google😀";
     public static final String INVALID_ROLE_DESC = " " + PREFIX_ROLE + "工程师";
@@ -128,8 +127,8 @@ public class CommandTestUtil {
 
         Application application = model.getFilteredApplicationList().get(targetIndex.getZeroBased());
         final String[] splitName = application.getCompany().value.split("\\s+");
-        model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(Arrays.asList(splitName[0]),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+        model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(
+                Collections.singletonList(splitName[0]), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
         assertEquals(1, model.getFilteredApplicationList().size());
     }
