@@ -12,6 +12,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
@@ -128,8 +129,9 @@ public class CommandTestUtil {
 
         Application application = model.getFilteredApplicationList().get(targetIndex.getZeroBased());
         final String[] splitName = application.getCompany().value.split("\\s+");
-        model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(Arrays.asList(splitName[0]),
-                new ArrayList<>(), null, null, new ArrayList<>(), new ArrayList<>()));
+        model.updateFilteredApplicationList(new ApplicationContainsKeywordsPredicate(
+                Collections.singletonList(splitName[0]), new ArrayList<>(), null, null, new ArrayList<>(),
+                new ArrayList<>()));
 
         assertEquals(1, model.getFilteredApplicationList().size());
     }
