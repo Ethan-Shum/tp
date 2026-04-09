@@ -41,6 +41,7 @@
     * [Unalias Command]({{ baseUrl }}/UserGuide.html#unalias)
     * [Alias-List Command]({{ baseUrl }}/UserGuide.html#alias-list)
     * [Find Command]({{ baseUrl }}/UserGuide.html#find)
+    * [Note Command]({{ baseUrl }}/UserGuide.html#note)
     * [Delete Command]({{ baseUrl }}/UserGuide.html#delete)
     * [Drop Command]({{ baseUrl }}/UserGuide.html#drop)
     * [Clear Command]({{ baseUrl }}/UserGuide.html#clear)
