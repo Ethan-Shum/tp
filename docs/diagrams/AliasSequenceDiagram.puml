@@ -28,7 +28,11 @@ create AliasCommandParser
 AddressBookParser -> AliasCommandParser
 activate AliasCommandParser
 
+AliasCommandParser --> AddressBookParser
+deactivate AliasCommandParser
+
 AddressBookParser -> AliasCommandParser : parse(" ls list")
+activate AliasCommandParser
 create AliasCommand
 AliasCommandParser -> AliasCommand
 activate AliasCommand
@@ -36,8 +40,11 @@ AliasCommand --> AliasCommandParser
 deactivate AliasCommand
 AliasCommandParser --> AddressBookParser : a
 deactivate AliasCommandParser
+AliasCommandParser -[hidden]-> AddressBookParser
+destroy AliasCommandParser
 AddressBookParser --> LogicManager : a
 deactivate AddressBookParser
+
 
 LogicManager -> AliasCommand : execute(m)
 activate AliasCommand
