@@ -415,6 +415,10 @@ Adds or replaces the note of an existing application.
 
 **Format:** `note INDEX NOTE`
 
+Before                                | After                                   |
+| ------------------------------------ | --------------------------------------- |
+| ![beforeNote](images/beforeNote.png) | ![afterClearNote](images/afterNote.png) |
+
 **Notes**
 
 * `INDEX` refers to the index number shown in the displayed list.
@@ -575,14 +579,6 @@ Give an alias to a command word: <code>alias</code>
 
 Creates a shortcut for an existing command word.
 
-| Setting an alias                 | Success                                  |
-| -------------------------------- | ---------------------------------------- |
-| ![setAlias](images/setAlias.png) | ![successAlias](images/successAlias.png) |
-
-| Using an alias                   | Result                                 |
-| -------------------------------- | -------------------------------------- |
-| ![useAlias](images/useAlias.png) | ![resultAlias](images/resultAlias.png) |
-
 **Format:** `alias ALIAS COMMAND_WORD`
 
 **Notes**
@@ -704,11 +700,9 @@ Opens the help window.
 
 **Format:** `help`
 
-![help message](images/helpMessage.png)
-
 **What you should expect**
 
-* A help window appears.
+* A help window appears, with a User Guide link available for copying.
 
 ---
 
