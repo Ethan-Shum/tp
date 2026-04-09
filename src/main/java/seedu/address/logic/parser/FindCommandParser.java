@@ -36,28 +36,54 @@ public class FindCommandParser implements Parser<FindCommand> {
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COMPANY, PREFIX_ROLE, PREFIX_APPLICATION_DATE, PREFIX_URL,
                 PREFIX_STATUS);
 
-        List<String> companyKeywords = new ArrayList<>();
-        List<String> roleKeywords = new ArrayList<>();
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        List<String> companyKeywords = parseKeywords(argMultimap, PREFIX_COMPANY);
+        List<String> roleKeywords = parseKeywords(argMultimap, PREFIX_ROLE);
+        List<String> urlKeywords = parseKeywords(argMultimap, PREFIX_URL);
+        List<String> statusKeywords = parseStatusKeywords(argMultimap);
+        
+        LocalDate[] dateRange = parseDateRange(argMultimap);
+        LocalDate startDate = dateRange[0];
+        LocalDate endDate = dateRange[1];
+
+        if (companyKeywords.isEmpty() && roleKeywords.isEmpty() && startDate == null && endDate == null
+                && urlKeywords.isEmpty() && statusKeywords.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        return new FindCommand(new ApplicationContainsKeywordsPredicate(companyKeywords, roleKeywords,
+                startDate, endDate, urlKeywords, statusKeywords));
+    }
+
+    private List<String> parseKeywords(ArgumentMultimap argMultimap, Prefix prefix) throws ParseException {
+        if (argMultimap.getValue(prefix).isPresent()) {
+            String arg = argMultimap.getValue(prefix).get().trim();
+            if (arg.isEmpty()) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            }
+            return Arrays.asList(arg.split("\\s+"));
+        }
+        return new ArrayList<>();
+    }
+
+    private List<String> parseStatusKeywords(ArgumentMultimap argMultimap) throws ParseException {
+        List<String> statusKeywords = parseKeywords(argMultimap, PREFIX_STATUS);
+        for (String status : statusKeywords) {
+            try {
+                Status.fromUserInput(status);
+            } catch (IllegalArgumentException e) {
+                throw new ParseException(Status.MESSAGE_CONSTRAINTS);
+            }
+        }
+        return statusKeywords;
+    }
+
+    private LocalDate[] parseDateRange(ArgumentMultimap argMultimap) throws ParseException {
         LocalDate startDate = null;
         LocalDate endDate = null;
-        List<String> urlKeywords = new ArrayList<>();
-        List<String> statusKeywords = new ArrayList<>();
-
-        if (argMultimap.getValue(PREFIX_COMPANY).isPresent()) {
-            String companyArg = argMultimap.getValue(PREFIX_COMPANY).get().trim();
-            if (companyArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            companyKeywords = Arrays.asList(companyArg.split("\\s+"));
-        }
-
-        if (argMultimap.getValue(PREFIX_ROLE).isPresent()) {
-            String roleArg = argMultimap.getValue(PREFIX_ROLE).get().trim();
-            if (roleArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            roleKeywords = Arrays.asList(roleArg.split("\\s+"));
-        }
 
         if (argMultimap.getValue(PREFIX_APPLICATION_DATE).isPresent()) {
             String dateArg = argMultimap.getValue(PREFIX_APPLICATION_DATE).get().trim();
@@ -86,42 +112,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 endDate = new ApplicationDate(dateArg).getValue();
             }
         }
-
-        if (argMultimap.getValue(PREFIX_URL).isPresent()) {
-            String urlArg = argMultimap.getValue(PREFIX_URL).get().trim();
-            if (urlArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            urlKeywords = Arrays.asList(urlArg.split("\\s+"));
-        }
-
-        if (argMultimap.getValue(PREFIX_STATUS).isPresent()) {
-            String statusArg = argMultimap.getValue(PREFIX_STATUS).get().trim();
-            if (statusArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            statusKeywords = Arrays.asList(statusArg.split("\\s+"));
-            for (String status : statusKeywords) {
-                try {
-                    Status.fromUserInput(status);
-                } catch (IllegalArgumentException e) {
-                    throw new ParseException(Status.MESSAGE_CONSTRAINTS);
-                }
-            }
-        }
-
-        if (companyKeywords.isEmpty() && roleKeywords.isEmpty() && startDate == null && endDate == null
-                && urlKeywords.isEmpty() && statusKeywords.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        return new FindCommand(new ApplicationContainsKeywordsPredicate(companyKeywords, roleKeywords,
-                startDate, endDate, urlKeywords, statusKeywords));
+        return new LocalDate[]{startDate, endDate};
     }
 
 }
