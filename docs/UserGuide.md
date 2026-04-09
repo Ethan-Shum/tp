@@ -469,31 +469,41 @@ Displays all currently saved aliases.
 Find applications: <code>find</code>
 </h3>
 
-Finds applications whose company names, roles, application dates, or statuses match the given keywords.
+Finds applications whose company names, roles, application dates, URLs, or statuses match the given keywords.
+For date fields, it can either find exact dates or find dates within a range (inclusive).
 
 | Before                               | After                              |
 |--------------------------------------|------------------------------------|
 | ![beforeFind](images/beforeFind.png) | ![afterFind](images/afterFind.png) |
 
-**Format:** `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...`
+**Format:** `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]...`
 
 **Notes**
 - You must provide at least one parameter.
+- You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g. `find n/` is invalid).
 - The search is case-insensitive.
   Example: `n/google` matches `Google`.
 - The order of keywords does not matter.
-  Example: `n/Google Meta` matches both Google and Meta.
+  Example: `n/Google r/Intern` returns the same results as `find r/Intern n/Google`.
 - Only full words are matched.
   Example: `n/Goog` does **not** match `Google`.
-- Applications matching at least one keyword in the same field are returned.
-- If multiple fields are specified, applications must match all those fields.
+- You can specify multiple keywords for each field (except date fields).
+  - Applications matching ANY of the keywords in a field will be returned (i.e. `OR` search within a field).
+    Example: `n/Google Meta` will return applications with `Google` or `Meta`.
+  - Applications must match the criteria for ALL provided fields (i.e. `AND` search across fields).
+    Example: `n/Google r/Intern` will return applications that have company `Google` AND role `Intern`.
+- For `APPLICATION_DATE`, you can provide:
+  - A single date: e.g. `d/2026-11-11` matches exactly `2026-11-11`.
+  - A date range using `:` separator: e.g. `d/2026-11-11:2026-12-12` matches dates from `2026-11-11` to `2026-12-12` (inclusive).
+- Duplicate prefixes will be flagged as an error.
 
 **Examples**
-- `find n/Google`
-- `find r/Intern`
-- `find n/Google r/Intern`
-- `find s/Applied`
-- `find n/TikTok s/Interview`
+- `find n/Google` returns applications with `Google` in the company name.
+- `find n/Google r/Intern` returns applications with `Google` in the company name and `Intern` in the role.
+- `find n/Google Meta r/Intern Developer` returns applications with `Google` or `Meta` in the company name AND `Intern` or `Developer` in the role.
+- `find d/2026-11-11:2026-12-12` returns applications with application date between `2026-11-11` and `2026-12-12`.
+- `find u/careers.google.com` returns applications with `careers.google.com` in the URL.
+- `find s/Applied` returns applications with `Applied` in the status.
 
 **What you should expect**
 - The application list updates to show only matching entries.
@@ -771,7 +781,7 @@ A: Install LockedIn on the other computer and replace the empty data file it cre
 | **Delete** | `delete INDEX` | `delete 3` |
 | **Drop** | `drop` | `drop` |
 | **Edit** | `edit INDEX [n/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]` | `edit 2 n/OpenAI s/Offered` |
-| **Find** | `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [s/STATUS]...` | `find n/Google r/Intern` |
+| **Find** | `find [n/COMPANY_NAME] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]...` | `find n/Google r/Intern` |
 | **Help** | `help` | `help` |
 | **List** | `list` | `list` |
 | **Next** | `next INDEX` | `next 3` |
