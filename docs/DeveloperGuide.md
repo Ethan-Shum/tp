@@ -326,34 +326,37 @@ in a CLI environment. It allows target users to log application updates, record 
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                     | I want to …​                                   | So that I can…​                                     |
-|----------|--------------------------------------------|------------------------------------------------|-----------------------------------------------------|
-| `* * *`  | first time user                            | add an application record                      | track my application                                |
-| `* * *`  | first time user                            | view all applications in a list                | see all my applications                             |
-| `* * *`  | first time user                            | delete application records                     | remove companies I am no longer interested in       |
-| `* * *`  | first time user                            | edit an application's details                  | correct mistakes I made                             |
-| `* * *`  | user                                       | update an application status                   | track the progress of my application                |
-| `* * *`  | user                                       | save the application date for each application | track my applications efficiently                   |
-| `* * *`  | user                                       | save data on my hard disk                      | access my records locally                           |
-| `* * *`  | user                                       | add a job URL to an entry                      | quickly revisit the job posting                     |
-| `* *`    | user                                       | sort company list by application date          | know which applications need follow-up first              |
-| `* *`    | user                                       | filter the list by status                      | see only my active applications                     |
-| `* *`    | user                                       | view the potential pay of each position        | know which applications result in higher pay        |
-| `* *`    | user                                       | filter the list by pay range                   | determine expected salary levels                    |
-| `* *`    | user                                       | view total number of applications by status    | track my overall progress                           |
-| `* *`    | user                                       | auto save my data after every command          | avoid losing data if the terminal closes            |
-| `* *`    | user                                       | copy contact info between entries              | avoid retyping everything                           |
-| `* *`    | user                                       | favourite companies                            | track companies I am particularly interested in     |
-| `* *`    | first time user                            | see dummy data                                 | understand how the data is structured               |
-| `* *`    | first time user                            | find company contact details by name           | follow up with companies easily                     |
-| `*`      | user                                       | pin the application window on top              | keep the logbook visible while browsing job portals |
-| `*`      | user                                       | undo a command                                 | recover from accidental deletions                   |
-| `*`      | expert user                                | use short aliases                              | type commands faster                                |
-| `*`      | expert user                                | use tab completion                             | avoid typing full commands                          |
-| `*`      | expert user                                | cycle through previous commands                | reuse previously typed commands                     |
-| `*`      | expert user                                | bulk delete applications by status             | remove rejected or ghosted applications quickly     |
-| `*`      | expert user                                | export data into another file format           | keep backups or reuse data elsewhere                |
-| `*`      | expert user                                | add tags to companies                          | record additional information about companies       |
+| Priority | As a …​         | I want to …​                                      | So that I can…​                                         |
+|----------|-----------------|---------------------------------------------------|---------------------------------------------------------|
+| `* * *`  | first time user | add an application record                         | track my application                                    |
+| `* * *`  | first time user | view all applications in a list                   | see all my applications                                 |
+| `* * *`  | first time user | delete application records                        | remove companies I am no longer interested in           |
+| `* * *`  | first time user | edit an application's details                     | correct mistakes I made                                 |
+| `* * *`  | user            | update an application status                      | track the progress of my application                    |
+| `* * *`  | user            | save the application date for each application    | track my applications efficiently                       |
+| `* * *`  | user            | save data on my hard disk                         | access my records locally                               |
+| `* * *`  | user            | add a application URL to an entry                 | have a reference to the original application page       |
+| `* * `   | user            | copy an application URL                           | quickly open the link in my browser without retyping it |
+| `* * `   | user            | add notes to an application                       | store reminders or interview details                    |
+| `* *`    | user            | filter the list by status                         | see only my active applications                         |
+| `* *`    | user            | filter applications by company name and role      | find relevant applications quickly                      |
+| `* *`    | user            | filter applications by application date           | find applications submitted during a specific period quickly                      |
+| `* *`    | user            | filter applications by URL                        | find applications linked to a specific job posting quickly |
+| `* *`    | user             | remove rejected or withdrawn applications quickly | keep my application list clean         |
+| `* *`    | user            | view total number of applications by status       | track my overall progress                               |
+| `* *`    | expert user     | use short aliases                                 | type commands faster                                    |
+| `* *`    | expert user      | remove aliases                              | stop using shortcuts I no longer need               | Add |
+| `* *`    | expert user      | view all saved aliases                      | remember what shortcuts I created                   |
+| `* *`    | expert user     | cycle through previous commands                   | reuse previously typed commands                         |
+| `* *`    | user            | view the potential pay of each position           | know which applications result in higher pay            |
+| `* *`    | user            | filter the list by pay range                      | determine expected salary levels                        |
+| `*`      | user            | favourite companies                               | track companies I am particularly interested in         |
+| `*`      | first time user | see dummy data                                    | understand how the data is structured                   |
+| `*`      | expert user     | use tab completion                                | avoid typing full commands                              |
+| `*`      | user            | pin the application window on top                 | keep the logbook visible while browsing job portals     |
+| `*`      | user            | undo a command                                    | recover from accidental deletions                       |
+| `*`      | expert user     | export data into another file format              | keep backups or reuse data elsewhere                    |
+| `*`      | expert user     | add tags to companies                             | record additional information about companies           |
 
 
 ### Use cases
@@ -853,8 +856,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1a1. LockedIn shows an error message.
 
       Use case ends.
-  
-*{More to be added}*
 
 ### Non-Functional Requirements
 
@@ -973,7 +974,7 @@ testers are expected to do more *exploratory* testing.
 
 2. Finding applications after only some applications are being shown
 
-    1. Prerequisites: Use the `find` command to filter the application list so that only some applications are shown.
+    1. Prerequisites: Use `find` command to filter the application list so that only some applications are shown.
 
     2. Test case: `find n/Google`  
        Expected: All applications in the data with company names matching `Google` are shown, including applications that were not shown before the command was entered.
