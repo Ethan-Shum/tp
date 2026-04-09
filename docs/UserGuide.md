@@ -344,7 +344,12 @@ For date fields, it can either find exact dates or find dates within a range (in
 | ------------------------------------ | ---------------------------------- |
 | ![beforeFind](images/beforeFind.png) | ![afterFind](images/afterFind.png) |
 
-**Format:** `find [n/COMPANY] [r/ROLE] [d/DATE] [u/URL] [s/STATUS]`
+**Format:** `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`
+
+**Date formats supported**
+
+* Exact date: `d/2025-03-14`
+* Date range: `d/2025-03-01:2025-03-31`
 
 **Notes**
 
