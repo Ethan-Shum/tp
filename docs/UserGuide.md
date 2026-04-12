@@ -358,6 +358,7 @@ For date fields, it can either find exact dates or find dates within a range (in
 * The search is case-insensitive.
   Example: `n/google` matches `Google`.
 * For company, role, URL, and status, applications matching at least one keyword in the same field are returned.
+* For URL fields, the keyword must match exactly as stored, including characters such as trailing slashes (`/`). For example, `https://www.example.com` does not match `https://www.example.com/`.
 * If multiple fields are specified, applications must match all those fields.
 * `d/START_DATE:END_DATE` returns applications whose application dates fall within the range, inclusive.
 * `START_DATE` must be earlier than or equal to `END_DATE`.
@@ -466,6 +467,7 @@ Clears the note of the specified application.
 * `INDEX` refers to the index number shown in the displayed list.
 * `INDEX` must be a positive integer.
 * The selected application's note is reset to an empty note.
+* If the selected application has an empty note, LockedIn shows an error message.
 
 **Examples**
 
@@ -498,6 +500,7 @@ Copies the URL of an application to your system clipboard.
 * `INDEX` refers to the index number shown in the displayed list.
 * `INDEX` must be a positive integer.
 * The selected application must already contain a URL.
+* If the selected application has no URL, LockedIn shows an error message.
 
 **Examples**
 
@@ -507,7 +510,7 @@ Copies the URL of an application to your system clipboard.
 **What you should expect**
 
 * If the selected application has a URL, LockedIn copies it to your clipboard.
-* If the selected application has no URL, LockedIn shows an error message.
+
 
 ---
 
