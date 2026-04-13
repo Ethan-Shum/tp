@@ -280,12 +280,13 @@ Edits an existing application in LockedIn.
 * `INDEX` must be a positive integer.
 * You must provide at least one field to edit.
 * Existing values are updated to the input values.
-* `COMPANY` and `ROLE` must not be blank.
-* `COMPANY` and `ROLE` may contain only [supported characters](#supported-characters).
-* `COMPANY` must be at most 100 characters long.
-* `ROLE` must be at most 100 characters long.
-* `APPLICATION_DATE` must be a valid date in the format `yyyy-MM-dd`.
+* `COMPANY` and `ROLE`, if provided, cannot be blank.
+* `COMPANY` and `ROLE`, if provided, may contain only [supported characters](#supported-characters).
+* `COMPANY`, if provided, must be at most 100 characters long.
+* `ROLE`, if provided, must be at most 100 characters long.
+* `APPLICATION_DATE`, if provided, must be a valid date in the format `yyyy-MM-dd`.
 * `URL`, if provided, must start with `http://` or `https://`.
+* `STATUS`, if provided, must be one of: `Applied`, `OA`, `Interview`, `Offered`, `Rejected`, `Withdrawn`.
 * If the edited values make the application a duplicate of an existing one, the edit is rejected.
 
 **Examples**
@@ -354,7 +355,7 @@ For date fields, it can either find exact dates or find dates within a range (in
 **Notes**
 
 * You must provide at least one field.
-* You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g. `find n/` is invalid).
+* You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g., `find n/` is invalid).
 * The search is case-insensitive.
   Example: `n/google` matches `Google`.
 * For company, role, URL, and status, applications matching at least one keyword in the same field are returned.
@@ -780,7 +781,7 @@ A: No. LockedIn currently supports only English letters, digits, spaces, and a [
 
 <br>
 
-**Q: Why does certain fonts not work properly?**<br>
+**Q: Why do certain fonts not work properly?**<br>
 A: LockedIn validates the company, role, and note fields using an ASCII-only character set, so other fonts not in the set may be rejected.
 
 <br>
