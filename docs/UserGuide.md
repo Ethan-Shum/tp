@@ -125,7 +125,7 @@ Here are a few commands you can try:
 * `list`
   Shows all saved applications.
 
-* `add n/Google r/Software Engineer Intern d/2025-02-14 u/https://careers.google.com s/Applied`
+* `add c/Google r/Software Engineer Intern d/2025-02-14 u/https://careers.google.com s/Applied`
   Adds a new application.
 
 * `note 1 Submitted resume through referral`
@@ -154,13 +154,13 @@ Notes about the command format
 **How to read command formats**
 
 * Words in `UPPER_CASE` are values to be supplied by the user.
-  Example: in `add n/COMPANY`, `COMPANY` can be used as `Google`.
+  Example: in `add c/COMPANY`, `COMPANY` can be used as `Google`.
 
 * Items in square brackets are optional.
-  Example: `n/COMPANY [u/URL]` can be used as `n/Google u/https://careers.google.com` or as `n/Google`.
+  Example: `c/COMPANY [u/URL]` can be used as `c/Google u/https://careers.google.com` or as `c/Google`.
 
 * Parameters can be entered in any order unless stated otherwise.
-  Example: if the command specifies `n/COMPANY r/ROLE`, `r/ROLE n/COMPANY` is also accepted.
+  Example: if the command specifies `c/COMPANY r/ROLE`, `r/ROLE c/COMPANY` is also accepted.
 
 * Extra words for commands that do not take parameters, such as `help`, `list`, and `exit`, are ignored.
   Example: `help 123` is treated as `help`.
@@ -169,7 +169,7 @@ Notes about the command format
   Example: `clear 4` will show an error message.
 
 * Leading and trailing spaces around field values are ignored.
-  Example: `add n/  Google   r/  Software Engineer  ` is treated the same as `add n/Google r/Software Engineer`.
+  Example: `add c/  Google   r/  Software Engineer  ` is treated the same as `add c/Google r/Software Engineer`.
 
 * If you are using a PDF version of this document, be careful when copying commands that wrap across multiple lines. Spaces around line breaks may be omitted when pasted into the app.
 
@@ -224,7 +224,7 @@ Adds a new application to LockedIn.
 | ---------------------------------- | -------------------------------- |
 | ![beforeAdd](images/beforeAdd.png) | ![afterAdd](images/afterAdd.png) |
 
-**Format:** `add n/COMPANY r/ROLE [d/APPLICATION_DATE] [u/URL] [s/STATUS]`
+**Format:** `add c/COMPANY r/ROLE [d/APPLICATION_DATE] [u/URL] [s/STATUS]`
 
 **Field meaning**
 
@@ -244,14 +244,15 @@ Adds a new application to LockedIn.
 * `APPLICATION_DATE` must be a valid date in the format `yyyy-MM-dd`.
 * If `d/APPLICATION_DATE` is omitted, LockedIn uses the current date by default.
 * `URL`, if provided, must start with `http://` or `https://`, must not be blank, and must not contain spaces.
+* Status input is case-insensitive. For example, `s/applied`, `s/Applied`, and `s/APPLIED` are all accepted.
 * If `s/STATUS` is omitted, LockedIn uses `Applied` by default.
 * Duplicate applications have the same company, role, and application date. LockedIn rejects duplicate applications.
 
 **Examples**
 
-* `add n/Google r/Software Engineer Intern d/2025-02-14`
-* `add n/OpenAI r/Research Intern d/2025-03-01 u/https://jobs.openai.com s/Interview`
-* `add n/Shopee r/Backend Intern d/2025-02-20 u/https://careers.shopee.sg`
+* `add c/Google r/Software Engineer Intern d/2025-02-14`
+* `add c/OpenAI r/Research Intern d/2025-03-01 u/https://jobs.openai.com s/Interview`
+* `add c/Shopee r/Backend Intern d/2025-02-20 u/https://careers.shopee.sg`
 
 **What you should expect**
 
@@ -272,7 +273,7 @@ Edits an existing application in LockedIn.
 | ------------------------------------ | ---------------------------------- |
 | ![beforeEdit](images/beforeEdit.png) | ![afterEdit](images/afterEdit.png) |
 
-**Format:** `edit INDEX [n/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]`
+**Format:** `edit INDEX [c/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]`
 
 **Notes**
 
@@ -287,12 +288,13 @@ Edits an existing application in LockedIn.
 * `APPLICATION_DATE`, if provided, must be a valid date in the format `yyyy-MM-dd`.
 * `URL`, if provided, must start with `http://` or `https://`, must not be blank, and must not contain spaces.
 * `STATUS`, if provided, must be one of: `Applied`, `OA`, `Interview`, `Offered`, `Rejected`, `Withdrawn`.
+* `STATUS` input is case-insensitive. For example, `s/offered`, `s/Offered`, and `s/OFFERED` are all accepted.
 * If the edited values make the application a duplicate of an existing one, the edit is rejected.
 
 **Examples**
 
 * `edit 1 r/Software Engineer d/2025-03-10`
-* `edit 2 n/OpenAI s/Offered`
+* `edit 2 c/OpenAI s/Offered`
 * `edit 3 u/https://careers.example.com s/OA`
 
 **What you should expect**
@@ -324,7 +326,7 @@ Deletes the specified application from LockedIn.
 **Examples**
 
 * `delete 2`
-* `find n/Google` followed by `delete 1`
+* `find c/Google` followed by `delete 1`
 
 **What you should expect**
 
@@ -345,7 +347,7 @@ For date fields, it can either find exact dates or find dates within a range (in
 | ------------------------------------ | ---------------------------------- |
 | ![beforeFind](images/beforeFind.png) | ![afterFind](images/afterFind.png) |
 
-**Format:** `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`
+**Format:** `find [c/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`
 
 **Date formats supported**
 
@@ -355,9 +357,10 @@ For date fields, it can either find exact dates or find dates within a range (in
 **Notes**
 
 * You must provide at least one field.
-* You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g., `find n/` is invalid).
+* You cannot provide an empty parameter. A prefix must be followed by at least one keyword (e.g. `find c/` is invalid).
 * The search is case-insensitive.
-  Example: `n/google` matches `Google`.
+  Example: `c/google` matches `Google`.
+* Status keywords are also case-insensitive. For example, `find s/applied` and `find s/APPLIED` are both valid.
 * For company, role, URL, and status, applications matching at least one keyword in the same field are returned.
 * For URL fields, the keyword must match exactly as stored, including characters such as trailing slashes (`/`). For example, `https://www.example.com` does not match `https://www.example.com/`.
 * If multiple fields are specified, applications must match all those fields.
@@ -367,14 +370,14 @@ For date fields, it can either find exact dates or find dates within a range (in
 
 **Examples**
 
-* `find n/Google`
+* `find c/Google`
 * `find r/Intern`
-* `find n/Google r/Intern`
+* `find c/Google r/Intern`
 * `find u/https://www.google.com/`
 * `find s/Applied`
 * `find d/2025-03-14`
 * `find d/2025-03-01:2025-03-31`
-* `find n/TikTok d/2025-02-01:2025-02-28 s/Interview`
+* `find c/TikTok d/2025-02-01:2025-02-28 s/Interview`
 
 **What you should expect**
 
@@ -473,7 +476,7 @@ Clears the note of the specified application.
 **Examples**
 
 * `clearnote 1`
-* `find n/Google` followed by `clearnote 1`
+* `find c/Google` followed by `clearnote 1`
 
 **What you should expect**
 
@@ -506,7 +509,7 @@ Copies the URL of an application to your system clipboard.
 **Examples**
 
 * `copy 1`
-* `find n/Google` followed by `copy 1`
+* `find c/Google` followed by `copy 1`
 
 **What you should expect**
 
@@ -806,7 +809,7 @@ A: Check the command format carefully. Common mistakes include:
 * exceeding the character limit
 * using the wrong date format
 * entering an invalid index
-* forgetting a required prefix such as `n/` or `r/`
+* forgetting a required prefix such as `c/` or `r/`
 * omitting required fields
 
 <br>
@@ -880,7 +883,7 @@ Manually restore the minimized Help window.
 
 | Action         | Format                                                                    | Example                                                |
 | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------------ |
-| **Add**        | `add n/COMPANY r/ROLE [d/APPLICATION_DATE] [u/URL] [s/STATUS]`            | `add n/Google r/Software Engineer Intern d/2025-02-14` |
+| **Add**        | `add c/COMPANY r/ROLE [d/APPLICATION_DATE] [u/URL] [s/STATUS]`            | `add c/Google r/Software Engineer Intern d/2025-02-14` |
 | **Alias**      | `alias ALIAS COMMAND_WORD`                                                | `alias ls list`                                        |
 | **Alias List** | `alias-list`                                                              | `alias-list`                                           |
 | **Clear**      | `clear`                                                                   | `clear`                                                |
@@ -888,11 +891,12 @@ Manually restore the minimized Help window.
 | **Copy**       | `copy INDEX`                                                              | `copy 3`                                               |
 | **Delete**     | `delete INDEX`                                                            | `delete 3`                                             |
 | **Drop**       | `drop`                                                                    | `drop`                                                 |
-| **Edit**       | `edit INDEX [n/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]` | `edit 2 n/OpenAI s/Offered`                            |
+| **Edit**       | `edit INDEX [c/COMPANY] [r/ROLE] [d/APPLICATION_DATE] [u/URL] [s/STATUS]` | `edit 2 c/OpenAI s/Offered`                            |
 | **Exit**       | `exit`                                                                    | `exit`                                                 |
-| **Find**       | `find [n/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`     | `find n/Google d/2025-03-01:2025-03-31`                |
+| **Find**       | `find [c/COMPANY] [r/ROLE] [d/DATE_OR_DATE_RANGE] [u/URL] [s/STATUS]`     | `find c/Google d/2025-03-01:2025-03-31`                |
 | **Help**       | `help`                                                                    | `help`                                                 |
 | **List**       | `list`                                                                    | `list`                                                 |
 | **Next**       | `next INDEX`                                                              | `next 3`                                               |
 | **Note**       | `note INDEX NOTE`                                                         | `note 1 OA deadline is 2025-03-15`                     |
 | **Unalias**    | `unalias ALIAS`                                                           | `unalias ls`                                           |
+

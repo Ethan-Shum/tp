@@ -245,7 +245,7 @@ Design note: The command requires a URL to be present; applications without a UR
 
 ### Find feature (`find`)
 
-`find` filters the displayed application list using one or more of the following prefixes: `n/COMPANY`, `r/ROLE`, `d/DATE_OR_DATE_RANGE`, `u/URL`, `s/STATUS`. At least one prefix must be provided.
+`find` filters the displayed application list using one or more of the following prefixes: `c/COMPANY`, `r/ROLE`, `d/DATE_OR_DATE_RANGE`, `u/URL`, `s/STATUS`. At least one prefix must be provided.
 
 Implementation flow:
 
@@ -428,6 +428,18 @@ Status:
 
        Use case ends.
 
+* 2g. The provided company name or role name contains unsupported characters.
+
+    * 2g1. LockedIn shows an error message indicating that the company name or role name contains unsupported characters.
+
+      Use case ends.
+
+* 2h. The provided company name or role name exceeds the maximum allowed length of 100 characters.
+
+    * 2h1. LockedIn shows an error message indicating that the company name or role name is too long.
+
+      Use case ends.
+
 **Use case: Delete an application record**
 
 **Preconditions:**
@@ -562,6 +574,18 @@ Status:
 * 2g. The user provides an unsupported or invalid prefix.
 
     * 2g1. LockedIn shows an error message indicating that the command format is invalid.
+
+      Use case ends.
+
+* 2h. The provided company name or role name contains unsupported characters.
+
+    * 2h1. LockedIn shows an error message indicating that the company name or role name contains unsupported characters.
+
+      Use case ends.
+
+* 2i. The provided company name or role name exceeds the maximum allowed length of 100 characters.
+
+    * 2i1. LockedIn shows an error message indicating that the company name or role name is too long.
 
       Use case ends.
 
@@ -939,19 +963,19 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a new application
 
-    1. Test case: `add n/OpenAI r/Research Intern d/2025-04-05 u/https://jobs.openai.com s/Interview`  
+    1. Test case: `add c/OpenAI r/Research Intern d/2025-04-05 u/https://jobs.openai.com s/Interview`  
        Expected: A new application is added with the given company name, role, date, URL, and status.
 
-    2. Test case: `add n/Shopee r/Backend Intern`  
+    2. Test case: `add c/Shopee r/Backend Intern`  
        Expected: A new application is added. The current date is used as the application date, and status defaults to `Applied`.
 
-    3. Test case: `add n/Google r/Software Engineer Intern d/2025-04-01` when an identical application already exists  
+    3. Test case: `add c/Google r/Software Engineer Intern d/2025-04-01` when an identical application already exists  
        Expected: No application is added. An error message is shown because duplicate applications are not allowed.
 
-    4. Test case: `add n/ r/Software Engineer Intern d/2025-04-01`  
+    4. Test case: `add c/ r/Software Engineer Intern d/2025-04-01`  
        Expected: No application is added. An error message is shown because the company name cannot be blank.
 
-    5. Test case: `add n/Google r/Software Engineer Intern s/InvalidStatus`  
+    5. Test case: `add c/Google r/Software Engineer Intern s/InvalidStatus`  
        Expected: No application is added. An error message is shown because only supported status values are accepted.
 
 ### Listing applications
@@ -972,32 +996,32 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: List all applications using the `list` command. Multiple applications exist in the list.
 
-    2. Test case: `find n/Google`  
+    2. Test case: `find c/Google`  
        Expected: Only applications with company names matching `Google` are shown. Details of the matching applications are displayed in the list.
 
     3. Test case: `find d/2025-11-11:2025-12-12`  
        Expected: Only applications with application dates from `2025-11-11` to `2025-12-12` (inclusive) are shown.
 
-    4. Test case: `find n/Google Meta`  
+    4. Test case: `find c/Google Meta`  
        Expected: Applications with company names matching either `Google` or `Meta` are shown.
 
     5. Test case: `find abc`  
        Expected: No applications are filtered. Error details are shown in the status message.
 
-    6. Other incorrect find commands to try: `find`, `find n/`, `find x/Google`  
+    6. Other incorrect find commands to try: `find`, `find c/`, `find x/Google`  
        Expected: Similar to previous.
 
 2. Finding applications after only some applications are being shown
 
     1. Prerequisites: Use `find` command to filter the application list so that only some applications are shown.
 
-    2. Test case: `find n/Google`  
+    2. Test case: `find c/Google`  
        Expected: All applications in the data with company names matching `Google` are shown, including applications that were not shown before the command was entered.
 
     3. Test case: `find d/2025-11-11:2025-12-12`  
        Expected: All applications in the data with application dates from `2025-11-11` to `2025-12-12` (inclusive) are shown, including applications that were not shown before the command was entered.
 
-    4. Test case: `find n/Google Meta`  
+    4. Test case: `find c/Google Meta`  
        Expected: All applications in the data with company names matching either `Google` or `Meta` are shown, including applications that were not shown before the command was entered.
 
     5. Test case: `find u/https://www.google.com/`  
